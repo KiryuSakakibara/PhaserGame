@@ -1,6 +1,6 @@
-// eslint-disable-next-line no-undef
 module.exports = {
 	root: true,
+	parser: "babel-eslint",
 	parserOptions: { 
 		ecmaVersion: 6,
 		sourceType: 'module'
@@ -8,14 +8,11 @@ module.exports = {
 	env: {
 		es6: true,
 		browser: true,
-		node: true
 	},
     extends: [
 		'eslint:recommended'
 	],
 	rules: {
 		"no-unused-vars": "warn"
-	},
-	globals: {
 	}
 }

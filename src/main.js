@@ -1,5 +1,6 @@
 import Phaser from "phaser"
 import GameScene from "./scenes/GameScene"
+import LoadScene from "./scenes/LoadScene"
 
 const config = {
     type: Phaser.AUTO,
@@ -7,7 +8,7 @@ const config = {
     height: 600,
     title: "PhaserGame",
     backgroundColor: '#2d2d2d',
-    scene: [GameScene]
+    scene: [LoadScene, GameScene]
 }
 
 export default new Phaser.Game(config)
