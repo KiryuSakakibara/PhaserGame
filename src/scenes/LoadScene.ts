@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import Ship from "../gameobjects/Ship";
 
 export default class LoadScene extends Phaser.Scene {
     constructor() {

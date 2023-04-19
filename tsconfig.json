@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+
+        "allowUnreachableCode": false,
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "strictPropertyInitialization": false,
+
+    }
+}
