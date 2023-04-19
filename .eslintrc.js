@@ -18,7 +18,8 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended"
 	],
 	rules: {
-		"no-unused-vars": "warn"
+		"no-unused-vars": "warn",
+		"@typescript-eslint/no-empty-function": "off"
 	},
 	exclude: ["node_modules", "dist"]
 }
