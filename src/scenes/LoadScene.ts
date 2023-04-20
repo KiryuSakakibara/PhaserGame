@@ -7,6 +7,7 @@ export default class LoadScene extends Phaser.Scene {
 
     preload() {
         this.load.image("walpurgisnachtImage", "assets/Walpurgisnacht.png")
+        this.load.image("bullet", "assets/bullet.png")
     }
 
     create() {

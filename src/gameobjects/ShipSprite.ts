@@ -2,7 +2,8 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     /** The cursor input keys for the scene this ship belongs to */
     cursors: Phaser.Types.Input.Keyboard.CursorKeys
     /** The speed of the ship */
-    speed = 300
+    speed = 400
+    coolDown = 100
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
         // Create the gameobject and add it to the physics world
@@ -20,7 +21,11 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         //console.log(this.cursors.left.isDown)
     }
 
-    update(...args: any[]): void {
+    update(time: number, delta: number): void {
+        //super.update(args)
+
+        this.coolDown -= delta
+
         // Ship velocity
         let velocity = new Phaser.Math.Vector2
         if (this.cursors.left.isDown && this.cursors.right.isUp) {
