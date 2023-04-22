@@ -1,3 +1,4 @@
+import InputController from "../Controllers/InputController"
 import Bullet from "./Bullet"
 
 type Key = Phaser.Input.Keyboard.Key
@@ -5,14 +6,8 @@ var KeyCodes = Phaser.Input.Keyboard.KeyCodes
 var Vec2 = Phaser.Math.Vector2
 
 export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
-    /** The input keys for the scene*/
-    inputs : {
-        up: Key
-        down: Key,
-        left: Key,
-        right: Key,
-        shoot: Key
-    }
+    /** The inputController */
+    inputs: InputController
     /** The speed of the ship */
     speed = 500
     /** The max cooldown of the ship */
@@ -22,7 +17,9 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     /** The collection of bullets owned by the ship */
     bullets: Phaser.GameObjects.Group
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
+    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture,
+                inputs: InputController) {
+
         // Create the gameobject and add it to the physics world
         super(scene, x, y, texture)
         scene.physics.world.enable(this)
@@ -30,14 +27,12 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true)
 
         // Create the inputs
-        let keyboard = scene.input.keyboard
-        this.inputs = {...this.inputs, ...keyboard.createCursorKeys()}
-        this.inputs.shoot = keyboard.addKey(KeyCodes.SPACE)
+        this.inputs = inputs
         
         // Create the bullets
         this.bullets = scene.add.group({
             classType: Bullet,
-            maxSize: 200,
+            maxSize: 100,
             runChildUpdate: true
         })
     }
@@ -81,7 +76,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
             const bullet: Bullet = this.bullets.get()
             if (bullet) {
                const yOffset = Math.random()*30-15
-               bullet.spawn(this.body.center.x + this.displayWidth/3, this.body.center.y + yOffset, 0, 800, 0)
+               bullet.spawn(this.x + this.displayWidth/3, this.y + yOffset, 0, 1500, 0)
                bullet.setDepth(-1)
                this.cooldown = this.maxCooldown
             }

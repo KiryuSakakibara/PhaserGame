@@ -1,17 +1,16 @@
 import Phaser from "phaser";
 import ShipSprite from "../gameobjects/ShipSprite";
 import Bullet from "../gameobjects/Bullet";
+import Enemy from "../gameobjects/Enemy";
+import InputController from "../Controllers/InputController";
 
 var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
     
-    
+    inputController: InputController
     walpurgisNacht: Phaser.GameObjects.Image
     shipSprite: ShipSprite
-    bulletCount: number = 0
-    spacebar: Phaser.Input.Keyboard.Key
-    bullets: Phaser.GameObjects.Group;
 
     constructor() {
         super("GameScene")
@@ -22,17 +21,13 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
+        this.inputController = new InputController(this)
         //this.physics.world.setBounds(0, 0, 800, 600)
-        this.walpurgisNacht = this.add.sprite(700, 300, "walpurgisnachtImage")
-        this.shipSprite = new ShipSprite(this, 100, 300, "walpurgisnachtImage")
+        //this.walpurgisNacht = this.add.sprite(700, 300, "walpurgisnachtImage")
+        this.walpurgisNacht = new Enemy(this, 700, 300, "walpurgisnachtImage")
+        this.shipSprite = new ShipSprite(this, 100, 300, "walpurgisnachtImage", this.inputController)
         this.shipSprite.setScale(0.2, 0.2)
-        this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
-        this.bullets = this.add.group({
-            classType: Bullet,
-            maxSize: 200,
-            runChildUpdate: true
-        })
     }
 
     

@@ -15,7 +15,8 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     update(time: number, delta: number): void {
         super.update()
         this.lifeSpan -= delta
-        if (this.lifeSpan <= 0) {
+        let bounds = this.scene.physics.world.bounds
+        if (this.x-this.displayWidth/2 > bounds.right || this.x+this.displayWidth/2 < 0 || this.y-this.displayHeight/2 > bounds.bottom || this.y+this.displayHeight/2 < 0) {
             this.setActive(false)
             this.setVisible(false)
         }
