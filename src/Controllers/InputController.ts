@@ -1,8 +1,9 @@
 type Key = Phaser.Input.Keyboard.Key
-var KeyCodes = Phaser.Input.Keyboard.KeyCodes
+const {KeyCodes} = Phaser.Input.Keyboard
 
 /**
- * Handles all inputs and stores them in variables
+ * Handles all inputs and stores them in variables.
+ * Call setScene() every time a scene is changed.
  */
 export default class InputController {
     up: Key
@@ -10,6 +11,7 @@ export default class InputController {
     left: Key
     right: Key
     shoot: Key
+    debug: Key
 
     private scene: Phaser.Scene
 
@@ -32,6 +34,7 @@ export default class InputController {
         this.left = keyboard.addKey(KeyCodes.LEFT)
         this.right = keyboard.addKey(KeyCodes.RIGHT)
         this.shoot = keyboard.addKey(KeyCodes.SPACE)
+        this.debug = keyboard.addKey(KeyCodes.D)
     }
 
 

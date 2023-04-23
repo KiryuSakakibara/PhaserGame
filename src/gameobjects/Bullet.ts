@@ -17,15 +17,12 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.lifeSpan -= delta
         let bounds = this.scene.physics.world.bounds
         if (this.x-this.displayWidth/2 > bounds.right || this.x+this.displayWidth/2 < 0 || this.y-this.displayHeight/2 > bounds.bottom || this.y+this.displayHeight/2 < 0) {
-            this.setActive(false)
-            this.setVisible(false)
+            this.disableBody(true, true)
         }
     }
 
     spawn(x: number, y: number, angle: number, vx = 0, vy = 0) {
-        this.setActive(true)
-        this.setVisible(true)
-        this.setPosition(x, y)
+        this.enableBody(true, x, y, true, true)
         this.setRotation(angle)
         this.setVelocity(vx, vy)
         

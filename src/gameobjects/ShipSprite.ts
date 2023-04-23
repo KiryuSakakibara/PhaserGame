@@ -32,7 +32,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         // Create the bullets
         this.bullets = scene.add.group({
             classType: Bullet,
-            maxSize: 100,
+            maxSize: 20,
             runChildUpdate: true
         })
     }
