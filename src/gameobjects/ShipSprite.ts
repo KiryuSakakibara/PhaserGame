@@ -26,7 +26,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this)
         this.setCollideWorldBounds(true)
 
-        // Create the inputs
+        // Set the inputs
         this.inputs = inputs
         
         // Create the bullets

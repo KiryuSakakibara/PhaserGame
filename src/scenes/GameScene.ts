@@ -32,7 +32,7 @@ export default class GameScene extends Phaser.Scene {
         this.shipSprite = new ShipSprite(this, 100, 300, "walpurgisnachtImage", this.inputController)
         this.shipSprite.setScale(0.2, 0.2)
 
-        this.physics.add.overlap(this.shipSprite.bullets, this.walpurgisNacht, undefined, bulletEnemy, this)
+        this.physics.add.overlap(this.shipSprite.bullets, this.walpurgisNacht, bulletEnemy, undefined, this)
         
 
     }
@@ -40,6 +40,7 @@ export default class GameScene extends Phaser.Scene {
     
     update(time: number, delta: number): void {
         this.shipSprite.update(time, delta)
+        this.walpurgisNacht.update(time, delta)
 
         // Toggle debug
         if (Phaser.Input.Keyboard.JustDown(this.inputController.debug)) {
