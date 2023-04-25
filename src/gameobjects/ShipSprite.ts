@@ -9,13 +9,15 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     /** The inputController */
     inputs: InputController
     /** The speed of the ship */
-    speed = 500
+    speed = 300
     /** The max cooldown of the ship */
     maxCooldown = 40
     /** The remaining shooting cooldown of the ship */
     cooldown = 0
     /** The collection of bullets owned by the ship */
     bullets: Phaser.GameObjects.Group
+    /** The health of the player */
+    health: number = 10
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture,
                 inputs: InputController) {
@@ -25,25 +27,37 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this)
         scene.add.existing(this)
         this.setCollideWorldBounds(true)
+        this.setSize(this.width*0.65, this.height*0.25)
+        this.body.setOffset(this.body.offset.x-3, this.body.offset.y-2)
 
         // Set the inputs
         this.inputs = inputs
         
         // Create the bullets
+        
         this.bullets = scene.add.group({
             classType: Bullet,
-            maxSize: 20,
-            runChildUpdate: true
+            maxSize: 10,
+            runChildUpdate: true,
         })
+        
+        /*
+        this.bullets.createMultiple({
+                classType: Bullet,
+                max: 10,
+                visible: false,
+                active: false
+        })
+        */
+        
+        
     }
 
     protected preUpdate(time: number, delta: number): void {
         super.preUpdate(time, delta)
-        //console.log(this.cursors.left.isDown)
     }
 
     update(time: number, delta: number): void {
-        //super.update(args)
 
         this.cooldown -= delta
 
@@ -75,11 +89,15 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         if (this.inputs.shoot.isDown && this.cooldown <= 0) {
             const bullet: Bullet = this.bullets.get()
             if (bullet) {
-               const yOffset = Math.random()*30-15
-               bullet.spawn(this.x + this.displayWidth/3, this.y + yOffset, 0, 1500, 0)
-               bullet.setDepth(-1)
-               this.cooldown = this.maxCooldown
+                const yOffset = Math.random()*30-15
+                bullet.spawn(this.x + this.displayWidth/3, this.y + yOffset, 0, 1.5, 0)
+                bullet.setDepth(-1)
+                this.cooldown = this.maxCooldown
             }
         } 
+    }
+
+    dealDamage(damage: number) {
+        this.health -= damage
     }
 }

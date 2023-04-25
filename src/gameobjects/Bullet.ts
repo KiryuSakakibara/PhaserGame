@@ -1,8 +1,10 @@
 import Phaser from "phaser";
+import PausableSprite from "./PausableSprite";
 
-export default class Bullet extends Phaser.Physics.Arcade.Sprite {
+export default class Bullet extends PausableSprite {
 
     lifeSpan: number = 1000
+    timeUntilPaused: number = 100
     
     constructor(scene: Phaser.Scene) {
         super(scene, 0, 0, "bullet")
@@ -12,8 +14,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(time: number, delta: number): void {
-        super.update()
-        this.lifeSpan -= delta
+        super.update(time, delta)
+
+        // Only run when the bullet is unpaused
+        this.lifeSpan -= delta * this.timeScale
         let bounds = this.scene.physics.world.bounds
         if (this.x-this.displayWidth/2 > bounds.right || this.x+this.displayWidth/2 < 0 ||
             this.y-this.displayHeight/2 > bounds.bottom || this.y+this.displayHeight/2 < 0 ||
@@ -29,6 +33,8 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.setVelocity(vx, vy)
         
         this.lifeSpan = lifeSpan
+        
     }
+
 
 }

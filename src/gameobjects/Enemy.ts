@@ -13,23 +13,32 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     // Attack 1 constants
     /** The delay between waves in milliseconds */
-    delayBetweenWaves: number = 30
+    delayBetweenWaves: number = 100
     /** The angle between waves in radians */
-    angleBetweenWaves: number = 50/180*Math.PI
+    angleBetweenWaves: number = 4
     /** The number of shots per wave */
     shotsPerWave: number = 5
     /** The speed of the bullet */
-    bulletSpeed: number = 250
+    bulletSpeed: number = 0.250
+
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
         super(scene, x, y, texture)
         scene.physics.world.enable(this)
         scene.add.existing(this)
+        let radius = 140
+        this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
+        /*
+        console.log(this.width)
+        this.setCircle(100)
+        console.log(this.width)
+        this.body.setOffset(this.displayWidth/2, this.displayHeight/2)
+        */
 
         // Create the bullets
         this.bullets = scene.add.group({
             classType: Bullet,
-            maxSize: 500,
+            maxSize: 1000,
             runChildUpdate: true
         })
     }
