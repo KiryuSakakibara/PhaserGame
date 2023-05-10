@@ -37,18 +37,16 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         
         this.bullets = scene.add.group({
             classType: Bullet,
-            maxSize: 10,
+            maxSize: 100,
             runChildUpdate: true,
         })
-        
-        /*
         this.bullets.createMultiple({
-                classType: Bullet,
-                max: 10,
-                visible: false,
-                active: false
+            classType: Bullet,
+            quantity: this.bullets.maxSize,
+            visible: false,
+            active: false
         })
-        */
+        
         
         
     }
@@ -58,6 +56,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(time: number, delta: number): void {
+        super.update(time, delta)
 
         this.cooldown -= delta
 

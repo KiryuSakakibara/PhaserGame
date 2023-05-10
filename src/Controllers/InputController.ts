@@ -12,7 +12,7 @@ export default class InputController {
     right: Key
     shoot: Key
     debug: Key
-    pause: Key
+    timeStop: Key
 
     private scene: Phaser.Scene
 
@@ -36,7 +36,7 @@ export default class InputController {
         this.right = keyboard.addKey(KeyCodes.RIGHT)
         this.shoot = keyboard.addKey(KeyCodes.SPACE)
         this.debug = keyboard.addKey(KeyCodes.D)
-        this.pause = keyboard.addKey(KeyCodes.SHIFT)
+        this.timeStop = keyboard.addKey(KeyCodes.SHIFT)
     }
 
 

@@ -1,10 +1,11 @@
 import Bullet from "./Bullet"
+import PausableSprite from "./PausableSprite"
 enum Attack {
 
 }
 var Vec2 = Phaser.Math.Vector2
 
-export default class Enemy extends Phaser.Physics.Arcade.Sprite {
+export default class Enemy extends PausableSprite {
     health: number = 100
     bullets: Phaser.GameObjects.Group
     /** The time elapsed since the last attack */
@@ -27,7 +28,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this)
         scene.add.existing(this)
         let radius = 140
-        this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
+        //this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
         /*
         console.log(this.width)
         this.setCircle(100)
@@ -41,22 +42,37 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             maxSize: 1000,
             runChildUpdate: true
         })
+        /*
+        this.bullets.createMultiple({
+            key: "bullet",
+            classType: Bullet,
+            quantity: this.bullets.maxSize-1,
+            frameQuantity: this.bullets.maxSize-1,
+            visible: false,
+            active: false
+        })
+        */
+        for (let i=0; i<1000; i++) {
+            this.bullets.add(new Bullet(scene))
+        }
+        console.log(this.bullets.getChildren().length)
     }
 
     update(time: number, delta: number): void {
-        this.attackTimer += delta
-        this.attack1(delta)
+        super.update(time, delta)
+        this.attackTimer += delta * this.timeScale
+        this.attack1()
     }
 
     dealDamage(damage: number) {
         this.health -= damage
     }
 
-    attack1(delta: number) {
+    attack1() {
         while (this.attackTimer >= 0) {
             let baseAngle = this.angleBetweenWaves * this.wavesFired % Math.PI*2
             for (let i=0; i<this.shotsPerWave; i++) {
-                const bullet: Bullet = this.bullets.get()
+                const bullet: Bullet = this.bullets.getFirst(false, false)
                 let angle = baseAngle + Math.PI*2*i/this.shotsPerWave
                 let vel = (new Vec2(Math.cos(angle), Math.sin(angle))).scale(this.bulletSpeed)
                 if (bullet) {

@@ -9,7 +9,7 @@ var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
     
-    inputController: InputController
+    inputs: InputController
     walpurgisNacht: Enemy
     shipSprite: ShipSprite
     enemyHealthText: Phaser.GameObjects.Text
@@ -27,11 +27,11 @@ export default class GameScene extends Phaser.Scene {
         this.physics.world.drawDebug = false
 
         // Initialize input controller
-        this.inputController = new InputController(this)
+        this.inputs = new InputController(this)
 
         // Create the game objects
-        this.walpurgisNacht = new Enemy(this, 700, 300, "walpurgisnachtImage")
-        this.shipSprite = new ShipSprite(this, 100, 300, "ship", this.inputController)
+        this.walpurgisNacht = new Enemy(this, 700, 300, "walpurgisnachtImage").setScale(0.7)
+        this.shipSprite = new ShipSprite(this, 100, 300, "ship", this.inputs)
 
         // Create collisions
         this.physics.add.overlap(this.shipSprite.bullets, this.walpurgisNacht, bulletEnemy)
@@ -50,22 +50,39 @@ export default class GameScene extends Phaser.Scene {
         this.shipSprite.update(time, delta)
         this.walpurgisNacht.update(time, delta)
 
-        // Toggle debug
-        if (Phaser.Input.Keyboard.JustDown(this.inputController.debug)) {
-            this.toggleDebug()
-        }
+        // Handle debug toggle
+        this.handleDebug()
+
+        // Handle the timeStop
+        this.handleTimeStop()
 
         // Update text
         this.enemyHealthText.setText(this.walpurgisNacht.health.toString())
         this.playerHealthText.setText(this.shipSprite.health.toString())
     }
     
-    toggleDebug() {
-        if (this.physics.world.drawDebug) {
-            this.physics.world.drawDebug = false;
-            this.physics.world.debugGraphic.clear()
-        } else {
-            this.physics.world.drawDebug = true;
+    handleDebug() {
+        if (Phaser.Input.Keyboard.JustDown(this.inputs.debug)) {
+            if (this.physics.world.drawDebug) {
+                this.physics.world.drawDebug = false;
+                this.physics.world.debugGraphic.clear()
+            } else {
+                this.physics.world.drawDebug = true;
+            }
+        }
+    }
+
+    handleTimeStop() {
+        if (Phaser.Input.Keyboard.JustDown(this.inputs.timeStop)) {
+            this.walpurgisNacht.bullets.getChildren().forEach((bullet) => {
+                (bullet as Bullet).timeScale = 0.2
+            })
+            this.walpurgisNacht.timeScale = 0.2
+        } else if (Phaser.Input.Keyboard.JustUp(this.inputs.timeStop)) {
+            this.walpurgisNacht.bullets.getChildren().forEach((bullet) => {
+                (bullet as Bullet).timeScale = 1
+            })
+            this.walpurgisNacht.timeScale = 1
         }
     }
     
