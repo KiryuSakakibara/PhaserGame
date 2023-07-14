@@ -1,3 +1,4 @@
+import Phaser from "phaser"
 var Vec2 = Phaser.Math.Vector2
 
 /**

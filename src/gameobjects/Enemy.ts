@@ -1,3 +1,4 @@
+import Phaser from "phaser"
 import Bullet from "./Bullet"
 import PausableSprite from "./PausableSprite"
 enum Attack {

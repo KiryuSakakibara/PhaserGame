@@ -1,3 +1,4 @@
+import Phaser from "phaser"
 type Key = Phaser.Input.Keyboard.Key
 const {KeyCodes} = Phaser.Input.Keyboard
 

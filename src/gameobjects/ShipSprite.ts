@@ -1,3 +1,4 @@
+import Phaser from "phaser"
 import InputController from "../Controllers/InputController"
 import Bullet from "./Bullet"
 
