@@ -16,7 +16,6 @@ export default class Bullet extends TimeSprite {
     update(time: number, delta: number, timeScale: number): void {
         super.update(time, delta, timeScale)
 
-        // Only run when the bullet is unpaused
         this.lifeSpan -= delta * timeScale
         let bounds = this.scene.physics.world.bounds
         if (this.x-this.displayWidth/2 > bounds.right || this.x+this.displayWidth/2 < 0 ||

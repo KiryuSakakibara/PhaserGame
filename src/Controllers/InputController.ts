@@ -1,4 +1,4 @@
-import Phaser from "phaser"
+import Phaser, { Input } from "phaser"
 type Key = Phaser.Input.Keyboard.Key
 const {KeyCodes} = Phaser.Input.Keyboard
 
@@ -11,9 +11,13 @@ export default class InputController {
     down: Key
     left: Key
     right: Key
-    shoot: Key
+    //shoot: Key
     debug: Key
     timeStop: Key
+
+    mouseX: number
+    mouseY: number
+    leftMouseDown: boolean
 
     private scene: Phaser.Scene
 
@@ -21,23 +25,34 @@ export default class InputController {
         this.scene = scene
 
         // Creating the inputs
-        this.setKeys()
+        this.createInputs()
     }
 
     setScene(scene: Phaser.Scene) {
         this.scene = scene
-        this.setKeys()
+        this.createInputs()
     }
 
-    setKeys() {
+    createInputs() {
+        // keys
         let keyboard = this.scene.input.keyboard
-        this.up = keyboard.addKey(KeyCodes.UP)
-        this.down = keyboard.addKey(KeyCodes.DOWN)
-        this.left = keyboard.addKey(KeyCodes.LEFT)
-        this.right = keyboard.addKey(KeyCodes.RIGHT)
-        this.shoot = keyboard.addKey(KeyCodes.SPACE)
-        this.debug = keyboard.addKey(KeyCodes.D)
+        this.up = keyboard.addKey(KeyCodes.W)
+        this.down = keyboard.addKey(KeyCodes.S)
+        this.left = keyboard.addKey(KeyCodes.A)
+        this.right = keyboard.addKey(KeyCodes.D)
+        //this.shoot = keyboard.addKey(KeyCodes.SPACE)
+        this.debug = keyboard.addKey(KeyCodes.P)
         this.timeStop = keyboard.addKey(KeyCodes.SHIFT)
+
+        // mouse
+        this.scene.input.on('pointermove', (pointer: Input.Pointer) => {
+            this.mouseX = pointer.x
+            this.mouseY = pointer.y
+        })
+    }
+
+    update() {
+        this.leftMouseDown = this.scene.input.mousePointer.leftButtonDown()
     }
 
 

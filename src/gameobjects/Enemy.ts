@@ -22,20 +22,16 @@ export default class Enemy extends TimeSprite {
     shotsPerWave: number = 5
     /** The speed of the bullet */
     bulletSpeed: number = 0.250
-
+    /** circle completion percentage */
+    circleCompletion: number = 0
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
         super(scene, x, y, texture)
         scene.physics.world.enable(this)
         scene.add.existing(this)
         let radius = 140
-        //this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
-        /*
-        console.log(this.width)
-        this.setCircle(100)
-        console.log(this.width)
-        this.body.setOffset(this.displayWidth/2, this.displayHeight/2)
-        */
+        this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
+        
 
         // Create the bullets
         this.bullets = scene.add.group({
@@ -43,20 +39,11 @@ export default class Enemy extends TimeSprite {
             maxSize: 1000,
             runChildUpdate: false
         })
-        /*
-        this.bullets.createMultiple({
-            key: "bullet",
-            classType: Bullet,
-            quantity: this.bullets.maxSize-1,
-            frameQuantity: this.bullets.maxSize-1,
-            visible: false,
-            active: false
-        })
-        */
+        
         for (let i=0; i<1000; i++) {
             this.bullets.add(new Bullet(scene))
         }
-        console.log(this.bullets.getChildren().length)
+    
     }
 
     update(time: number, delta: number, timeScale: number): void {
@@ -67,6 +54,12 @@ export default class Enemy extends TimeSprite {
         this.bullets.getChildren().forEach((bullet) => {
             (bullet as Bullet).update(time, delta, timeScale);
         })
+
+        this.circleCompletion = (this.circleCompletion + delta/10000*timeScale)%1
+        let angle = Math.PI*2*this.circleCompletion
+
+        this.setPosition(400+300*Math.cos(angle), 300-200*Math.sin(angle))
+        
     }
 
     dealDamage(damage: number) {
