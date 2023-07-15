@@ -1,12 +1,12 @@
 import Phaser from "phaser"
 import Bullet from "./Bullet"
-import PausableSprite from "./PausableSprite"
+import TimeSprite from "./TimeSprite"
 enum Attack {
 
 }
 var Vec2 = Phaser.Math.Vector2
 
-export default class Enemy extends PausableSprite {
+export default class Enemy extends TimeSprite {
     health: number = 100
     bullets: Phaser.GameObjects.Group
     /** The time elapsed since the last attack */
@@ -41,7 +41,7 @@ export default class Enemy extends PausableSprite {
         this.bullets = scene.add.group({
             classType: Bullet,
             maxSize: 1000,
-            runChildUpdate: true
+            runChildUpdate: false
         })
         /*
         this.bullets.createMultiple({
@@ -59,10 +59,14 @@ export default class Enemy extends PausableSprite {
         console.log(this.bullets.getChildren().length)
     }
 
-    update(time: number, delta: number): void {
-        super.update(time, delta)
-        this.attackTimer += delta * this.timeScale
+    update(time: number, delta: number, timeScale: number): void {
+        super.update(time, delta, timeScale)
+        this.attackTimer += delta * timeScale
         this.attack1()
+
+        this.bullets.getChildren().forEach((bullet) => {
+            (bullet as Bullet).update(time, delta, timeScale);
+        })
     }
 
     dealDamage(damage: number) {

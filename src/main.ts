@@ -1,6 +1,7 @@
 import Phaser from "phaser"
 import GameScene from "./scenes/GameScene"
 import LoadScene from "./scenes/LoadScene"
+import Stage1 from "./scenes/Stage1"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -15,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
             debug: true
         }
     },
-    scene: [LoadScene, GameScene]
+    scene: [LoadScene, Stage1]
 }
 
 export default new Phaser.Game(config)
