@@ -16,6 +16,11 @@ const config: Phaser.Types.Core.GameConfig = {
             debug: true
         }
     },
+    input: {
+        mouse: {
+            target: window
+        }
+    },
     scene: [LoadScene, Stage1]
 }
 

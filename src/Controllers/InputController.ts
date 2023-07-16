@@ -7,19 +7,25 @@ const {KeyCodes} = Phaser.Input.Keyboard
  * Call setScene() every time a scene is changed.
  */
 export default class InputController {
+    private scene: Phaser.Scene
+
+    // Keys
     up: Key
     down: Key
     left: Key
     right: Key
-    //shoot: Key
     debug: Key
     timeStop: Key
+    /** Either a key or undefined if using a mouse button */
+    shoot: Key | undefined = undefined
 
+    // mouse
     mouseX: number
     mouseY: number
-    leftMouseDown: boolean
 
-    private scene: Phaser.Scene
+    // states
+    isShooting: boolean
+    shootToggled: boolean
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene
@@ -34,25 +40,40 @@ export default class InputController {
     }
 
     createInputs() {
-        // keys
+        // KEYS
         let keyboard = this.scene.input.keyboard
         this.up = keyboard.addKey(KeyCodes.W)
         this.down = keyboard.addKey(KeyCodes.S)
         this.left = keyboard.addKey(KeyCodes.A)
         this.right = keyboard.addKey(KeyCodes.D)
-        //this.shoot = keyboard.addKey(KeyCodes.SPACE)
         this.debug = keyboard.addKey(KeyCodes.P)
         this.timeStop = keyboard.addKey(KeyCodes.SHIFT)
 
-        // mouse
+        // MOUSE
+        //this.shoot = keyboard.addKey(KeyCodes.SPACE)
+        this.shoot = undefined
         this.scene.input.on('pointermove', (pointer: Input.Pointer) => {
             this.mouseX = pointer.x
             this.mouseY = pointer.y
         })
+        if (this.shoot === undefined) {
+            this.scene.input.on('pointerdown', (pointer: Input.Pointer) => {
+                if (pointer.leftButtonDown()) {
+                    this.isShooting = !this.isShooting
+                }
+            })
+        }
+        
+        this.scene.input.mouse.disableContextMenu()
     }
 
     update() {
-        this.leftMouseDown = this.scene.input.mousePointer.leftButtonDown()
+        let activePointer = this.scene.input.activePointer
+        if (this.shoot instanceof Phaser.Input.Keyboard.Key) {
+            if (Phaser.Input.Keyboard.JustDown(this.shoot)) {
+                this.isShooting = !this.isShooting
+            }
+        }
     }
 
 

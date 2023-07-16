@@ -92,7 +92,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     }
 
     handleShoot() {
-        if (this.inputs.leftMouseDown && this.cooldown <= 0) {
+        if (this.inputs.isShooting && this.cooldown <= 0) {
             const bullet: Bullet = this.bullets.get()
             if (bullet) {
                 let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
