@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { GameObjects } from "phaser";
-import Bullet from "../gameobjects/Bullet";
+import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
 import ShipSprite from "../gameobjects/ShipSprite";
 

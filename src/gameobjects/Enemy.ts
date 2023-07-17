@@ -1,5 +1,5 @@
 import Phaser from "phaser"
-import Bullet from "./Bullet"
+import Bullet from "./Bullets/Bullet"
 import TimeSprite from "./TimeSprite"
 enum Attack {
 
@@ -40,9 +40,11 @@ export default class Enemy extends TimeSprite {
             runChildUpdate: false
         })
         
+        /*
         for (let i=0; i<1000; i++) {
             this.bullets.add(new Bullet(scene))
         }
+        */
     
     }
 
@@ -70,7 +72,7 @@ export default class Enemy extends TimeSprite {
         while (this.attackTimer >= 0) {
             let baseAngle = this.angleBetweenWaves * this.wavesFired % Math.PI*2
             for (let i=0; i<this.shotsPerWave; i++) {
-                const bullet: Bullet = this.bullets.getFirst(false, false)
+                const bullet: Bullet = this.bullets.get()
                 let angle = baseAngle + Math.PI*2*i/this.shotsPerWave
                 let vel = (new Vec2(Math.cos(angle), Math.sin(angle))).scale(this.bulletSpeed)
                 if (bullet) {

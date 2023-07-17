@@ -1,26 +1,28 @@
 import Phaser from "phaser";
-import TimeSprite from "./TimeSprite";
+import TimeSprite from "../TimeSprite";
 
 export default class Bullet extends TimeSprite {
 
     lifeSpan: number = 1000
-    timeUntilPaused: number = 100
+    age = 0
     
-    constructor(scene: Phaser.Scene) {
-        super(scene, 0, 0, "bullet")
+    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
+        super(scene, x, y, texture)
         scene.physics.world.enable(this)
         scene.add.existing(this)
         this.setScale(0.5, 0.5)
+
+        this.disableBody(true, true)
     }
 
     update(time: number, delta: number, timeScale: number): void {
         super.update(time, delta, timeScale)
 
         this.lifeSpan -= delta * timeScale
+        this.age += delta * timeScale
         let bounds = this.scene.physics.world.bounds
         if (this.x-this.displayWidth/2 > bounds.right || this.x+this.displayWidth/2 < 0 ||
-            this.y-this.displayHeight/2 > bounds.bottom || this.y+this.displayHeight/2 < 0 ||
-            this.lifeSpan <= 0) {
+            this.y-this.displayHeight/2 > bounds.bottom || this.y+this.displayHeight/2 < 0) {
 
             this.disableBody(true, true)
         }
@@ -32,7 +34,7 @@ export default class Bullet extends TimeSprite {
         this.setVelocity(vx, vy)
         
         this.lifeSpan = lifeSpan
-        
+        this.age = 0
     }
 
 

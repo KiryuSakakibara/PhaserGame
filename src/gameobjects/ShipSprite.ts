@@ -1,6 +1,7 @@
 import Phaser from "phaser"
 import InputController from "../Controllers/InputController"
-import Bullet from "./Bullet"
+import Bullet from "./Bullets/Bullet"
+import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 
 type Key = Phaser.Input.Keyboard.Key
 var KeyCodes = Phaser.Input.Keyboard.KeyCodes
@@ -37,7 +38,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         // Create the bullets
         
         this.bullets = scene.add.group({
-            classType: Bullet,
+            classType: PlayerLinearBullet,
             maxSize: 100,
             runChildUpdate: false,
         })
