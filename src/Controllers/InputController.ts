@@ -9,6 +9,8 @@ const {KeyCodes} = Phaser.Input.Keyboard
 export default class InputController {
     private scene: Phaser.Scene
 
+    controls: any
+
     // Keys
     up: Key
     down: Key
@@ -16,65 +18,131 @@ export default class InputController {
     right: Key
     debug: Key
     timeStop: Key
-    /** Either a key or undefined if using a mouse button */
-    shoot: Key | undefined = undefined
+    shoot: Key
 
     // mouse
+    timeStopMouse = 0
+    shootMouse = 0
     mouseX: number
     mouseY: number
 
     // states
-    isShooting: boolean
-    shootToggled: boolean
+    /** whether the player is shooting */
+    isShooting: boolean = false
+    /** whether the player is stopping time */
+    isStoppingTime: boolean = false
+    /** whether shooting is in toggle mode */
+    shootToggle: boolean = false
+    /** whether shotting has just been toggled, if toggle mode is enabled */
+    shootToggled: boolean = false
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene
 
         // Creating the inputs
-        this.createInputs()
+        this.initializeInputs()
     }
 
     setScene(scene: Phaser.Scene) {
         this.scene = scene
-        this.createInputs()
+        this.initializeInputs()
     }
 
-    createInputs() {
+    initializeInputs() {
+        this.controls = this.scene.cache.json.get("settings").controls
+
         // KEYS
-        let keyboard = this.scene.input.keyboard
-        this.up = keyboard.addKey(KeyCodes.W)
-        this.down = keyboard.addKey(KeyCodes.S)
-        this.left = keyboard.addKey(KeyCodes.A)
-        this.right = keyboard.addKey(KeyCodes.D)
-        this.debug = keyboard.addKey(KeyCodes.P)
-        this.timeStop = keyboard.addKey(KeyCodes.SHIFT)
+        this.createKeys()
 
         // MOUSE
-        //this.shoot = keyboard.addKey(KeyCodes.SPACE)
-        this.shoot = undefined
-        this.scene.input.on('pointermove', (pointer: Input.Pointer) => {
-            this.mouseX = pointer.x
-            this.mouseY = pointer.y
-        })
-        if (this.shoot === undefined) {
-            this.scene.input.on('pointerdown', (pointer: Input.Pointer) => {
-                if (pointer.leftButtonDown()) {
-                    this.isShooting = !this.isShooting
-                }
-            })
-        }
+        this.setMouseControls()
+
+        // enable the shoot or timeStop keys if mouse is not being used
+        this.enableKeysIfNoMouse()
         
         this.scene.input.mouse.disableContextMenu()
     }
 
-    update() {
-        let activePointer = this.scene.input.activePointer
-        if (this.shoot instanceof Phaser.Input.Keyboard.Key) {
-            if (Phaser.Input.Keyboard.JustDown(this.shoot)) {
-                this.isShooting = !this.isShooting
+    /** 
+     * Create the KEY objects (no functionality) 
+     */
+    createKeys() {
+        let keyboard = this.scene.input.keyboard
+        this.up = keyboard.addKey(this.controls.up)
+        this.down = keyboard.addKey(this.controls.down)
+        this.left = keyboard.addKey(this.controls.left)
+        this.right = keyboard.addKey(this.controls.right)
+        this.debug = keyboard.addKey(this.controls.debug)
+        this.timeStop = keyboard.addKey(this.controls.timeStop)
+        this.shoot = keyboard.addKey(this.controls.shoot)
+    }
+
+    /**
+     * Adds event listeners on mouse buttons if necessary
+     */
+    setMouseControls() {
+        this.timeStopMouse = this.controls.timeStopMouse
+        this.shootMouse = this.controls.shootMouse
+        this.scene.input.on('pointermove', (pointer: Input.Pointer) => {
+            this.mouseX = pointer.x
+            this.mouseY = pointer.y
+        })
+        this.scene.input.on('pointerdown', (pointer: Input.Pointer) => {
+            if (pointer.button == this.controls.shootMouse) {
+                if (this.controls.shootToggle) {
+                    this.isShooting = !this.isShooting
+                } else {
+                    this.isShooting = true
+                }
+            } else if (pointer.button == this.controls.timeStopMouse) {
+                this.isStoppingTime = true
+            }
+        })
+        this.scene.input.on('pointerup', (pointer: Input.Pointer) => {
+            if (pointer.button == this.controls.shootMouse) {
+                if (!this.controls.shootToggle) {
+                    this.isShooting = false
+                }
+            } else if (pointer.button == this.controls.timeStopMouse) {
+                this.isStoppingTime = false
+            }
+        })
+    }
+
+    /**
+     * Enables the shoot or timeStop keys if the mouse is not being used for those actions
+     */
+    enableKeysIfNoMouse() {
+        if (this.shootMouse == -1) {
+            if (this.controls.shootToggle) {
+                this.shoot.on("down", () => {
+                    this.isShooting = !this.isShooting
+                })
+            } else {
+                this.shoot.on("down", () => {
+                    this.isShooting = true
+                })
+                this.shoot.on("up", () => {
+                    this.isShooting = false
+                })
             }
         }
+
+        if (this.timeStopMouse == -1) {
+            this.timeStop.on("down", () => {
+                this.isStoppingTime = true
+            })
+            this.timeStop.on("up", () => {
+                this.isStoppingTime = false
+            })
+        }
     }
+
+    
+    update() {
+        //let activePointer = this.scene.input.activePointer
+    }
+    
 
 
 }
