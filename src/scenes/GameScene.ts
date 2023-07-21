@@ -54,7 +54,7 @@ export default class GameScene extends Phaser.Scene {
         }
         */
         if (this.inputs.isStoppingTime) {
-            this.timeScale = 0.1
+            this.timeScale = 0.02
         } else {
             this.timeScale = 1
         }

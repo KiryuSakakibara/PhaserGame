@@ -32,7 +32,7 @@ export default class Stage1 extends GameScene {
     update(time: number, delta: number): void {
         super.update(time, delta)
 
-        this.shipSprite.update(time, delta)
+        this.shipSprite.update(time, delta, this.timeScale)
         this.walpurgisNacht.update(time, delta, this.timeScale)
 
         // Update text

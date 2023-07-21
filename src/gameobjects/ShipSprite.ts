@@ -13,7 +13,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     /** The speed of the ship */
     speed = 300
     /** The max cooldown of the ship */
-    maxCooldown = 40
+    maxCooldown = 100
     /** The remaining shooting cooldown of the ship */
     cooldown = 0
     /** The collection of bullets owned by the ship */
@@ -39,7 +39,7 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         
         this.bullets = scene.add.group({
             classType: PlayerLinearBullet,
-            maxSize: 100,
+            maxSize: 1000,
             runChildUpdate: false,
         })
         /*
@@ -59,13 +59,13 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta)
     }
 
-    update(time: number, delta: number): void {
+    update(time: number, delta: number, timeScale: number): void {
         super.update(time, delta)
 
         this.cooldown -= delta
 
         this.bullets.getChildren().forEach((bullet) => {
-            (bullet as Bullet).update(time, delta, 1)
+            (bullet as PlayerLinearBullet).update(time, delta, timeScale)
         })
 
         this.handleMovement()
@@ -94,10 +94,10 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
 
     handleShoot() {
         if (this.inputs.isShooting && this.cooldown <= 0) {
-            const bullet: Bullet = this.bullets.get()
+            const bullet: PlayerLinearBullet = this.bullets.get()
             if (bullet) {
                 let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
-                angle += Math.random()*Math.PI/40-Math.PI/80 + Math.PI
+                angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
                 bullet.spawn(this.x, this.y, angle, 1.5*Math.cos(angle), 1.5*Math.sin(angle))
                 bullet.setDepth(-1)
                 this.cooldown = this.maxCooldown

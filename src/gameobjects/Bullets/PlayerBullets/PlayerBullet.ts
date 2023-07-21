@@ -2,6 +2,9 @@ import Bullet from "../Bullet";
 
 export default class PlayerBullet extends Bullet {
 
+    /** how long it takes for the timeScale of the bullet to synchronize with the timeScale
+     * of the world
+     */
     timeScaleDelay: number
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
@@ -14,7 +17,7 @@ export default class PlayerBullet extends Bullet {
     }
 
     /**
-     * Linear function scaling with age so that timeScale is reached at 0.2 seconds
+     * Function scaling with age so that timeScale is reached at {@link timeScaleDelay} seconds
      * @param age age of bullet
      * @param endTimeScale the destination/desired time scale
      */
@@ -22,7 +25,7 @@ export default class PlayerBullet extends Bullet {
         if (age >= this.timeScaleDelay) {
             return endTimeScale
         } else {
-            return (this.timeScaleDelay-age)/this.timeScaleDelay + endTimeScale*(age/this.timeScaleDelay)
+            return 1-(age/this.timeScaleDelay)**3 + endTimeScale*(age/this.timeScaleDelay)**3
         }
     }
 }

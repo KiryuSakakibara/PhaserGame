@@ -1,6 +1,7 @@
 import Phaser from "phaser"
 import Bullet from "./Bullets/Bullet"
 import TimeSprite from "./TimeSprite"
+import EnemyBullet from "./Bullets/EnemyBullets/EnemyBullet"
 enum Attack {
 
 }
@@ -35,7 +36,7 @@ export default class Enemy extends TimeSprite {
 
         // Create the bullets
         this.bullets = scene.add.group({
-            classType: Bullet,
+            classType: EnemyBullet,
             maxSize: 1000,
             runChildUpdate: false
         })
@@ -54,7 +55,7 @@ export default class Enemy extends TimeSprite {
         this.attack1()
 
         this.bullets.getChildren().forEach((bullet) => {
-            (bullet as Bullet).update(time, delta, timeScale);
+            (bullet as EnemyBullet).update(time, delta, timeScale);
         })
 
         this.circleCompletion = (this.circleCompletion + delta/10000*timeScale)%1
@@ -72,7 +73,7 @@ export default class Enemy extends TimeSprite {
         while (this.attackTimer >= 0) {
             let baseAngle = this.angleBetweenWaves * this.wavesFired % Math.PI*2
             for (let i=0; i<this.shotsPerWave; i++) {
-                const bullet: Bullet = this.bullets.get()
+                const bullet: EnemyBullet = this.bullets.get()
                 let angle = baseAngle + Math.PI*2*i/this.shotsPerWave
                 let vel = (new Vec2(Math.cos(angle), Math.sin(angle))).scale(this.bulletSpeed)
                 if (bullet) {
