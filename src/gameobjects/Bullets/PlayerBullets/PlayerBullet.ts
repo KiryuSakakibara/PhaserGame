@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import Bullet from "../Bullet";
 
 export default class PlayerBullet extends Bullet {

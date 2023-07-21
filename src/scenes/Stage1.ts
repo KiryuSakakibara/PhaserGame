@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import { bulletEnemy, bulletPlayer } from "../Controllers/CollisionController";
 import Enemy from "../gameobjects/Enemy";
 import ShipSprite from "../gameobjects/ShipSprite";

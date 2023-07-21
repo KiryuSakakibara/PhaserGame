@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import PlayerBullet from "./PlayerBullet";
 
 export default class PlayerLinearBullet extends PlayerBullet {
