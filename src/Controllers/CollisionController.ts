@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { GameObjects } from "phaser";
 import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
-import ShipSprite from "../gameobjects/ShipSprite";
+import Player from "../gameobjects/Player";
 
 
 export function bulletEnemy(ob1: Phaser.GameObjects.GameObject, ob2: Phaser.GameObjects.GameObject) {
@@ -14,7 +14,7 @@ export function bulletEnemy(ob1: Phaser.GameObjects.GameObject, ob2: Phaser.Game
 
 export function bulletPlayer(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
     let bullet = obj1 as Bullet
-    let player = obj2 as ShipSprite
+    let player = obj2 as Player
     bullet.disableBody(true, true)
     player.dealDamage(1)
 }

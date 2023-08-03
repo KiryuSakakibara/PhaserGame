@@ -9,6 +9,7 @@ const config: Phaser.Types.Core.GameConfig = {
     height: 600,
     title: "PhaserGame",
     backgroundColor: '#2d2d2d',
+    antialias: false,
     physics: {
         default: "arcade",
         arcade: {

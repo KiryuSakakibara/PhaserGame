@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import ShipSprite from "../gameobjects/ShipSprite";
+import Player from "../gameobjects/Player";
 import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
 import InputController from "../Controllers/InputController";

@@ -7,7 +7,7 @@ type Key = Phaser.Input.Keyboard.Key
 var KeyCodes = Phaser.Input.Keyboard.KeyCodes
 var Vec2 = Phaser.Math.Vector2
 
-export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
+export default class Player extends Phaser.Physics.Arcade.Sprite {
     /** The inputController */
     inputs: InputController
     /** The speed of the ship */
@@ -29,8 +29,11 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this)
         scene.add.existing(this)
         this.setCollideWorldBounds(true)
-        this.setSize(this.width*0.65, this.height*0.25)
-        this.body.setOffset(this.body.offset.x-3, this.body.offset.y-2)
+        this.setSize(this.width*0.3, this.height*0.5)
+        this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
+        //let radius = 5
+        //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
+        this.setScale(2, 2)
 
         // Set the inputs
         this.inputs = inputs
