@@ -11,6 +11,7 @@ export default class LoadScene extends Phaser.Scene {
         this.load.json("settings", "assets/jsons/settings.json")
         this.load.json("constants", "assets/jsons/constants.json")
         this.load.image("Carmine", "assets/Sprites/Characters/Carmine/Carmine.png")
+        this.load.image("PlayerBullet", "assets/Sprites/Projectiles/Bullet.png")
     }
 
     create() {

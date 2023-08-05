@@ -17,8 +17,8 @@ export default class Stage1 extends GameScene {
     create(): void {
         super.create()
         // Create the game objects
-        this.walpurgisNacht = new Enemy(this, 700, 300, "walpurgisnachtImage").setScale(0.7)
-        this.player = new Player(this, 100, 300, "Carmine", this.inputs)
+        this.walpurgisNacht = new Enemy(this, 1760, 540, "walpurgisnachtImage")
+        this.player = new Player(this, 100, 540, "Carmine", this.inputs)
 
         // Create collisions
         this.physics.add.overlap(this.player.bullets, this.walpurgisNacht, bulletEnemy)
@@ -39,5 +39,6 @@ export default class Stage1 extends GameScene {
         // Update text
         this.enemyHealthText.setText(this.walpurgisNacht.health.toString())
         this.playerHealthText.setText(this.player.health.toString())
+        console.log(this.scale.displaySize)
     }
 }

@@ -11,7 +11,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     /** The inputController */
     inputs: InputController
     /** The speed of the ship */
-    speed = 300
+    speed = 600
     /** The max cooldown of the ship */
     maxCooldown = 100
     /** The remaining shooting cooldown of the ship */
@@ -33,7 +33,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
         //let radius = 5
         //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
-        this.setScale(2, 2)
+        //this.setScale(2, 2)
 
         // Set the inputs
         this.inputs = inputs
@@ -101,7 +101,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             if (bullet) {
                 let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
                 angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
-                bullet.spawn(this.x, this.y, angle, 1.5*Math.cos(angle), 1.5*Math.sin(angle))
+                bullet.spawn(this.x, this.y, angle, 3*Math.cos(angle), 3*Math.sin(angle))
                 bullet.setDepth(-1)
                 this.cooldown = this.maxCooldown
             }

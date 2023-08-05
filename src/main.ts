@@ -5,11 +5,14 @@ import Stage1 from "./scenes/Stage1"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
     title: "PhaserGame",
     backgroundColor: '#2d2d2d',
-    antialias: false,
+    scale: {
+        width: 1920,
+        height: 1080,
+        zoom: 1,
+        mode: Phaser.Scale.FIT
+    },
     physics: {
         default: "arcade",
         arcade: {

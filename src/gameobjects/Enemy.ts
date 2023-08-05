@@ -22,7 +22,7 @@ export default class Enemy extends TimeSprite {
     /** The number of shots per wave */
     shotsPerWave: number = 5
     /** The speed of the bullet */
-    bulletSpeed: number = 0.250
+    bulletSpeed: number = 0.7
     /** circle completion percentage */
     circleCompletion: number = 0
 
@@ -61,7 +61,7 @@ export default class Enemy extends TimeSprite {
         this.circleCompletion = (this.circleCompletion + delta/10000*timeScale)%1
         let angle = Math.PI*2*this.circleCompletion
 
-        this.setPosition(400+300*Math.cos(angle), 300-200*Math.sin(angle))
+        this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
         
     }
 

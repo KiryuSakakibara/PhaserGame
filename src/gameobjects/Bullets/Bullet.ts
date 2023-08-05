@@ -10,7 +10,7 @@ export default class Bullet extends TimeSprite {
         super(scene, x, y, texture)
         scene.physics.world.enable(this)
         scene.add.existing(this)
-        this.setScale(0.5, 0.5)
+        this.setScale(1, 1)
 
         this.disableBody(true, true)
     }
