@@ -1,18 +1,19 @@
 import Phaser from "phaser"
 import InputController from "../Controllers/InputController"
-import Bullet from "./Bullet"
+import Bullet from "./Bullets/Bullet"
+import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 
 type Key = Phaser.Input.Keyboard.Key
 var KeyCodes = Phaser.Input.Keyboard.KeyCodes
 var Vec2 = Phaser.Math.Vector2
 
-export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
+export default class Player extends Phaser.Physics.Arcade.Sprite {
     /** The inputController */
     inputs: InputController
     /** The speed of the ship */
-    speed = 300
+    speed = 600
     /** The max cooldown of the ship */
-    maxCooldown = 40
+    maxCooldown = 100
     /** The remaining shooting cooldown of the ship */
     cooldown = 0
     /** The collection of bullets owned by the ship */
@@ -28,8 +29,11 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this)
         scene.add.existing(this)
         this.setCollideWorldBounds(true)
-        this.setSize(this.width*0.65, this.height*0.25)
-        this.body.setOffset(this.body.offset.x-3, this.body.offset.y-2)
+        this.setSize(this.width*0.3, this.height*0.5)
+        this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
+        //let radius = 5
+        //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
+        //this.setScale(2, 2)
 
         // Set the inputs
         this.inputs = inputs
@@ -37,16 +41,18 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         // Create the bullets
         
         this.bullets = scene.add.group({
-            classType: Bullet,
-            maxSize: 100,
-            runChildUpdate: true,
+            classType: PlayerLinearBullet,
+            maxSize: 1000,
+            runChildUpdate: false,
         })
+        /*
         this.bullets.createMultiple({
             classType: Bullet,
             quantity: this.bullets.maxSize,
             visible: false,
             active: false
         })
+        */
         
         
         
@@ -56,10 +62,14 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta)
     }
 
-    update(time: number, delta: number): void {
+    update(time: number, delta: number, timeScale: number): void {
         super.update(time, delta)
 
         this.cooldown -= delta
+
+        this.bullets.getChildren().forEach((bullet) => {
+            (bullet as PlayerLinearBullet).update(time, delta, timeScale)
+        })
 
         this.handleMovement()
         this.handleShoot()
@@ -86,11 +96,12 @@ export default class ShipSprite extends Phaser.Physics.Arcade.Sprite {
     }
 
     handleShoot() {
-        if (this.inputs.shoot.isDown && this.cooldown <= 0) {
-            const bullet: Bullet = this.bullets.get()
+        if (this.inputs.isShooting && this.cooldown <= 0) {
+            const bullet: PlayerLinearBullet = this.bullets.get()
             if (bullet) {
-                const yOffset = Math.random()*30-15
-                bullet.spawn(this.x + this.displayWidth/3, this.y + yOffset, 0, 1.5, 0)
+                let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
+                angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
+                bullet.spawn(this.x, this.y, angle, 3*Math.cos(angle), 3*Math.sin(angle))
                 bullet.setDepth(-1)
                 this.cooldown = this.maxCooldown
             }
