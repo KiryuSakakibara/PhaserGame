@@ -4,14 +4,16 @@ import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
 import InputController from "../Controllers/InputController";
 import { bulletEnemy, bulletPlayer } from "../Controllers/CollisionController";
+import * as Planck from "planck"
 
 var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
     
     inputs: InputController
-
     timeScale = 1
+    world: Planck.World
+    planckScale: number
     
 
     create() {
@@ -19,6 +21,10 @@ export default class GameScene extends Phaser.Scene {
 
         // Initialize input controller
         this.inputs = new InputController(this)
+
+        // Initialize the physics world
+        this.world = Planck.World()
+        this.planckScale = this.cache.json.get("constants").planckScale
         
     }
 

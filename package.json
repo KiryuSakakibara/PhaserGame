@@ -11,7 +11,8 @@
   "author": "Kiryu Sakakibara",
   "license": "ISC",
   "dependencies": {
-    "phaser": "^3.55.2"
+    "phaser": "^3.55.2",
+    "planck": "^1.0.0-alpha.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",

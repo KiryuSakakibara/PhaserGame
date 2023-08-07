@@ -2,12 +2,15 @@ import Phaser from "phaser"
 import InputController from "../Controllers/InputController"
 import Bullet from "./Bullets/Bullet"
 import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
+import PlanckSprite from "./PlanckSprite"
+import * as Planck from "planck"
+import GameScene from "../scenes/GameScene"
 
 type Key = Phaser.Input.Keyboard.Key
 var KeyCodes = Phaser.Input.Keyboard.KeyCodes
 var Vec2 = Phaser.Math.Vector2
 
-export default class Player extends Phaser.Physics.Arcade.Sprite {
+export default class Player extends PlanckSprite {
     /** The inputController */
     inputs: InputController
     /** The speed of the ship */
@@ -21,16 +24,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     /** The health of the player */
     health: number = 10
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture,
+    constructor(scene: GameScene, x: number, y: number, texture: string, world: Planck.World,
                 inputs: InputController) {
 
         // Create the gameobject and add it to the physics world
-        super(scene, x, y, texture)
+        super(scene, x, y, texture, world)
         scene.physics.world.enable(this)
         scene.add.existing(this)
-        this.setCollideWorldBounds(true)
-        this.setSize(this.width*0.3, this.height*0.5)
-        this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
+        //this.setCollideWorldBounds(true)
+        //this.setSize(this.width*0.3, this.height*0.5)
+        //this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
         //let radius = 5
         //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
         //this.setScale(2, 2)
@@ -63,7 +66,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(time: number, delta: number, timeScale: number): void {
-        super.update(time, delta)
+        super.update(time, delta, timeScale)
 
         this.cooldown -= delta
 
