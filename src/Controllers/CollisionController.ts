@@ -8,13 +8,13 @@ import Player from "../gameobjects/Player";
 export function bulletEnemy(ob1: Phaser.GameObjects.GameObject, ob2: Phaser.GameObjects.GameObject) {
     let bullet = ob1 as Bullet
     let enemy = ob2 as Enemy
-    bullet.disableBody(true, true)
+    //bullet.disableBody(true, true)
     enemy.dealDamage(1)
 }
 
 export function bulletPlayer(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
     let bullet = obj1 as Bullet
     let player = obj2 as Player
-    bullet.disableBody(true, true)
+    //bullet.disableBody(true, true)
     player.dealDamage(1)
 }

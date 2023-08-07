@@ -78,7 +78,7 @@ export default class Enemy extends TimeSprite {
                 let vel = (new Vec2(Math.cos(angle), Math.sin(angle))).scale(this.bulletSpeed)
                 if (bullet) {
                     bullet.spawn(this.x + vel.x*this.attackTimer/1000,
-                        this.y + vel.y*this.attackTimer/1000, angle, vel.x, vel.y, 3000)
+                        this.y + vel.y*this.attackTimer/1000, angle, vel.x, vel.y)
                     bullet.setDepth(-0.1)
                 }
 

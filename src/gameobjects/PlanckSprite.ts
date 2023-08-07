@@ -14,7 +14,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     pbody: Planck.Body
     /** The scale to multiply by to convert pixel units to meters */
     planckScale: number
-    /** The velocity in pixels/second */
+    /** The velocity in pixels/millisecond */
     velocity = new Vec2(0, 0)
 
     constructor(scene: GameScene, x: number, y: number, texture: string, world: Planck.World) {
@@ -27,7 +27,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     update(time: number, delta: number, timeScale: number): void {
         super.update(time, delta)
 
-        let scaledDelta = delta * timeScale
+        let scaledDelta = delta * timeScale // scale delta for time stop
         this.setPosition(this.x+this.velocity.x*scaledDelta, this.y+this.velocity.y*scaledDelta)
         this.pbody.setPosition(Vec2(this.x * this.planckScale, this.y * this.planckScale))
         this.pbody.setAngle(this.rotation)
@@ -43,5 +43,9 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.velocity.x = x
         this.velocity.y = y !== undefined ? y : x
         return this
+    }
+
+    drawDebug() {
+        // TODO
     }
 }

@@ -21,8 +21,8 @@ export default class Stage1 extends GameScene {
         this.player = new Player(this, 100, 540, "Carmine", this.world, this.inputs)
 
         // Create collisions
-        this.physics.add.overlap(this.player.bullets, this.walpurgisNacht, bulletEnemy)
-        this.physics.add.overlap(this.walpurgisNacht.bullets, this.player, bulletPlayer)
+        //this.physics.add.overlap(this.player.bullets, this.walpurgisNacht, bulletEnemy)
+        //this.physics.add.overlap(this.walpurgisNacht.bullets, this.player, bulletPlayer)
         
 
         // Create the on screen text
@@ -33,7 +33,7 @@ export default class Stage1 extends GameScene {
     update(time: number, delta: number): void {
         super.update(time, delta)
 
-        this.player.update(time, delta, 1)
+        this.player.update(time, delta, this.timeScale)
         this.walpurgisNacht.update(time, delta, this.timeScale)
 
         // Update text

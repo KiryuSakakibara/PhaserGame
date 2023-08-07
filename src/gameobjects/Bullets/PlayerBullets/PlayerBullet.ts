@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Bullet from "../Bullet";
+import GameScene from "../../../scenes/GameScene";
 
 export default class PlayerBullet extends Bullet {
 
@@ -8,7 +9,7 @@ export default class PlayerBullet extends Bullet {
      */
     timeScaleDelay: number
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
+    constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
         this.timeScaleDelay = this.scene.cache.json.get("constants").playerBulletTimeScaleDelay
     }
@@ -18,8 +19,8 @@ export default class PlayerBullet extends Bullet {
     }
 
     /**
-     * Function scaling with age so that timeScale is reached at {@link timeScaleDelay} seconds
-     * @param age age of bullet
+     * Function scaling with age so that timeScale is reached at {@link timeScaleDelay} milliseconds
+     * @param age age of bullet in milliseconds
      * @param endTimeScale the destination/desired time scale
      */
     calculateTimeScale(age: number, endTimeScale: number): number {

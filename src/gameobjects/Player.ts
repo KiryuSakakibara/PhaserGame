@@ -13,8 +13,8 @@ var Vec2 = Phaser.Math.Vector2
 export default class Player extends PlanckSprite {
     /** The inputController */
     inputs: InputController
-    /** The speed of the ship */
-    speed = 600
+    /** The speed of the ship in pixels/millisecond */
+    speed = 0.6
     /** The max cooldown of the ship */
     maxCooldown = 100
     /** The remaining shooting cooldown of the ship */
@@ -29,7 +29,7 @@ export default class Player extends PlanckSprite {
 
         // Create the gameobject and add it to the physics world
         super(scene, x, y, texture, world)
-        scene.physics.world.enable(this)
+        //scene.physics.world.enable(this)
         scene.add.existing(this)
         //this.setCollideWorldBounds(true)
         //this.setSize(this.width*0.3, this.height*0.5)
@@ -65,13 +65,23 @@ export default class Player extends PlanckSprite {
         super.preUpdate(time, delta)
     }
 
+    /**
+     * 
+     * @param time 
+     * @param delta 
+     * @param timeScale the unchanged world timeScale
+     */
     update(time: number, delta: number, timeScale: number): void {
-        super.update(time, delta, timeScale)
+        // timeScale for the player should not be affected by time stop
+        super.update(time, delta, 1)
 
         this.cooldown -= delta
 
         this.bullets.getChildren().forEach((bullet) => {
-            (bullet as PlayerLinearBullet).update(time, delta, timeScale)
+            let b = bullet as PlayerLinearBullet
+            if (b.active) {
+                b.update(time, delta, timeScale)
+            }
         })
 
         this.handleMovement()
