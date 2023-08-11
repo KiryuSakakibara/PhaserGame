@@ -35,16 +35,6 @@ export default class Bullet extends PlanckSprite {
         
     }
 
-    enable() {
-        this.setActive(true)
-        this.setVisible(true)
-    }
-
-    disable() {
-        this.setActive(false)
-        this.setVisible(false)
-    }
-
     spawn(x: number, y: number, angle: number, vx=0, vy=0) {
         //this.enableBody(true, x, y, true, true)
         this.setPosition(x, y)

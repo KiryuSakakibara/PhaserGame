@@ -5,15 +5,22 @@ import Enemy from "../gameobjects/Enemy";
 import InputController from "../Controllers/InputController";
 import { bulletEnemy, bulletPlayer } from "../Controllers/CollisionController";
 import * as Planck from "planck"
+import { PlanckScale } from "../gameobjects/PhysicsConstants";
 
 var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
     
+    /** Inputs for the scene. */
     inputs: InputController
+    /** The world time scale */
     timeScale = 1
+    /** The planck physics world */
     world: Planck.World
+    /** The conversion rate from pixels to meters */
     planckScale: number
+    /** Whether debug lines should be drawn or not */
+    drawDebug = false
     
 
     create() {
@@ -24,7 +31,8 @@ export default class GameScene extends Phaser.Scene {
 
         // Initialize the physics world
         this.world = Planck.World()
-        this.planckScale = this.cache.json.get("constants").planckScale
+        this.planckScale = PlanckScale
+
         
     }
 
@@ -38,6 +46,8 @@ export default class GameScene extends Phaser.Scene {
 
         // Handle the timeStop
         this.handleTimeStop()
+
+        //this.world.step(delta/1000)
     }
     
     handleDebug() {
@@ -48,6 +58,7 @@ export default class GameScene extends Phaser.Scene {
             } else {
                 this.physics.world.drawDebug = true;
             }
+            this.drawDebug = !this.drawDebug
         }
     }
 

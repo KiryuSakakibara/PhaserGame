@@ -12,6 +12,7 @@ export default class PlayerBullet extends Bullet {
     constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
         this.timeScaleDelay = this.scene.cache.json.get("constants").playerBulletTimeScaleDelay
+        this.lifeSpan = 3000
     }
     
     update(time: number, delta: number, timeScale: number) {

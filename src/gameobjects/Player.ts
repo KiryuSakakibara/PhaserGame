@@ -5,10 +5,7 @@ import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 import PlanckSprite from "./PlanckSprite"
 import * as Planck from "planck"
 import GameScene from "../scenes/GameScene"
-
-type Key = Phaser.Input.Keyboard.Key
-var KeyCodes = Phaser.Input.Keyboard.KeyCodes
-var Vec2 = Phaser.Math.Vector2
+import { PixelScale, PlayerFixture } from "./PhysicsConstants"
 
 export default class Player extends PlanckSprite {
     /** The inputController */
@@ -37,6 +34,9 @@ export default class Player extends PlanckSprite {
         //let radius = 5
         //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
         //this.setScale(2, 2)
+
+        this.pbody.createFixture(PlayerFixture)
+        this.pbodyOffset = Planck.Vec2(-PixelScale/2, 12)
 
         // Set the inputs
         this.inputs = inputs
