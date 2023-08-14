@@ -3,7 +3,7 @@ import Player from "../gameobjects/Player";
 import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
 import InputController from "../Controllers/InputController";
-import { bulletEnemy, bulletPlayer } from "../Controllers/CollisionController";
+import { bulletEnemy, bulletPlayer, collision } from "../Controllers/CollisionController";
 import * as Planck from "planck"
 import { PlanckScale } from "../gameobjects/PhysicsConstants";
 
@@ -33,7 +33,7 @@ export default class GameScene extends Phaser.Scene {
         this.world = Planck.World()
         this.planckScale = PlanckScale
 
-        
+        this.world.on("begin-contact", collision)
     }
 
     
@@ -47,17 +47,19 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
-        //this.world.step(delta/1000)
+        this.world.step(delta/1000,1,3)
     }
     
     handleDebug() {
         if (Phaser.Input.Keyboard.JustDown(this.inputs.debug)) {
+            /*
             if (this.physics.world.drawDebug) {
                 this.physics.world.drawDebug = false;
                 this.physics.world.debugGraphic.clear()
             } else {
                 this.physics.world.drawDebug = true;
             }
+            */
             this.drawDebug = !this.drawDebug
         }
     }

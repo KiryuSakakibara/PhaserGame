@@ -14,11 +14,6 @@ const config: Phaser.Types.Core.GameConfig = {
         zoom: 1,
         mode: Phaser.Scale.FIT
     },
-    plugins: {
-        scene: [
-            {key: "planck", plugin: PlanckPhysicsPlugin, mapping: "planck"}
-        ]
-    },
     physics: {
         default: "arcade",
         arcade: {

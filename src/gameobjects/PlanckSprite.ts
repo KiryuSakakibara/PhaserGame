@@ -9,8 +9,6 @@ import { PlanckScale } from "./PhysicsConstants";
  */
 export default class PlanckSprite extends Phaser.GameObjects.Sprite {
 
-    /** The physics world */
-    world: Planck.World
     /** The planck physics body */
     pbody: Planck.Body
     /** the positional offset of the pbody in pixels */
@@ -22,11 +20,11 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     /** The debug graphics for this sprite */
     graphics: Phaser.GameObjects.Graphics
 
-    constructor(scene: GameScene, x: number, y: number, texture: string, world: Planck.World) {
+    constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
-        this.world = world
+        scene.add.existing(this)
         this.planckScale = scene.planckScale
-        this.pbody = world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
+        this.pbody = scene.world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
         this.graphics = scene.add.graphics()
         this.graphics.setDepth(1000)
     }
@@ -76,7 +74,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.graphics.lineStyle(2, 0x00ff00)
         if (this.pbody.getFixtureList()) {
             for (let f = this.pbody.getFixtureList(); f; f=f.getNext()) {
-                let position = this.pbody.getPosition().mul(1/PlanckScale)
+                let position = this.pbody.getPosition().clone().mul(1/PlanckScale)
                 this.graphics.translateCanvas(position.x, position.y)
                 this.graphics.rotateCanvas(this.rotation)
                 let data = f.getUserData() as any

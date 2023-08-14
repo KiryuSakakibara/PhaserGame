@@ -20,7 +20,7 @@ const masks = {
 }
 
 export const PlayerFixture = {
-    shape: Planck.Box(40*PlanckScale, 70*PlanckScale),
+    shape: Planck.Box(30*PlanckScale, 50*PlanckScale),
     isSensor: true,
     filterCategoryBits: bits.player,
     filterMaskBits: masks.player,
@@ -31,9 +31,20 @@ export const PlayerFixture = {
     }
 }
 
-export const linearPlayerBulletFixture = {
+export const BossFixture = {
+    shape: Planck.Circle(140*PlanckScale),
+    isSensor: false,
+    filterCategoryBits: bits.enemy,
+    filterMaskBits: masks.enemy,
+    userData: {
+        type: "circle",
+        radius: 140
+    }
+}
+
+export const LinearPlayerBulletFixture = {
     shape: Planck.Box(50*PlanckScale, 30*PlanckScale),
-    isSensor: true,
+    isSensor: false,
     filterCategoryBits: bits.playerBullet,
     filterMaskBits: masks.playerBullet,
     userData: {

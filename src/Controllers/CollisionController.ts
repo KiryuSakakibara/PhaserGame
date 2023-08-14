@@ -3,6 +3,7 @@ import { GameObjects } from "phaser";
 import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
 import Player from "../gameobjects/Player";
+import * as Planck from "planck"
 
 
 export function bulletEnemy(ob1: Phaser.GameObjects.GameObject, ob2: Phaser.GameObjects.GameObject) {
@@ -17,4 +18,8 @@ export function bulletPlayer(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.G
     let player = obj2 as Player
     //bullet.disableBody(true, true)
     player.dealDamage(1)
+}
+
+export function collision(contact: Planck.Contact) {
+    console.log("contact detected")
 }

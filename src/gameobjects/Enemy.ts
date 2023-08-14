@@ -2,12 +2,15 @@ import Phaser from "phaser"
 import Bullet from "./Bullets/Bullet"
 import TimeSprite from "./TimeSprite"
 import EnemyBullet from "./Bullets/EnemyBullets/EnemyBullet"
+import PlanckSprite from "./PlanckSprite"
+import GameScene from "../scenes/GameScene"
+import { BossFixture } from "./PhysicsConstants"
 enum Attack {
 
 }
 var Vec2 = Phaser.Math.Vector2
 
-export default class Enemy extends TimeSprite {
+export default class Enemy extends PlanckSprite {
     health: number = 100
     bullets: Phaser.GameObjects.Group
     /** The time elapsed since the last attack */
@@ -26,12 +29,10 @@ export default class Enemy extends TimeSprite {
     /** circle completion percentage */
     circleCompletion: number = 0
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
+    constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
-        scene.physics.world.enable(this)
-        scene.add.existing(this)
-        let radius = 140
-        this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
+        this.pbody.createFixture(BossFixture)
+        //this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
         
 
         // Create the bullets

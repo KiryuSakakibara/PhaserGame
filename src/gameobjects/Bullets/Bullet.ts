@@ -10,9 +10,8 @@ export default class Bullet extends PlanckSprite {
     age = 0
     
     constructor(scene: GameScene, x: number, y: number, texture: string) {
-        super(scene, x, y, texture, scene.world)
+        super(scene, x, y, texture)
         //scene.physics.world.enable(this)
-        scene.add.existing(this)
 
         //this.disableBody(true, true)
     }

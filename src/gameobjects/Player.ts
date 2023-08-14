@@ -21,13 +21,11 @@ export default class Player extends PlanckSprite {
     /** The health of the player */
     health: number = 10
 
-    constructor(scene: GameScene, x: number, y: number, texture: string, world: Planck.World,
-                inputs: InputController) {
+    constructor(scene: GameScene, x: number, y: number, texture: string, inputs: InputController) {
 
         // Create the gameobject and add it to the physics world
-        super(scene, x, y, texture, world)
+        super(scene, x, y, texture)
         //scene.physics.world.enable(this)
-        scene.add.existing(this)
         //this.setCollideWorldBounds(true)
         //this.setSize(this.width*0.3, this.height*0.5)
         //this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
