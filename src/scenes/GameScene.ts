@@ -1,12 +1,5 @@
 import Phaser from "phaser";
-import Player from "../gameobjects/Player";
-import Bullet from "../gameobjects/Bullets/Bullet";
-import Enemy from "../gameobjects/Enemy";
 import InputController from "../Controllers/InputController";
-import { bulletEnemy, bulletPlayer, collision } from "../Controllers/CollisionController";
-import * as Planck from "planck"
-import { PlanckScale } from "../gameobjects/PhysicsConstants";
-
 var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
@@ -15,12 +8,6 @@ export default class GameScene extends Phaser.Scene {
     inputs: InputController
     /** The world time scale */
     timeScale = 1
-    /** The planck physics world */
-    world: Planck.World
-    /** The conversion rate from pixels to meters */
-    planckScale: number
-    /** Whether debug lines should be drawn or not */
-    drawDebug = false
     
 
     create() {
@@ -28,12 +15,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Initialize input controller
         this.inputs = new InputController(this)
-
-        // Initialize the physics world
-        this.world = Planck.World()
-        this.planckScale = PlanckScale
-
-        this.world.on("begin-contact", collision)
+        
     }
 
     
@@ -47,7 +29,7 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
-        this.world.step(delta/1000,1,3)
+        this.planck.world.step(delta/1000,1,3)
     }
     
     handleDebug() {
@@ -60,7 +42,7 @@ export default class GameScene extends Phaser.Scene {
                 this.physics.world.drawDebug = true;
             }
             */
-            this.drawDebug = !this.drawDebug
+            this.planck.drawDebug = !this.planck.drawDebug
         }
     }
 
@@ -78,5 +60,24 @@ export default class GameScene extends Phaser.Scene {
             this.timeScale = 1
         }
     }
+
+    /*
+    collision(contact: Planck.Contact) {
+        console.log("contact detected")
+        let fixA = contact.getFixtureA()
+        let fixB = contact.getFixtureB()
+        let spriteA = (fixA.getUserData() as UserData).sprite
+        let spriteB = (fixB.getUserData() as UserData).sprite
+    
+        
+        if (spriteA instanceof Enemy && spriteB instanceof PlayerBullet) {
+            spriteA.dealDamage(1)
+        } else if (spriteA instanceof PlayerBullet && spriteB instanceof Enemy) {
+            spriteB.dealDamage(1)
+        }
+        
+    
+    }
+    */
     
 }

@@ -23,8 +23,8 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
         scene.add.existing(this)
-        this.planckScale = scene.planckScale
-        this.pbody = scene.world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
+        this.planckScale = scene.planck.planckScale
+        this.pbody = scene.planck.world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
         this.graphics = scene.add.graphics()
         this.graphics.setDepth(1000)
     }
@@ -37,7 +37,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.pbody.setPosition(Vec2((this.x+this.pbodyOffset.x) * this.planckScale, (this.y+this.pbodyOffset.y) * this.planckScale))
         this.pbody.setAngle(this.rotation)
 
-        if (this.scene instanceof GameScene && this.scene.drawDebug) {
+        if (this.scene.planck.drawDebug) {
             this.drawDebug()
         } else {
             this.graphics.clear()

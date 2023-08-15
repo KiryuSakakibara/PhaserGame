@@ -5,7 +5,7 @@ import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 import PlanckSprite from "./PlanckSprite"
 import * as Planck from "planck"
 import GameScene from "../scenes/GameScene"
-import { PixelScale, PlayerFixture } from "./PhysicsConstants"
+import { PixelScale, Tags, Bits, boxFixture, Masks } from "./PhysicsConstants"
 
 export default class Player extends PlanckSprite {
     /** The inputController */
@@ -33,7 +33,7 @@ export default class Player extends PlanckSprite {
         //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
         //this.setScale(2, 2)
 
-        this.pbody.createFixture(PlayerFixture)
+        this.pbody.createFixture(boxFixture(30, 50, Bits.player, Masks.player, this, Tags.player))
         this.pbodyOffset = Planck.Vec2(-PixelScale/2, 12)
 
         // Set the inputs

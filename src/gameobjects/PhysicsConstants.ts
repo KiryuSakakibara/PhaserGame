@@ -1,55 +1,91 @@
 import * as Planck from "planck"
+import PlanckSprite from "./PlanckSprite"
 
 /** The scale to multiply by to convert from pixels to meters */
 export const PlanckScale = 0.02
 /** How much the pixel art is scaled up by */
 export const PixelScale = 5
 
-const bits = {
-    player: 1,
-    enemy: 2,
-    playerBullet: 4,
-    enemyBullet: 8
+// TAGS
+export const Tags = {
+    player: "player",
+    playerBullet: "playerBullet",
+    enemy: "enemy",
+    enemyBullet: "enemyBullet"
 }
 
-const masks = {
-    player: bits.enemy + bits.enemyBullet,
-    enemy: bits.player + bits.playerBullet,
-    playerBullet: bits.enemy,
-    enemyBullet: bits.player
+/** The type of the userData stored in fixtures, to be used during collisions */
+export type UserData = {
+    type: string,
+    width?: number,
+    height?: number,
+    radius?: number,
+    sprite: PlanckSprite,
+    tag: string
 }
 
-export const PlayerFixture = {
-    shape: Planck.Box(30*PlanckScale, 50*PlanckScale),
-    isSensor: true,
-    filterCategoryBits: bits.player,
-    filterMaskBits: masks.player,
-    userData: {
-        type: "box",
-        width: 30,
-        height: 50
+/** The collision bits of objects */
+export const Bits = {
+    player: 0x1,
+    enemy: 0x2,
+    playerBullet: 0x4,
+    enemyBullet: 0x8
+}
+
+/** The collision bit masks of objects */
+export const Masks = {
+    player: Bits.enemy + Bits.enemyBullet,
+    enemy: Bits.player + Bits.playerBullet,
+    playerBullet: Bits.enemy,
+    enemyBullet: Bits.player
+}
+
+/**
+ * Creates a fixture with a box shape with the given parameters
+ * @param width Width of the box
+ * @param height Height of the box
+ * @param filterCategoryBits The bits associated with this fixture
+ * @param filterMaskBits The bits to enable collisions for
+ * @param sprite The sprite associated with the fixture
+ * @param tag The fixture's tag, to be used during collisions to identify the fixture
+ * @returns A Planck FixtureDef
+ */
+export function boxFixture(width: number, height: number, filterCategoryBits: number, 
+    filterMaskBits: number, sprite: PlanckSprite, tag: string) {
+    return {
+        shape: Planck.Box(width*PlanckScale, height*PlanckScale),
+        filterCategoryBits,
+        filterMaskBits,
+        userData: {
+            type: "box",
+            width,
+            height,
+            sprite,
+            tag
+        } as UserData
     }
 }
 
-export const BossFixture = {
-    shape: Planck.Circle(140*PlanckScale),
-    isSensor: false,
-    filterCategoryBits: bits.enemy,
-    filterMaskBits: masks.enemy,
-    userData: {
-        type: "circle",
-        radius: 140
-    }
-}
-
-export const LinearPlayerBulletFixture = {
-    shape: Planck.Box(50*PlanckScale, 30*PlanckScale),
-    isSensor: false,
-    filterCategoryBits: bits.playerBullet,
-    filterMaskBits: masks.playerBullet,
-    userData: {
-        type: "box",
-        width: 50,
-        height: 30
+/**
+ * Creates a fixture with a circle shape with the given parameters
+ * @param radius The radius of the circle
+ * @param filterCategoryBits The bits associated with this fixture
+ * @param filterMaskBits The bits to enable collisions for
+ * @param sprite The sprite associated with this fixture
+ * @param tag The fixture's tag, to be used during collisions to identify the fixture
+ * @returns A Planck FixtureDef
+ */
+export function circleFixture(radius: number, filterCategoryBits: number,
+    filterMaskBits: number, sprite: PlanckSprite, tag: string) {
+    return {
+        shape: Planck.Circle(radius*PlanckScale),
+        filterCategoryBits,
+        filterMaskBits,
+        userData: {
+            type: "circle",
+            radius,
+            sprite,
+            tag
+        } as UserData
     }
 }

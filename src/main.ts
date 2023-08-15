@@ -2,7 +2,7 @@ import Phaser from "phaser"
 import GameScene from "./scenes/GameScene"
 import LoadScene from "./scenes/LoadScene"
 import Stage1 from "./scenes/Stage1"
-import PlanckPhysicsPlugin from "./Plugins/PlanckPhysics"
+import PlanckPhysics from "./Plugins/PlanckPhysics"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -13,6 +13,11 @@ const config: Phaser.Types.Core.GameConfig = {
         height: 1080,
         zoom: 1,
         mode: Phaser.Scale.FIT
+    },
+    plugins: {
+        scene: [
+            {key: "planck", plugin: PlanckPhysics, start: true, mapping: "planck"}
+        ]
     },
     physics: {
         default: "arcade",
