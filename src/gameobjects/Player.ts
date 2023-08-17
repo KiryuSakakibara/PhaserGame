@@ -5,16 +5,16 @@ import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 import PlanckSprite from "./PlanckSprite"
 import * as Planck from "planck"
 import GameScene from "../scenes/GameScene"
-import { PixelScale, Tags, Bits, boxFixture, Masks } from "./PhysicsConstants"
+import { PixelScale, Tags, Bits, boxFixture, Masks, PlanckScale } from "./PhysicsConstants"
 
 export default class Player extends PlanckSprite {
     /** The inputController */
     inputs: InputController
-    /** The speed of the ship in pixels/millisecond */
-    speed = 0.6
-    /** The max cooldown of the ship */
-    maxCooldown = 100
-    /** The remaining shooting cooldown of the ship */
+    /** The speed of the ship in pixels/second */
+    speed = 600
+    /** The max cooldown of the ship in milliseconds */
+    maxCooldown = 80
+    /** The remaining shooting cooldown of the ship in milliseconds */
     cooldown = 0
     /** The collection of bullets owned by the ship */
     bullets: Phaser.GameObjects.Group
@@ -34,7 +34,8 @@ export default class Player extends PlanckSprite {
         //this.setScale(2, 2)
 
         this.pbody.createFixture(boxFixture(30, 50, Bits.player, Masks.player, this, Tags.player))
-        this.pbodyOffset = Planck.Vec2(-PixelScale/2, 12)
+        this.spriteOffset = Planck.Vec2(PixelScale/2, -12)
+        console.log(this.pbody.getFixtureList())
 
         // Set the inputs
         this.inputs = inputs
@@ -43,7 +44,7 @@ export default class Player extends PlanckSprite {
         
         this.bullets = scene.add.group({
             classType: PlayerLinearBullet,
-            maxSize: 1000,
+            maxSize: 5000,
             runChildUpdate: false,
         })
         /*
@@ -75,6 +76,9 @@ export default class Player extends PlanckSprite {
 
         this.cooldown -= delta
 
+        this.handleMovement()
+        this.handleShoot() // handle shooting first so the bullet sprites get updated
+        
         this.bullets.getChildren().forEach((bullet) => {
             let b = bullet as PlayerLinearBullet
             if (b.active) {
@@ -82,8 +86,6 @@ export default class Player extends PlanckSprite {
             }
         })
 
-        this.handleMovement()
-        this.handleShoot()
     }
 
     handleMovement() {
@@ -103,19 +105,23 @@ export default class Player extends PlanckSprite {
             velocity.y = 0
         }
         velocity.normalize().scale(this.speed)
-        this.setVelocity(velocity.x, velocity.y)
+        this.setRawVelocity(velocity.x, velocity.y)
     }
 
     handleShoot() {
         if (this.inputs.isShooting && this.cooldown <= 0) {
-            const bullet: PlayerLinearBullet = this.bullets.get()
-            if (bullet) {
-                let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
-                angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
-                bullet.spawn(this.x, this.y, angle, 3*Math.cos(angle), 3*Math.sin(angle))
-                bullet.setDepth(-1)
-                this.cooldown = this.maxCooldown
+            for (let i=0; i<1; i++) {
+                const bullet: PlayerLinearBullet = this.bullets.get()
+                if (bullet) {
+                    let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
+                    angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
+                    let pos = this.pbody.getPosition().clone().mul(1/PlanckScale)
+                    bullet.spawn(pos.x, pos.y, angle, 3000*Math.cos(angle), 3000*Math.sin(angle))
+                    bullet.setDepth(-1)
+                    this.cooldown = this.maxCooldown
+                }
             }
+            
         } 
     }
 

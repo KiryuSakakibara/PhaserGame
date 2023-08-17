@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import TimeSprite from "../TimeSprite";
 import PlanckSprite from "../PlanckSprite";
 import * as Planck from "planck"
 import GameScene from "../../scenes/GameScene";
@@ -34,11 +33,22 @@ export default class Bullet extends PlanckSprite {
         
     }
 
+    /**
+     * 
+     * @param x x position in pixels
+     * @param y y position in pixels
+     * @param angle angle in radians
+     * @param vx x velocity in pixels/second
+     * @param vy y velocity in pixels/second
+     */
     spawn(x: number, y: number, angle: number, vx=0, vy=0) {
         //this.enableBody(true, x, y, true, true)
-        this.setPosition(x, y)
-        this.setRotation(angle)
-        this.setVelocity(vx, vy)
+        //this.setPosition(x, y)
+        //this.setRotation(angle)
+        //this.setVelocity(vx, vy)
+        this.pbody.setPosition(Planck.Vec2(x*this.planckScale, y*this.planckScale))
+        this.pbody.setAngle(angle)
+        this.setRawVelocity(vx, vy)
         
         this.enable()
         this.age = 0

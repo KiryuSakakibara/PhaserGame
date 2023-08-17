@@ -42,8 +42,8 @@ export const Masks = {
 
 /**
  * Creates a fixture with a box shape with the given parameters
- * @param width Width of the box
- * @param height Height of the box
+ * @param width Width of the box in pixels
+ * @param height Height of the box in pixels
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
  * @param sprite The sprite associated with the fixture
@@ -53,9 +53,10 @@ export const Masks = {
 export function boxFixture(width: number, height: number, filterCategoryBits: number, 
     filterMaskBits: number, sprite: PlanckSprite, tag: string) {
     return {
-        shape: Planck.Box(width*PlanckScale, height*PlanckScale),
+        shape: Planck.Box(width*PlanckScale/2, height*PlanckScale/2), // Planck.Box uses half width ad half height
         filterCategoryBits,
         filterMaskBits,
+        isSensor: true,
         userData: {
             type: "box",
             width,
@@ -68,7 +69,7 @@ export function boxFixture(width: number, height: number, filterCategoryBits: nu
 
 /**
  * Creates a fixture with a circle shape with the given parameters
- * @param radius The radius of the circle
+ * @param radius The radius of the circle in pixels
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
  * @param sprite The sprite associated with this fixture
@@ -81,6 +82,7 @@ export function circleFixture(radius: number, filterCategoryBits: number,
         shape: Planck.Circle(radius*PlanckScale),
         filterCategoryBits,
         filterMaskBits,
+        isSensor: true,
         userData: {
             type: "circle",
             radius,

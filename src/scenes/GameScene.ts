@@ -29,7 +29,7 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
-        this.planck.world.step(delta/1000,1,3)
+        this.planck.world.step(delta/1000,8,5)
     }
     
     handleDebug() {
@@ -60,24 +60,5 @@ export default class GameScene extends Phaser.Scene {
             this.timeScale = 1
         }
     }
-
-    /*
-    collision(contact: Planck.Contact) {
-        console.log("contact detected")
-        let fixA = contact.getFixtureA()
-        let fixB = contact.getFixtureB()
-        let spriteA = (fixA.getUserData() as UserData).sprite
-        let spriteB = (fixB.getUserData() as UserData).sprite
-    
-        
-        if (spriteA instanceof Enemy && spriteB instanceof PlayerBullet) {
-            spriteA.dealDamage(1)
-        } else if (spriteA instanceof PlayerBullet && spriteB instanceof Enemy) {
-            spriteB.dealDamage(1)
-        }
-        
-    
-    }
-    */
     
 }

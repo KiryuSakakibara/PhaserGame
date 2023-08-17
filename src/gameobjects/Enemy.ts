@@ -1,10 +1,10 @@
 import Phaser from "phaser"
 import Bullet from "./Bullets/Bullet"
-import TimeSprite from "./TimeSprite"
 import EnemyBullet from "./Bullets/EnemyBullets/EnemyBullet"
 import PlanckSprite from "./PlanckSprite"
 import GameScene from "../scenes/GameScene"
 import { Tags, Bits, circleFixture, Masks } from "./PhysicsConstants"
+import * as Planck from "planck"
 enum Attack {
 
 }
@@ -13,7 +13,7 @@ var Vec2 = Phaser.Math.Vector2
 export default class Enemy extends PlanckSprite {
     health: number = 100
     bullets: Phaser.GameObjects.Group
-    /** The time elapsed since the last attack */
+    /** The time elapsed since the last attack in milliseconds*/
     attackTimer: number = 0
     wavesFired: number = 0
 
@@ -24,8 +24,8 @@ export default class Enemy extends PlanckSprite {
     angleBetweenWaves: number = 4
     /** The number of shots per wave */
     shotsPerWave: number = 5
-    /** The speed of the bullet */
-    bulletSpeed: number = 0.7
+    /** The speed of the bullet in pixels/second */
+    bulletSpeed: number = 700
     /** circle completion percentage */
     circleCompletion: number = 0
 
@@ -38,7 +38,7 @@ export default class Enemy extends PlanckSprite {
         // Create the bullets
         this.bullets = scene.add.group({
             classType: EnemyBullet,
-            maxSize: 1000,
+            maxSize: 5000,
             runChildUpdate: false
         })
         
@@ -62,7 +62,8 @@ export default class Enemy extends PlanckSprite {
         this.circleCompletion = (this.circleCompletion + delta/10000*timeScale)%1
         let angle = Math.PI*2*this.circleCompletion
 
-        this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
+        //this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
+        this.pbody.setPosition(Planck.Vec2(960+800*Math.cos(angle), 540-400*Math.sin(angle)).mul(this.planckScale))
         
     }
 
@@ -78,8 +79,8 @@ export default class Enemy extends PlanckSprite {
                 let angle = baseAngle + Math.PI*2*i/this.shotsPerWave
                 let vel = (new Vec2(Math.cos(angle), Math.sin(angle))).scale(this.bulletSpeed)
                 if (bullet) {
-                    bullet.spawn(this.x + vel.x*this.attackTimer/1000,
-                        this.y + vel.y*this.attackTimer/1000, angle, vel.x, vel.y)
+                    bullet.spawn(this.pbody.getPosition().x/this.planckScale + vel.x*this.attackTimer/1000,
+                        this.pbody.getPosition().y/this.planckScale + vel.y*this.attackTimer/1000, angle, vel.x, vel.y)
                     bullet.setDepth(-0.1)
                 }
 

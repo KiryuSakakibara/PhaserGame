@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import * as Planck from "planck"
 import { Vec2 } from "planck";
 import GameScene from "../scenes/GameScene";
-import { PlanckScale } from "./PhysicsConstants";
+import { PlanckScale, UserData } from "./PhysicsConstants";
 
 /**
  * Basically the Sprite class but with Planck physics. Has a body, but no fixture or shape.
@@ -11,12 +11,12 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
 
     /** The planck physics body */
     pbody: Planck.Body
-    /** the positional offset of the pbody in pixels */
-    pbodyOffset = new Vec2(0, 0)
+    /** the positional offset of the sprite in pixels */
+    spriteOffset = new Vec2(0, 0)
     /** The scale to multiply by to convert pixel units to meters */
     planckScale: number
-    /** The velocity in pixels/millisecond */
-    velocity = new Vec2(0, 0)
+    /** The unscaled velocity in pixels/second */
+    rawVelocity = new Vec2(0, 0)
     /** The debug graphics for this sprite */
     graphics: Phaser.GameObjects.Graphics
 
@@ -33,9 +33,13 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         super.update(time, delta)
 
         let scaledDelta = delta * timeScale // scale delta for time stop
-        this.setPosition(this.x+this.velocity.x*scaledDelta, this.y+this.velocity.y*scaledDelta)
-        this.pbody.setPosition(Vec2((this.x+this.pbodyOffset.x) * this.planckScale, (this.y+this.pbodyOffset.y) * this.planckScale))
-        this.pbody.setAngle(this.rotation)
+        this.pbody.setLinearVelocity(this.rawVelocity.clone().mul(timeScale*this.planckScale))
+        let pos = this.pbody.getPosition().clone().mul(1/this.planckScale) // body position in pixels
+        this.setPosition(pos.x+this.spriteOffset.x, pos.y + this.spriteOffset.y)
+        //this.setPosition(this.x+this.velocity.x*scaledDelta, this.y+this.velocity.y*scaledDelta)
+        //this.pbody.setPosition(Vec2((this.x+this.pbodyOffset.x) * this.planckScale, (this.y+this.pbodyOffset.y) * this.planckScale))
+        //this.pbody.setAngle(this.rotation)
+        this.setRotation(this.pbody.getAngle())
 
         if (this.scene.planck.drawDebug) {
             this.drawDebug()
@@ -45,27 +49,27 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     }
 
     /**
-     * Sets the velocity
+     * Sets the velocity of the sprite in pixels/second (unscaled by time, does not set pbody velocity)
      * @param x x velocity
      * @param y y velocity
      * @returns this game object
      */
-    setVelocity(x: number, y?: number | undefined): this {
-        this.velocity.x = x
-        this.velocity.y = y !== undefined ? y : x
+    setRawVelocity(x: number, y: number): this {
+        this.rawVelocity.x = x
+        this.rawVelocity.y = y
         return this
     }
 
     enable() {
         this.setActive(true)
         this.setVisible(true)
-        this.pbody.setAwake(true)
+        this.pbody.setActive(true)
     }
 
     disable() {
         this.setActive(false)
         this.setVisible(false)
-        this.pbody.setAwake(false)
+        this.pbody.setActive(false)
         this.graphics.clear()
     }
 
@@ -77,14 +81,18 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
                 let position = this.pbody.getPosition().clone().mul(1/PlanckScale)
                 this.graphics.translateCanvas(position.x, position.y)
                 this.graphics.rotateCanvas(this.rotation)
-                let data = f.getUserData() as any
+                let data = f.getUserData() as UserData
                 switch (data.type) {
                     case "box":
-                        this.graphics.strokeRect(-data.width/2, -data.height/2, data.width, data.height)
-                        break
+                        if (data.width && data.height){
+                            this.graphics.strokeRect(-data.width/2, -data.height/2, data.width, data.height)
+                            break
+                        }
                     case "circle":
-                        this.graphics.strokeCircle(0, 0, data.radius)
-                        break
+                        if (data.radius) {
+                            this.graphics.strokeCircle(0, 0, data.radius)
+                            break
+                        }
                     default:
                         console.warn("Shape type unknown");
                         break
