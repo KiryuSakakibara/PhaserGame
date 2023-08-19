@@ -1,28 +1,20 @@
 import Phaser from "phaser";
-import InputController from "../Controllers/InputController";
 var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
     
-    /** Inputs for the scene. */
-    inputs: InputController
     /** The world time scale */
     timeScale = 1
     
 
     create() {
         this.physics.world.drawDebug = false
-
-        // Initialize input controller
-        this.inputs = new InputController(this)
         
     }
 
     
     update(time: number, delta: number): void {
         
-        this.inputs.update()
-
         // Handle debug toggle
         this.handleDebug()
 
@@ -34,7 +26,7 @@ export default class GameScene extends Phaser.Scene {
     }
     
     handleDebug() {
-        if (Phaser.Input.Keyboard.JustDown(this.inputs.debug)) {
+        if (Phaser.Input.Keyboard.JustDown(this.customInputs.debug)) {
             /*
             if (this.physics.world.drawDebug) {
                 this.physics.world.drawDebug = false;
@@ -55,7 +47,7 @@ export default class GameScene extends Phaser.Scene {
             this.timeScale = 1
         }
         */
-        if (this.inputs.isStoppingTime) {
+        if (this.customInputs.isStoppingTime) {
             this.timeScale = 0.02
         } else {
             this.timeScale = 1

@@ -60,13 +60,18 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         return this
     }
 
-
+    /**
+     * Activates the sprite and body
+     */
     enable() {
         this.setActive(true)
         this.setVisible(true)
         this.pbody.setActive(true)
     }
 
+    /**
+     * Deactivates the sprite and body
+     */
     disable() {
         this.setActive(false)
         this.setVisible(false)
@@ -74,30 +79,24 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.graphics.clear()
     }
 
+    /**
+     * Draws debug lines to represent every shape/fixture attached to the body
+     */
     drawDebug() {
         this.graphics.clear()
         this.graphics.lineStyle(2, 0x00ff00)
-        if (this.pbody.getFixtureList()) {
-            for (let f = this.pbody.getFixtureList(); f; f=f.getNext()) {
-                let position = this.pbody.getPosition().clone().mul(1/PlanckScale)
-                this.graphics.translateCanvas(position.x, position.y)
-                this.graphics.rotateCanvas(this.rotation)
-                let data = f.getUserData() as UserData
-                switch (data.type) {
-                    case "box":
-                        if (data.width && data.height){
-                            this.graphics.strokeRect(-data.width/2, -data.height/2, data.width, data.height)
-                            break
-                        }
-                    case "circle":
-                        if (data.radius) {
-                            this.graphics.strokeCircle(0, 0, data.radius)
-                            break
-                        }
-                    default:
-                        console.warn("Shape type unknown");
-                        break
-                }
+        // does not go through loop if there are no fixtures
+        for (let f = this.pbody.getFixtureList(); f; f=f.getNext()) {
+            let position = this.pbody.getPosition().clone().mul(1/PlanckScale)
+            this.graphics.translateCanvas(position.x, position.y)
+            this.graphics.rotateCanvas(this.rotation)
+            let data = f.getUserData() as UserData
+            if (data.width && data.height) {
+                this.graphics.strokeRect(-data.width/2, -data.height/2, data.width, data.height)
+            } else if (data.radius) {
+                this.graphics.strokeCircle(0, 0, data.radius)
+            } else {
+                console.warn("Shape type unknown")
             }
         }
     }

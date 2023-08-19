@@ -1,4 +1,5 @@
 import Phaser, { Input } from "phaser"
+import defaultSettings from "../Constants/defaultSettings.json"
 type Key = Phaser.Input.Keyboard.Key
 const {KeyCodes} = Phaser.Input.Keyboard
 
@@ -6,8 +7,7 @@ const {KeyCodes} = Phaser.Input.Keyboard
  * Handles all inputs and stores them in variables.
  * Call setScene() every time a scene is changed.
  */
-export default class InputController {
-    private scene: Phaser.Scene
+export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
 
     controls: any
 
@@ -36,20 +36,15 @@ export default class InputController {
     /** whether shotting has just been toggled, if toggle mode is enabled */
     shootToggled: boolean = false
 
-    constructor(scene: Phaser.Scene) {
-        this.scene = scene
+    constructor(scene: Phaser.Scene, pluginManager: Phaser.Plugins.PluginManager) {
+        super(scene, pluginManager, "customInputs")
+        this.controls = defaultSettings.controls
 
         // Creating the inputs
         this.initializeInputs()
     }
 
-    setScene(scene: Phaser.Scene) {
-        this.scene = scene
-        this.initializeInputs()
-    }
-
     initializeInputs() {
-        this.controls = this.scene.cache.json.get("settings").controls
 
         // KEYS
         this.createKeys()

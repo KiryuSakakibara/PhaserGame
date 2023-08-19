@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import * as Planck from "planck"
 import { collision } from "../Controllers/CollisionController";
 
-export default class PlanckPhysics extends Phaser.Plugins.ScenePlugin {
+export default class PlanckPhysicsPlugin extends Phaser.Plugins.ScenePlugin {
 
     /** The planck world */
     world: Planck.World
@@ -14,7 +14,7 @@ export default class PlanckPhysics extends Phaser.Plugins.ScenePlugin {
     drawDebug = false
 
     constructor(scene: Phaser.Scene, pluginManager: Phaser.Plugins.PluginManager) {
-        super(scene, pluginManager, "myPlugin")
+        super(scene, pluginManager, "planck")
 
         this.world = Planck.World()
         this.world.on("begin-contact", collision)

@@ -1,15 +1,17 @@
 import Phaser from "phaser"
-import InputController from "../Controllers/InputController"
 import Bullet from "./Bullets/Bullet"
 import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 import PlanckSprite from "./PlanckSprite"
 import * as Planck from "planck"
+import {Fixture} from "planck"
 import GameScene from "../scenes/GameScene"
-import { PixelScale, Bits, boxFixture, Masks, PlanckScale } from "./PhysicsConstants"
+import { PixelScale, Bits, createBoxFixture, Masks, PlanckScale, UserData } from "./PhysicsConstants"
+import { PlayerConst } from "../Constants/GameObjects/PlayerConst"
+import CustomInputPlugin from "../Plugins/CustomInputPlugin"
 
 export default class Player extends PlanckSprite {
-    /** The inputController */
-    inputs: InputController
+    /** The CustomInputPlugin */
+    inputs: CustomInputPlugin
     /** The speed of the ship in pixels/second */
     speed = 600
     /** The max cooldown of the ship in milliseconds */
@@ -21,24 +23,17 @@ export default class Player extends PlanckSprite {
     /** The health of the player */
     health: number = 10
 
-    constructor(scene: GameScene, x: number, y: number, texture: string, inputs: InputController) {
+    constructor(scene: GameScene, x: number, y: number, texture: string) {
 
-        // Create the gameobject and add it to the physics world
         super(scene, x, y, texture)
-        //scene.physics.world.enable(this)
-        //this.setCollideWorldBounds(true)
-        //this.setSize(this.width*0.3, this.height*0.5)
-        //this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
-        //let radius = 5
-        //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
-        //this.setScale(2, 2)
 
-        this.pbody.createFixture(boxFixture(30, 50, Bits.player, Masks.player, this))
+        this.pbody.createFixture(createBoxFixture(
+            PlayerConst.width, PlayerConst.height, Bits.player, Masks.player, this
+        ))
         this.spriteOffset = Planck.Vec2(PixelScale/2, -12)
-        console.log(this.pbody.getFixtureList())
 
         // Set the inputs
-        this.inputs = inputs
+        this.inputs = this.scene.customInputs
         
         // Create the bullets
         
@@ -55,7 +50,6 @@ export default class Player extends PlanckSprite {
             active: false
         })
         */
-        
         
         
     }
@@ -89,7 +83,7 @@ export default class Player extends PlanckSprite {
     }
 
     handleMovement() {
-        let velocity = new Phaser.Math.Vector2
+        let velocity = Planck.Vec2()
         if (this.inputs.left.isDown && this.inputs.right.isUp) {
             velocity.x = -1
         } else if (this.inputs.left.isUp && this.inputs.right.isDown) {
@@ -104,7 +98,8 @@ export default class Player extends PlanckSprite {
         } else {
             velocity.y = 0
         }
-        velocity.normalize().scale(this.speed)
+        //velocity.normalize().scale(this.speed)
+        velocity.clamp(1).mul(this.speed)
         this.setRawVelocity(velocity.x, velocity.y)
 
     }
@@ -117,20 +112,20 @@ export default class Player extends PlanckSprite {
         let pos = this.pbody.getPosition().clone().mul(1/this.planckScale)
         let newPos = Planck.Vec2(pos.x, pos.y) // in pixels
         let boundsHit = false
-        if (pos.x-this.displayWidth/2 < 0) {
-            newPos.x = this.displayWidth/2
+        if (pos.x-PlayerConst.width/2 < 0) {
+            newPos.x = PlayerConst.width/2
             boundsHit = true
         }
-        else if (pos.x+this.displayWidth/2 > 1920) {
-            newPos.x = 1920-this.displayWidth/2
+        else if (pos.x+PlayerConst.width/2 > 1920) {
+            newPos.x = 1920-PlayerConst.width/2
             boundsHit = true
         }
-        if (pos.y-this.displayHeight/2 < 0) {
-            newPos.y = this.displayHeight/2
+        if (pos.y-PlayerConst.height/2 < 0) {
+            newPos.y = PlayerConst.height/2
             boundsHit = true
         }
-        else if (pos.y+this.displayHeight/2 > 1080) {
-            newPos.y = 1080-this.displayHeight/2
+        else if (pos.y+PlayerConst.height/2 > 1080) {
+            newPos.y = 1080-PlayerConst.height/2
             boundsHit = true
         }
         if (boundsHit) {

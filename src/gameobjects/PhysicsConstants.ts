@@ -8,7 +8,6 @@ export const PixelScale = 5
 
 /** The type of the userData stored in fixtures, to be used during collisions */
 export type UserData = {
-    type: string,
     width?: number,
     height?: number,
     radius?: number,
@@ -38,10 +37,9 @@ export const Masks = {
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
  * @param sprite The sprite associated with the fixture
- * @param tag The fixture's tag, to be used during collisions to identify the fixture
  * @returns A Planck FixtureDef
  */
-export function boxFixture(width: number, height: number, filterCategoryBits: number, 
+export function createBoxFixture(width: number, height: number, filterCategoryBits: number, 
     filterMaskBits: number, sprite: PlanckSprite) {
     return {
         shape: Planck.Box(width*PlanckScale/2, height*PlanckScale/2), // Planck.Box uses half width ad half height
@@ -49,7 +47,6 @@ export function boxFixture(width: number, height: number, filterCategoryBits: nu
         filterMaskBits,
         isSensor: true,
         userData: {
-            type: "box",
             width,
             height,
             sprite
@@ -63,10 +60,9 @@ export function boxFixture(width: number, height: number, filterCategoryBits: nu
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
  * @param sprite The sprite associated with this fixture
- * @param tag The fixture's tag, to be used during collisions to identify the fixture
  * @returns A Planck FixtureDef
  */
-export function circleFixture(radius: number, filterCategoryBits: number,
+export function createCircleFixture(radius: number, filterCategoryBits: number,
     filterMaskBits: number, sprite: PlanckSprite) {
     return {
         shape: Planck.Circle(radius*PlanckScale),
@@ -74,7 +70,6 @@ export function circleFixture(radius: number, filterCategoryBits: number,
         filterMaskBits,
         isSensor: true,
         userData: {
-            type: "circle",
             radius,
             sprite
         } as UserData

@@ -18,7 +18,7 @@ export default class Stage1 extends GameScene {
         super.create()
         // Create the game objects
         this.walpurgisNacht = new Enemy(this, 1760, 540, "walpurgisnachtImage")
-        this.player = new Player(this, 100, 540, "Carmine", this.inputs)
+        this.player = new Player(this, 100, 540, "Carmine")
         
 
         // Create the on screen text

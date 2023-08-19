@@ -2,7 +2,8 @@ import Phaser from "phaser"
 import GameScene from "./scenes/GameScene"
 import LoadScene from "./scenes/LoadScene"
 import Stage1 from "./scenes/Stage1"
-import PlanckPhysics from "./Plugins/PlanckPhysics"
+import PlanckPhysicsPlugin from "./Plugins/PlanckPhysicsPlugin"
+import CustomInputPlugin from "./Plugins/CustomInputPlugin"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -16,7 +17,8 @@ const config: Phaser.Types.Core.GameConfig = {
     },
     plugins: {
         scene: [
-            {key: "planck", plugin: PlanckPhysics, start: true, mapping: "planck"}
+            {key: "planck", plugin: PlanckPhysicsPlugin, start: true, mapping: "planck"},
+            {key: "customInputs", plugin: CustomInputPlugin, mapping: "customInputs"}
         ]
     },
     physics: {
