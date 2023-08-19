@@ -21,14 +21,15 @@ export default class Bullet extends PlanckSprite {
 
             //this.lifeSpan -= delta * timeScale
             this.age += delta * timeScale
-            let bounds = this.scene.physics.world.bounds
-            if (this.x-this.displayWidth/2 > bounds.right || this.x+this.displayWidth/2 < 0 ||
-                this.y-this.displayHeight/2 > bounds.bottom || this.y+this.displayHeight/2 < 0 ||
+            if (this.x-this.displayWidth/2 > 1920 || this.x+this.displayWidth/2 < 0 ||
+                this.y-this.displayHeight/2 > 1080 || this.y+this.displayHeight/2 < 0 ||
                 this.age > this.lifeSpan) {
 
+                
                 //this.disableBody(true, true)
                 this.disable()
             }
+            
         }
         
     }

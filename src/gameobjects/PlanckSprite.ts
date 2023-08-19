@@ -60,6 +60,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         return this
     }
 
+
     enable() {
         this.setActive(true)
         this.setVisible(true)

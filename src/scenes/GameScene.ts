@@ -29,7 +29,8 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
-        this.planck.world.step(delta/1000,8,5)
+        // step the physics engine
+        this.planck.world.step(delta/1000,5,5)
     }
     
     handleDebug() {

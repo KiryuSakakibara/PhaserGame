@@ -5,7 +5,7 @@ import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
 import PlanckSprite from "./PlanckSprite"
 import * as Planck from "planck"
 import GameScene from "../scenes/GameScene"
-import { PixelScale, Tags, Bits, boxFixture, Masks, PlanckScale } from "./PhysicsConstants"
+import { PixelScale, Bits, boxFixture, Masks, PlanckScale } from "./PhysicsConstants"
 
 export default class Player extends PlanckSprite {
     /** The inputController */
@@ -33,7 +33,7 @@ export default class Player extends PlanckSprite {
         //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
         //this.setScale(2, 2)
 
-        this.pbody.createFixture(boxFixture(30, 50, Bits.player, Masks.player, this, Tags.player))
+        this.pbody.createFixture(boxFixture(30, 50, Bits.player, Masks.player, this))
         this.spriteOffset = Planck.Vec2(PixelScale/2, -12)
         console.log(this.pbody.getFixtureList())
 
@@ -68,10 +68,10 @@ export default class Player extends PlanckSprite {
      * 
      * @param time 
      * @param delta 
-     * @param timeScale the unchanged world timeScale
+     * @param timeScale the world timeScale
      */
     update(time: number, delta: number, timeScale: number): void {
-        // timeScale for the player should not be affected by time stop
+        this.checkInBounds() // calling this first so body gets updated before sprite jump
         super.update(time, delta, 1)
 
         this.cooldown -= delta
@@ -106,6 +106,36 @@ export default class Player extends PlanckSprite {
         }
         velocity.normalize().scale(this.speed)
         this.setRawVelocity(velocity.x, velocity.y)
+
+    }
+
+    /**
+     * Checks if the player is still within bounds, and moves them back inside if they're not.
+     * Should be called after the physics update and before the sprite jumps to the body.
+     */
+    checkInBounds() {
+        let pos = this.pbody.getPosition().clone().mul(1/this.planckScale)
+        let newPos = Planck.Vec2(pos.x, pos.y) // in pixels
+        let boundsHit = false
+        if (pos.x-this.displayWidth/2 < 0) {
+            newPos.x = this.displayWidth/2
+            boundsHit = true
+        }
+        else if (pos.x+this.displayWidth/2 > 1920) {
+            newPos.x = 1920-this.displayWidth/2
+            boundsHit = true
+        }
+        if (pos.y-this.displayHeight/2 < 0) {
+            newPos.y = this.displayHeight/2
+            boundsHit = true
+        }
+        else if (pos.y+this.displayHeight/2 > 1080) {
+            newPos.y = 1080-this.displayHeight/2
+            boundsHit = true
+        }
+        if (boundsHit) {
+            this.pbody.setPosition(newPos.mul(this.planckScale))
+        }
     }
 
     handleShoot() {

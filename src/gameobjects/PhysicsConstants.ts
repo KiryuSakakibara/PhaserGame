@@ -6,22 +6,13 @@ export const PlanckScale = 0.02
 /** How much the pixel art is scaled up by */
 export const PixelScale = 5
 
-// TAGS
-export const Tags = {
-    player: "player",
-    playerBullet: "playerBullet",
-    enemy: "enemy",
-    enemyBullet: "enemyBullet"
-}
-
 /** The type of the userData stored in fixtures, to be used during collisions */
 export type UserData = {
     type: string,
     width?: number,
     height?: number,
     radius?: number,
-    sprite: PlanckSprite,
-    tag: string
+    sprite: PlanckSprite
 }
 
 /** The collision bits of objects */
@@ -51,7 +42,7 @@ export const Masks = {
  * @returns A Planck FixtureDef
  */
 export function boxFixture(width: number, height: number, filterCategoryBits: number, 
-    filterMaskBits: number, sprite: PlanckSprite, tag: string) {
+    filterMaskBits: number, sprite: PlanckSprite) {
     return {
         shape: Planck.Box(width*PlanckScale/2, height*PlanckScale/2), // Planck.Box uses half width ad half height
         filterCategoryBits,
@@ -61,8 +52,7 @@ export function boxFixture(width: number, height: number, filterCategoryBits: nu
             type: "box",
             width,
             height,
-            sprite,
-            tag
+            sprite
         } as UserData
     }
 }
@@ -77,7 +67,7 @@ export function boxFixture(width: number, height: number, filterCategoryBits: nu
  * @returns A Planck FixtureDef
  */
 export function circleFixture(radius: number, filterCategoryBits: number,
-    filterMaskBits: number, sprite: PlanckSprite, tag: string) {
+    filterMaskBits: number, sprite: PlanckSprite) {
     return {
         shape: Planck.Circle(radius*PlanckScale),
         filterCategoryBits,
@@ -86,8 +76,7 @@ export function circleFixture(radius: number, filterCategoryBits: number,
         userData: {
             type: "circle",
             radius,
-            sprite,
-            tag
+            sprite
         } as UserData
     }
 }

@@ -3,7 +3,7 @@ import Bullet from "./Bullets/Bullet"
 import EnemyBullet from "./Bullets/EnemyBullets/EnemyBullet"
 import PlanckSprite from "./PlanckSprite"
 import GameScene from "../scenes/GameScene"
-import { Tags, Bits, circleFixture, Masks } from "./PhysicsConstants"
+import {Bits, circleFixture, Masks } from "./PhysicsConstants"
 import * as Planck from "planck"
 enum Attack {
 
@@ -31,7 +31,7 @@ export default class Enemy extends PlanckSprite {
 
     constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
-        this.pbody.createFixture(circleFixture(140, Bits.enemy, Masks.enemy, this, Tags.enemy))
+        this.pbody.createFixture(circleFixture(140, Bits.enemy, Masks.enemy, this))
         //this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
         
 
