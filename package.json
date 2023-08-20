@@ -33,7 +33,7 @@
     "dist"
   ],
   "staticFiles": {
-    "staticPath": "public",
+    "staticPath": "PhaserGameAssets/src",
     "watcherGlob": "**"
   }
 }

@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Bullet from "../Bullet";
 import GameScene from "../../../scenes/GameScene";
+import { PlayerConst } from "../../../Constants/GameObjects/PlayerConst";
 
 export default class PlayerBullet extends Bullet {
 
@@ -11,7 +12,7 @@ export default class PlayerBullet extends Bullet {
 
     constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
-        this.timeScaleDelay = this.scene.cache.json.get("constants").playerBulletTimeScaleDelay
+        this.timeScaleDelay = PlayerConst.playerBulletTimeScaleDelay
         this.lifeSpan = 3000
     }
     
