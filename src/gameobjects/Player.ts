@@ -23,9 +23,9 @@ export default class Player extends PlanckSprite {
     /** The health of the player */
     health: number = 10
 
-    constructor(scene: GameScene, x: number, y: number, texture: string) {
+    constructor(scene: GameScene, x: number, y: number) {
 
-        super(scene, x, y, texture)
+        super(scene, x, y, "Player")
 
         this.pbody.createFixture(createBoxFixture(
             PlayerConst.width, PlayerConst.height, Bits.player, Masks.player, this

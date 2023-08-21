@@ -29,8 +29,8 @@ export default class Enemy extends PlanckSprite {
     /** circle completion percentage */
     circleCompletion: number = 0
 
-    constructor(scene: GameScene, x: number, y: number, texture: string) {
-        super(scene, x, y, texture)
+    constructor(scene: GameScene, x: number, y: number) {
+        super(scene, x, y, "Boss")
         this.pbody.createFixture(createCircleFixture(140, Bits.enemy, Masks.enemy, this))
         //this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
         
