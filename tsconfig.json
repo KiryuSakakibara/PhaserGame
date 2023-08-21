@@ -2,13 +2,14 @@
     "compilerOptions": {
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": false,
         "forceConsistentCasingInFileNames": true,
 
         "allowUnreachableCode": false,
         "noImplicitAny": false,
         "sourceMap": true,
         "strictPropertyInitialization": false,
-
+        "types": ["./src/plugin.d.ts"]
     }
 }

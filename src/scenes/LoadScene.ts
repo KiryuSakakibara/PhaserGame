@@ -1,17 +1,37 @@
 import Phaser from "phaser";
 
 export default class LoadScene extends Phaser.Scene {
+
+    assetPaths
+
     constructor() {
-        super("LoadScene")
+        super({
+            key: "LoadScene",
+            pack: {
+                files: [
+                    {
+                        type: "json",
+                        key: "assetsJSON",
+                        url: "Assets/assets.json"
+                    }
+                ]
+            }
+        })
     }
 
     preload() {
-        this.load.image("walpurgisnachtImage", "assets/Walpurgisnacht.png")
-        this.load.image("bullet", "assets/bullet.png")
-        this.load.json("settings", "assets/jsons/settings.json")
-        this.load.json("constants", "assets/jsons/constants.json")
-        this.load.image("Carmine", "assets/Sprites/Characters/Carmine/Carmine.png")
-        this.load.image("PlayerBullet", "assets/Sprites/Projectiles/Bullet.png")
+        let json = this.cache.json.get("assetsJSON")
+
+        /*
+        this.load.image("walpurgisnachtImage", json["Boss"])
+        this.load.image("Carmine", json["Carmine"])
+        this.load.image("bullet", json["EnemyBullet"])
+        this.load.image("PlayerBullet", json["PlayerLinearBullet"])
+        */
+        let keys = Object.keys(json)
+        keys.forEach((key) => {
+            this.load.image(key, json[key])
+        })
     }
 
     create() {

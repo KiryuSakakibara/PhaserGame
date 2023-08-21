@@ -1,48 +1,45 @@
 import Phaser from "phaser"
-import InputController from "../Controllers/InputController"
 import Bullet from "./Bullets/Bullet"
 import PlayerLinearBullet from "./Bullets/PlayerBullets/PlayerLinearBullet"
+import PlanckSprite from "./PlanckSprite"
+import * as Planck from "planck"
+import {Fixture} from "planck"
+import GameScene from "../scenes/GameScene"
+import { PixelScale, Bits, createBoxFixture, Masks, PlanckScale, UserData } from "./PhysicsConstants"
+import { PlayerConst } from "../Constants/GameObjects/PlayerConst"
+import CustomInputPlugin from "../Plugins/CustomInputPlugin"
 
-type Key = Phaser.Input.Keyboard.Key
-var KeyCodes = Phaser.Input.Keyboard.KeyCodes
-var Vec2 = Phaser.Math.Vector2
-
-export default class Player extends Phaser.Physics.Arcade.Sprite {
-    /** The inputController */
-    inputs: InputController
-    /** The speed of the ship */
+export default class Player extends PlanckSprite {
+    /** The CustomInputPlugin */
+    inputs: CustomInputPlugin
+    /** The speed of the ship in pixels/second */
     speed = 600
-    /** The max cooldown of the ship */
-    maxCooldown = 100
-    /** The remaining shooting cooldown of the ship */
+    /** The max cooldown of the ship in milliseconds */
+    maxCooldown = 80
+    /** The remaining shooting cooldown of the ship in milliseconds */
     cooldown = 0
     /** The collection of bullets owned by the ship */
     bullets: Phaser.GameObjects.Group
     /** The health of the player */
     health: number = 10
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture,
-                inputs: InputController) {
+    constructor(scene: GameScene, x: number, y: number) {
 
-        // Create the gameobject and add it to the physics world
-        super(scene, x, y, texture)
-        scene.physics.world.enable(this)
-        scene.add.existing(this)
-        this.setCollideWorldBounds(true)
-        this.setSize(this.width*0.3, this.height*0.5)
-        this.body.setOffset(this.body.offset.x-0.5, this.body.offset.y+2)
-        //let radius = 5
-        //this.setCircle(radius, this.displayWidth/2-radius-0.5, this.displayHeight/2-radius+4)
-        //this.setScale(2, 2)
+        super(scene, x, y, "Player")
+
+        this.pbody.createFixture(createBoxFixture(
+            PlayerConst.width, PlayerConst.height, Bits.player, Masks.player, this
+        ))
+        this.spriteOffset = Planck.Vec2(PixelScale/2, -12)
 
         // Set the inputs
-        this.inputs = inputs
+        this.inputs = this.scene.customInputs
         
         // Create the bullets
         
         this.bullets = scene.add.group({
             classType: PlayerLinearBullet,
-            maxSize: 1000,
+            maxSize: 5000,
             runChildUpdate: false,
         })
         /*
@@ -55,28 +52,38 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         */
         
         
-        
     }
 
     protected preUpdate(time: number, delta: number): void {
         super.preUpdate(time, delta)
     }
 
+    /**
+     * 
+     * @param time 
+     * @param delta 
+     * @param timeScale the world timeScale
+     */
     update(time: number, delta: number, timeScale: number): void {
-        super.update(time, delta)
+        this.checkInBounds() // calling this first so body gets updated before sprite jump
+        super.update(time, delta, 1)
 
         this.cooldown -= delta
 
+        this.handleMovement()
+        this.handleShoot() // handle shooting first so the bullet sprites get updated
+        
         this.bullets.getChildren().forEach((bullet) => {
-            (bullet as PlayerLinearBullet).update(time, delta, timeScale)
+            let b = bullet as PlayerLinearBullet
+            if (b.active) {
+                b.update(time, delta, timeScale)
+            }
         })
 
-        this.handleMovement()
-        this.handleShoot()
     }
 
     handleMovement() {
-        let velocity = new Phaser.Math.Vector2
+        let velocity = Planck.Vec2()
         if (this.inputs.left.isDown && this.inputs.right.isUp) {
             velocity.x = -1
         } else if (this.inputs.left.isUp && this.inputs.right.isDown) {
@@ -91,20 +98,55 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         } else {
             velocity.y = 0
         }
-        velocity.normalize().scale(this.speed)
-        this.setVelocity(velocity.x, velocity.y)
+        //velocity.normalize().scale(this.speed)
+        velocity.clamp(1).mul(this.speed)
+        this.setRawVelocity(velocity.x, velocity.y)
+
+    }
+
+    /**
+     * Checks if the player is still within bounds, and moves them back inside if they're not.
+     * Should be called after the physics update and before the sprite jumps to the body.
+     */
+    checkInBounds() {
+        let pos = this.pbody.getPosition().clone().mul(1/this.planckScale)
+        let newPos = Planck.Vec2(pos.x, pos.y) // in pixels
+        let boundsHit = false
+        if (pos.x-PlayerConst.width/2 < 0) {
+            newPos.x = PlayerConst.width/2
+            boundsHit = true
+        }
+        else if (pos.x+PlayerConst.width/2 > 1920) {
+            newPos.x = 1920-PlayerConst.width/2
+            boundsHit = true
+        }
+        if (pos.y-PlayerConst.height/2 < 0) {
+            newPos.y = PlayerConst.height/2
+            boundsHit = true
+        }
+        else if (pos.y+PlayerConst.height/2 > 1080) {
+            newPos.y = 1080-PlayerConst.height/2
+            boundsHit = true
+        }
+        if (boundsHit) {
+            this.pbody.setPosition(newPos.mul(this.planckScale))
+        }
     }
 
     handleShoot() {
         if (this.inputs.isShooting && this.cooldown <= 0) {
-            const bullet: PlayerLinearBullet = this.bullets.get()
-            if (bullet) {
-                let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
-                angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
-                bullet.spawn(this.x, this.y, angle, 3*Math.cos(angle), 3*Math.sin(angle))
-                bullet.setDepth(-1)
-                this.cooldown = this.maxCooldown
+            for (let i=0; i<1; i++) {
+                const bullet: PlayerLinearBullet = this.bullets.get()
+                if (bullet) {
+                    let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
+                    angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
+                    let pos = this.pbody.getPosition().clone().mul(1/PlanckScale)
+                    bullet.spawn(pos.x, pos.y, angle, 3000*Math.cos(angle), 3000*Math.sin(angle))
+                    bullet.setDepth(-1)
+                    this.cooldown = this.maxCooldown
+                }
             }
+            
         } 
     }
 

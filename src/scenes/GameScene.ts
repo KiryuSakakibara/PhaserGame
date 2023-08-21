@@ -1,47 +1,41 @@
 import Phaser from "phaser";
-import Player from "../gameobjects/Player";
-import Bullet from "../gameobjects/Bullets/Bullet";
-import Enemy from "../gameobjects/Enemy";
-import InputController from "../Controllers/InputController";
-import { bulletEnemy, bulletPlayer } from "../Controllers/CollisionController";
-
 var Vec2 = Phaser.Math.Vector2
 
 export default class GameScene extends Phaser.Scene {
     
-    inputs: InputController
-
+    /** The world time scale */
     timeScale = 1
     
 
     create() {
         this.physics.world.drawDebug = false
-
-        // Initialize input controller
-        this.inputs = new InputController(this)
         
     }
 
     
     update(time: number, delta: number): void {
         
-        this.inputs.update()
-
         // Handle debug toggle
         this.handleDebug()
 
         // Handle the timeStop
         this.handleTimeStop()
+
+        // step the physics engine
+        this.planck.world.step(delta/1000,5,5)
     }
     
     handleDebug() {
-        if (Phaser.Input.Keyboard.JustDown(this.inputs.debug)) {
+        if (Phaser.Input.Keyboard.JustDown(this.customInputs.debug)) {
+            /*
             if (this.physics.world.drawDebug) {
                 this.physics.world.drawDebug = false;
                 this.physics.world.debugGraphic.clear()
             } else {
                 this.physics.world.drawDebug = true;
             }
+            */
+            this.planck.drawDebug = !this.planck.drawDebug
         }
     }
 
@@ -53,7 +47,7 @@ export default class GameScene extends Phaser.Scene {
             this.timeScale = 1
         }
         */
-        if (this.inputs.isStoppingTime) {
+        if (this.customInputs.isStoppingTime) {
             this.timeScale = 0.02
         } else {
             this.timeScale = 1

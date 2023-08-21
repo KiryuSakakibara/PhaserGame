@@ -1,20 +1,32 @@
 import Phaser from "phaser";
-import { GameObjects } from "phaser";
-import Bullet from "../gameobjects/Bullets/Bullet";
 import Enemy from "../gameobjects/Enemy";
+import * as Planck from "planck"
+import { UserData } from "../gameobjects/PhysicsConstants";
+import PlayerBullet from "../gameobjects/Bullets/PlayerBullets/PlayerBullet";
 import Player from "../gameobjects/Player";
+import EnemyBullet from "../gameobjects/Bullets/EnemyBullets/EnemyBullet";
 
+export function collision(contact: Planck.Contact) {
+    let fixA = contact.getFixtureA()
+    let fixB = contact.getFixtureB()
+    let spriteA = (fixA.getUserData() as UserData).sprite
+    let spriteB = (fixB.getUserData() as UserData).sprite
 
-export function bulletEnemy(ob1: Phaser.GameObjects.GameObject, ob2: Phaser.GameObjects.GameObject) {
-    let bullet = ob1 as Bullet
-    let enemy = ob2 as Enemy
-    bullet.disableBody(true, true)
-    enemy.dealDamage(1)
-}
+    
+    if (spriteA instanceof Enemy && spriteB instanceof PlayerBullet) {
+        spriteA.dealDamage(1)
+        spriteB.disable()
+    } else if (spriteA instanceof PlayerBullet && spriteB instanceof Enemy) {
+        spriteB.dealDamage(1)
+        spriteA.disable()
+    }
+    
+    if (spriteA instanceof Player && spriteB instanceof EnemyBullet) {
+        spriteA.dealDamage(1)
+        spriteB.disable()
+    } else if (spriteA instanceof EnemyBullet && spriteB instanceof Player) {
+        spriteB.dealDamage(1)
+        spriteA.disable()
+    }
 
-export function bulletPlayer(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
-    let bullet = obj1 as Bullet
-    let player = obj2 as Player
-    bullet.disableBody(true, true)
-    player.dealDamage(1)
 }
