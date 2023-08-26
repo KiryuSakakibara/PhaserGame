@@ -5,7 +5,7 @@ const package = require("./package.json");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-    entry: path.resolve(__dirname, "./src/index.ts"),
+    entry: path.resolve(__dirname, "./src/game.ts"),
     module: {
         rules: [
             {
@@ -38,7 +38,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "index.js",
+        filename: "game.js",
         clean: true,
     },
     devServer: {
@@ -57,7 +57,7 @@ module.exports = {
             template: path.resolve(__dirname, "./src/index.html"),
             filename: "index.html",
             title: package.description,
-            inject: "body",
+            inject: "head",
             hot: true,
         }),
     ],

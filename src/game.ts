@@ -13,8 +13,10 @@ const config: Phaser.Types.Core.GameConfig = {
         width: 1920,
         height: 1080,
         zoom: 1,
-        mode: Phaser.Scale.FIT
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    parent: "game",
     plugins: {
         scene: [
             {key: "planck", plugin: PlanckPhysicsPlugin, start: true, mapping: "planck"},
@@ -33,7 +35,7 @@ const config: Phaser.Types.Core.GameConfig = {
             target: window
         }
     },
-    scene: [LoadScene, Stage1]
+    scene: [LoadScene, Stage1],
 }
 
 export default new Phaser.Game(config)
