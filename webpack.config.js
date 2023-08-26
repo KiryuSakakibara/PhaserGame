@@ -42,7 +42,22 @@ module.exports = {
         clean: true,
     },
     devServer: {
-        static: path.resolve(__dirname, "./dist"),
+        /*
+        static: {
+            directory: path.resolve(__dirname, "./dist"),
+            watch: true,
+        },
+        */
+        //static: path.resolve(__dirname, "./dist")
+        static: [
+            {
+                directory: path.resolve(__dirname, "./PhaserGameAssets")
+            },
+            {
+                directory: path.resolve(__dirname, "./src")
+            }
+        ]
+        
     },
     plugins: [
         new CopyWebpackPlugin({

@@ -9,7 +9,7 @@ export default class PlanckPhysicsPlugin extends Phaser.Plugins.ScenePlugin {
     /** The scale to multiply by to convert from pixels to meters */
     planckScale = 0.02
     /** How much the pixel art is scaled up by */
-    pixelScale = 5
+    pixelScale = 4
     /** Whether debug lines should be drawn or not */
     drawDebug = false
 

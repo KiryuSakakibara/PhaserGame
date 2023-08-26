@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import * as Planck from "planck"
 import { Vec2 } from "planck";
 import GameScene from "../scenes/GameScene";
-import { PlanckScale, UserData } from "./PhysicsConstants";
+import { PixelScale, PlanckScale, UserData } from "./PhysicsConstants";
 
 /**
  * Basically the Sprite class but with Planck physics. Has a body, but no fixture or shape.
@@ -27,6 +27,10 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.pbody = scene.planck.world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
         this.graphics = scene.add.graphics()
         this.graphics.setDepth(1000)
+
+        
+        this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST)
+        this.setScale(PixelScale)
     }
 
     update(time: number, delta: number, timeScale: number): void {
@@ -46,6 +50,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         } else {
             this.graphics.clear()
         }
+        // TODO: Reduce physics simulation to 60fps and interpolate sprites instead
     }
 
     /**
