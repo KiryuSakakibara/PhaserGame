@@ -6,12 +6,16 @@ export const PlanckScale = 0.02
 /** How much the pixel art is scaled up by */
 export const PixelScale = 4
 
-/** The type of the userData stored in fixtures, to be used during collisions */
-export type UserData = {
+/** The type of the userData stored in bodies, to be used during collisions */
+export type BodyData = {
+    sprite: PlanckSprite
+}
+
+/** The type of the userData stored in fixtures, to be used when rendering debug lines */
+export type FixtureData = {
     width?: number,
     height?: number,
-    radius?: number,
-    sprite: PlanckSprite
+    radius?: number
 }
 
 /** The collision bits of objects */
@@ -36,11 +40,10 @@ export const Masks = {
  * @param height Height of the box in pixels
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
- * @param sprite The sprite associated with the fixture
  * @returns A Planck FixtureDef
  */
 export function createBoxFixture(width: number, height: number, filterCategoryBits: number, 
-    filterMaskBits: number, sprite: PlanckSprite) {
+    filterMaskBits: number) {
     return {
         shape: Planck.Box(width*PlanckScale/2, height*PlanckScale/2), // Planck.Box uses half width ad half height
         filterCategoryBits,
@@ -48,9 +51,8 @@ export function createBoxFixture(width: number, height: number, filterCategoryBi
         isSensor: true,
         userData: {
             width,
-            height,
-            sprite
-        } as UserData
+            height
+        } as FixtureData
     }
 }
 
@@ -59,19 +61,17 @@ export function createBoxFixture(width: number, height: number, filterCategoryBi
  * @param radius The radius of the circle in pixels
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
- * @param sprite The sprite associated with this fixture
  * @returns A Planck FixtureDef
  */
 export function createCircleFixture(radius: number, filterCategoryBits: number,
-    filterMaskBits: number, sprite: PlanckSprite) {
+    filterMaskBits: number) {
     return {
         shape: Planck.Circle(radius*PlanckScale),
         filterCategoryBits,
         filterMaskBits,
         isSensor: true,
         userData: {
-            radius,
-            sprite
-        } as UserData
+            radius
+        } as FixtureData
     }
 }

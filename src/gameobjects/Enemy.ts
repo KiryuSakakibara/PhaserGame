@@ -31,8 +31,7 @@ export default class Enemy extends PlanckSprite {
 
     constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, "Boss")
-        this.pbody.createFixture(createCircleFixture(100, Bits.enemy, Masks.enemy, this))
-        //this.setCircle(radius, this.displayWidth/2-radius, this.displayHeight/2-radius)
+        this.pbody.createFixture(createCircleFixture(100, Bits.enemy, Masks.enemy))
         
 
         // Create the bullets

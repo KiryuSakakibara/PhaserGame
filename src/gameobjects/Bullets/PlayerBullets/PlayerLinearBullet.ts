@@ -8,6 +8,6 @@ export default class PlayerLinearBullet extends PlayerBullet {
     constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, "DefaultPlayerBullet")
         this.pbody.createFixture(createBoxFixture(
-            50, 30, Bits.playerBullet, Masks.playerBullet, this))
+            50, 30, Bits.playerBullet, Masks.playerBullet))
     }
 }

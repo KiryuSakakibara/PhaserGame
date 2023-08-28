@@ -6,9 +6,10 @@ export default class GameScene extends Phaser.Scene {
     /** The world time scale */
     timeScale = 1
     
+    /** The time left until physics update */
+    timeLeft = 0
 
     create() {
-        this.physics.world.drawDebug = false
         
     }
 
@@ -21,8 +22,13 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
-        // step the physics engine
-        this.planck.world.step(delta/1000,5,5)
+        // step the physics engine (this assumes the refresh rate is at least 60hz)
+        this.timeLeft -= delta
+        if (this.timeLeft <= 0) {
+            this.planck.world.step(1/60,1,2)
+            this.timeLeft += 1000/60
+        }
+        
     }
     
     handleDebug() {

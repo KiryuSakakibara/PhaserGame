@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import * as Planck from "planck"
 import { Vec2 } from "planck";
 import GameScene from "../scenes/GameScene";
-import { PixelScale, PlanckScale, UserData } from "./PhysicsConstants";
+import { PixelScale, PlanckScale, FixtureData } from "./PhysicsConstants";
 
 /**
  * Basically the Sprite class but with Planck physics. Has a body, but no fixture or shape.
@@ -25,6 +25,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         scene.add.existing(this)
         this.planckScale = scene.planck.planckScale
         this.pbody = scene.planck.world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
+        this.pbody.setUserData({sprite: this})
         this.graphics = scene.add.graphics()
         this.graphics.setDepth(1000)
 
@@ -95,7 +96,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
             let position = this.pbody.getPosition().clone().mul(1/PlanckScale)
             this.graphics.translateCanvas(position.x, position.y)
             this.graphics.rotateCanvas(this.rotation)
-            let data = f.getUserData() as UserData
+            let data = f.getUserData() as FixtureData
             if (data.width && data.height) {
                 this.graphics.strokeRect(-data.width/2, -data.height/2, data.width, data.height)
             } else if (data.radius) {

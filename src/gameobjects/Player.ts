@@ -5,7 +5,7 @@ import PlanckSprite from "./PlanckSprite"
 import * as Planck from "planck"
 import {Fixture} from "planck"
 import GameScene from "../scenes/GameScene"
-import { PixelScale, Bits, createBoxFixture, Masks, PlanckScale, UserData } from "./PhysicsConstants"
+import { PixelScale, Bits, createBoxFixture, Masks, PlanckScale, FixtureData } from "./PhysicsConstants"
 import { PlayerConst } from "../Constants/GameObjects/PlayerConst"
 import CustomInputPlugin from "../Plugins/CustomInputPlugin"
 
@@ -28,7 +28,7 @@ export default class Player extends PlanckSprite {
         super(scene, x, y, "Player")
 
         this.pbody.createFixture(createBoxFixture(
-            PlayerConst.width, PlayerConst.height, Bits.player, Masks.player, this
+            PlayerConst.width, PlayerConst.height, Bits.player, Masks.player
         ))
         this.spriteOffset = Planck.Vec2(PixelScale/2, -12)
 
