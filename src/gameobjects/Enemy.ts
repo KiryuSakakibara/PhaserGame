@@ -62,8 +62,8 @@ export default class Enemy extends PlanckSprite {
         let angle = Math.PI*2*this.circleCompletion
 
         //this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
-        this.pbody.setPosition(Planck.Vec2(960+800*Math.cos(angle), 540-400*Math.sin(angle)).mul(this.planckScale))
-        
+        //this.pbody.setPosition(Planck.Vec2(960+800*Math.cos(angle), 540-400*Math.sin(angle)).mul(this.planckScale))
+        this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
     }
 
     dealDamage(damage: number) {

@@ -17,6 +17,10 @@ const config: Phaser.Types.Core.GameConfig = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     parent: "game",
+    fps: {
+        target: 60,
+        smoothStep: true
+    },
     plugins: {
         scene: [
             {key: "planck", plugin: PlanckPhysicsPlugin, start: true, mapping: "planck"},

@@ -20,12 +20,20 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     /** The debug graphics for this sprite */
     graphics: Phaser.GameObjects.Graphics
 
+    
+    // INTERPOLATION BETWEEN PHYSICS UPDATES
+    /** The position of the body in the previous physics update, so the sprite 
+     *  can be interpolated, units in meters. ALWAYS CLONE WHEN USING VALUE */
+    previousBodyPos: Vec2
+
     constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
         scene.add.existing(this)
         this.planckScale = scene.planck.planckScale
         this.pbody = scene.planck.world.createDynamicBody(Vec2(x*this.planckScale, y*this.planckScale))
         this.pbody.setUserData({sprite: this})
+        this.previousBodyPos = this.pbody.getPosition().clone()
+
         this.graphics = scene.add.graphics()
         this.graphics.setDepth(1000)
 
@@ -39,11 +47,14 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
 
         let scaledDelta = delta * timeScale // scale delta for time stop
         this.pbody.setLinearVelocity(this.rawVelocity.clone().mul(timeScale*this.planckScale))
-        let pos = this.pbody.getPosition().clone().mul(1/this.planckScale) // body position in pixels
-        this.setPosition(pos.x+this.spriteOffset.x, pos.y + this.spriteOffset.y)
-        //this.setPosition(this.x+this.velocity.x*scaledDelta, this.y+this.velocity.y*scaledDelta)
-        //this.pbody.setPosition(Vec2((this.x+this.pbodyOffset.x) * this.planckScale, (this.y+this.pbodyOffset.y) * this.planckScale))
-        //this.pbody.setAngle(this.rotation)
+        //let pos = this.pbody.getPosition().clone().mul(1/this.planckScale) // body position in pixels
+        let prev = this.previousBodyPos.clone()
+        let next = this.pbody.getPosition().clone()
+        // ratio of how much time passed since the last physics update : how much time a physics update should take
+        let t = (this.scene as GameScene).timeSincePhysicsUpdate/(1000/60)
+        // lerp between the previous physics position and next physics position
+        let pos = prev.mul(1-t).add(next.mul(t)).mul(1/this.planckScale)
+        super.setPosition(pos.x+this.spriteOffset.x, pos.y + this.spriteOffset.y)
         this.setRotation(this.pbody.getAngle())
 
         if (this.scene.planck.drawDebug) {
@@ -51,7 +62,6 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         } else {
             this.graphics.clear()
         }
-        // TODO: Reduce physics simulation to 60fps and interpolate sprites instead
     }
 
     /**
@@ -63,6 +73,17 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     setRawVelocity(x: number, y: number): this {
         this.rawVelocity.x = x
         this.rawVelocity.y = y
+        return this
+    }
+
+    setPosition(x?: number | undefined, y?: number | undefined, z?: number | undefined, w?: number | undefined): this {
+        if (x && y) {
+            if (this.pbody) {
+                this.pbody.setPosition(Vec2(x*PlanckScale, y*PlanckScale))
+                this.previousBodyPos = this.pbody.getPosition()
+            }
+        }
+        super.setPosition(x, y, z, w)
         return this
     }
 

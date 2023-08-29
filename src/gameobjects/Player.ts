@@ -71,7 +71,8 @@ export default class Player extends PlanckSprite {
         this.cooldown -= delta
 
         this.handleMovement()
-        this.handleShoot() // handle shooting first so the bullet sprites get updated
+        // handle shooting before updating bullets so the bullet sprites get updated
+        this.handleShoot() 
         
         this.bullets.getChildren().forEach((bullet) => {
             let b = bullet as PlayerLinearBullet
@@ -129,7 +130,8 @@ export default class Player extends PlanckSprite {
             boundsHit = true
         }
         if (boundsHit) {
-            this.pbody.setPosition(newPos.mul(this.planckScale))
+            //this.pbody.setPosition(newPos.mul(this.planckScale))
+            this.setPosition(newPos.x, newPos.y)
         }
     }
 

@@ -43,11 +43,8 @@ export default class Bullet extends PlanckSprite {
      * @param vy y velocity in pixels/second
      */
     spawn(x: number, y: number, angle: number, vx=0, vy=0) {
-        //this.enableBody(true, x, y, true, true)
-        //this.setPosition(x, y)
-        //this.setRotation(angle)
-        //this.setVelocity(vx, vy)
-        this.pbody.setPosition(Planck.Vec2(x*this.planckScale, y*this.planckScale))
+        //this.pbody.setPosition(Planck.Vec2(x*this.planckScale, y*this.planckScale))
+        this.setPosition(x, y)
         this.pbody.setAngle(angle)
         this.setRawVelocity(vx, vy)
         

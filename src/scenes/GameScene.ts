@@ -6,8 +6,8 @@ export default class GameScene extends Phaser.Scene {
     /** The world time scale */
     timeScale = 1
     
-    /** The time left until physics update */
-    timeLeft = 0
+    /** How much time has passed since the last physics update, in milliseconds */
+    timeSincePhysicsUpdate = 0
 
     create() {
         
@@ -22,11 +22,11 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
-        // step the physics engine (this assumes the refresh rate is at least 60hz)
-        this.timeLeft -= delta
-        if (this.timeLeft <= 0) {
-            this.planck.world.step(1/60,1,2)
-            this.timeLeft += 1000/60
+        // step the physics engine
+        this.timeSincePhysicsUpdate += delta
+        while (this.timeSincePhysicsUpdate >= 1000/60) {
+            this.planck.stepWorld()
+            this.timeSincePhysicsUpdate -= 1000/60
         }
         
     }
