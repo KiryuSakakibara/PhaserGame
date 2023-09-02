@@ -2,8 +2,6 @@ import Phaser from "phaser";
 
 export default class LoadScene extends Phaser.Scene {
 
-    assetPaths
-
     constructor() {
         super({
             key: "LoadScene",
@@ -12,7 +10,7 @@ export default class LoadScene extends Phaser.Scene {
                     {
                         type: "json",
                         key: "assetsJSON",
-                        url: "Assets/assets.json"
+                        url: "assets/assets.json"
                     }
                 ]
             }
@@ -28,10 +26,13 @@ export default class LoadScene extends Phaser.Scene {
         this.load.image("bullet", json["EnemyBullet"])
         this.load.image("PlayerBullet", json["PlayerLinearBullet"])
         */
-        let keys = Object.keys(json)
-        keys.forEach((key) => {
-            this.load.image(key, json[key])
-        })
+        if (json) {
+            let keys = Object.keys(json)
+            keys.forEach((key) => {
+                this.load.image(key, json[key])
+            })
+        }
+        
     }
 
     create() {

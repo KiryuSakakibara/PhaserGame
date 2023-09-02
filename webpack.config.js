@@ -31,14 +31,25 @@ module.exports = {
     optimization: {
         minimizer: [new TerserPlugin({
             extractComments: false
-        })]
+        })],
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "phaser",
+                    enforce: true,
+                    chunks: "initial",
+                },
+            },
+        },
     },
     resolve: {
         extensions: [".js", ".ts"],
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "game.js",
+        filename: "[name].[chunkhash].js",
+        chunkFilename: "[name].[chunkhash].js",
         clean: true,
     },
     devServer: {
