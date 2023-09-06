@@ -19,6 +19,8 @@ export default class LoadScene extends Phaser.Scene {
 
     preload() {
         let json = this.cache.json.get("assetsJSON")
+        let sprites = json["Sprites"]
+        let spriteAtlases = json["SpriteAtlases"]
 
         /*
         this.load.image("walpurgisnachtImage", json["Boss"])
@@ -26,16 +28,34 @@ export default class LoadScene extends Phaser.Scene {
         this.load.image("bullet", json["EnemyBullet"])
         this.load.image("PlayerBullet", json["PlayerLinearBullet"])
         */
-        if (json) {
-            let keys = Object.keys(json)
-            keys.forEach((key) => {
-                this.load.image(key, json[key])
-            })
+        if (!json) {
+            return
         }
+
+        // Load sprites
+        this.loadSprites(sprites)
+        this.loadSpriteAtlases(spriteAtlases)
+
+        // Load sprite atlases
+        
         
     }
 
     create() {
         this.scene.start("Stage1")
+    }
+
+    loadSprites(sprites: Object) {
+        let keys = Object.keys(sprites)
+        keys.forEach((key) => {
+            this.load.image(key, sprites[key])
+        })
+    }
+
+    loadSpriteAtlases(atlases: Object) {
+        let keys = Object.keys(atlases)
+        keys.forEach((key) => {
+            this.load.atlas(key, atlases[key]+".png", atlases[key]+".json")
+        })
     }
 }

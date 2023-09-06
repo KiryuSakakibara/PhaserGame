@@ -30,7 +30,7 @@ export default class Player extends PlanckSprite {
         this.pbody.createFixture(createBoxFixture(
             PlayerConst.width, PlayerConst.height, Bits.player, Masks.player
         ))
-        this.spriteOffset = Planck.Vec2(PixelScale/2, -12)
+        this.setDisplayOrigin(this.width/2-0.5, this.height/2+3)
 
         // Set the inputs
         this.inputs = this.scene.customInputs

@@ -11,8 +11,6 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
 
     /** The planck physics body */
     pbody: Planck.Body
-    /** the positional offset of the sprite in pixels */
-    spriteOffset = new Vec2(0, 0)
     /** The scale to multiply by to convert pixel units to meters */
     planckScale: number
     /** The unscaled velocity in pixels/second */
@@ -54,7 +52,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         let t = (this.scene as GameScene).timeSincePhysicsUpdate/(1000/60)
         // lerp between the previous physics position and next physics position
         let pos = prev.mul(1-t).add(next.mul(t)).mul(1/this.planckScale)
-        super.setPosition(pos.x+this.spriteOffset.x, pos.y + this.spriteOffset.y)
+        super.setPosition(pos.x, pos.y)
         this.setRotation(this.pbody.getAngle())
 
         if (this.scene.planck.drawDebug) {

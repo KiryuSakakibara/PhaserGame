@@ -1,5 +1,5 @@
 export const PlayerConst = {
     width: 30,
-    height: 50,
+    height: 60,
     playerBulletTimeScaleDelay: 100
 }
