@@ -74,6 +74,15 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         return this
     }
 
+    /**
+     * Sets the position of both the body and sprite. To only set the position of the sprite,
+     * call the super method.
+     * @param x 
+     * @param y 
+     * @param z 
+     * @param w 
+     * @returns this
+     */
     setPosition(x?: number | undefined, y?: number | undefined, z?: number | undefined, w?: number | undefined): this {
         if (x && y) {
             if (this.pbody) {

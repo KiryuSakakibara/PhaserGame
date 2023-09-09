@@ -17,6 +17,8 @@ export default class Enemy extends PlanckSprite {
     attackTimer: number = 0
     wavesFired: number = 0
 
+    animKeys: string[]
+
     // Attack 1 constants
     /** The delay between waves in milliseconds */
     delayBetweenWaves: number = 100
@@ -30,8 +32,8 @@ export default class Enemy extends PlanckSprite {
     circleCompletion: number = 0
 
     constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, "Boss")
-        this.pbody.createFixture(createCircleFixture(100, Bits.enemy, Masks.enemy))
+        super(scene, x, y, "SnakeHead")
+        this.pbody.createFixture(createCircleFixture(45, Bits.enemy, Masks.enemy))
         
 
         // Create the bullets
@@ -46,7 +48,36 @@ export default class Enemy extends PlanckSprite {
             this.bullets.add(new Bullet(scene))
         }
         */
-    
+
+        // make the animations
+        let atlasMetaData = this.scene.cache.json.get("SnakeHeadMeta")
+        let layers = atlasMetaData["layers"] as Object[]
+        let tags = atlasMetaData["frameTags"] as Object[]
+        layers.forEach(layer => {
+            tags.forEach(tag => {
+                let animName = layer["name"] + "-" + tag["name"]
+                this.scene.anims.create({
+                    key: animName,
+                    frames: this.scene.anims.generateFrameNames("SnakeHead", {
+                        prefix: animName + "-",
+                        start: tag["from"],
+                        end: tag["to"]
+                    })
+                })
+            })
+        });
+        // Animation keys go clockwise starting at east
+        this.animKeys = [
+            "east-idle",
+            "southeast-idle",
+            "south-idle",
+            "southwest-idle",
+            "west-idle",
+            "northwest-idle",
+            "north-idle",
+            "northeast-idle"
+        ]
+        this.play("east-idle")
     }
 
     update(time: number, delta: number, timeScale: number): void {
@@ -61,9 +92,16 @@ export default class Enemy extends PlanckSprite {
         this.circleCompletion = (this.circleCompletion + delta/10000*timeScale)%1
         let angle = Math.PI*2*this.circleCompletion
 
-        //this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
-        //this.pbody.setPosition(Planck.Vec2(960+800*Math.cos(angle), 540-400*Math.sin(angle)).mul(this.planckScale))
         this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
+        //this.pbody.setAngle((-angle-Math.PI/2+Math.PI/8)%(Math.PI/4)+Math.PI/8)
+        //this.setRotation((-angle-Math.PI/2+Math.PI/8)%(Math.PI/4)+Math.PI/8)
+
+        // set the animation
+        let theta = -angle - Math.PI/2
+        let index = Math.floor((theta+Math.PI/8)/(Math.PI/4))%8
+        if (index < 0) index += 8
+        this.play(this.animKeys[index])
+        //this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST)
     }
 
     dealDamage(damage: number) {

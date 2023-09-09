@@ -56,6 +56,7 @@ export default class LoadScene extends Phaser.Scene {
         let keys = Object.keys(atlases)
         keys.forEach((key) => {
             this.load.atlas(key, atlases[key]+".png", atlases[key]+".json")
+            this.load.json(key+"Meta", atlases[key]+".json", "meta")
         })
     }
 }
