@@ -52,7 +52,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         let t = (this.scene as GameScene).timeSincePhysicsUpdate/(1000/60)
         // lerp between the previous physics position and next physics position
         let pos = prev.mul(1-t).add(next.mul(t)).mul(1/this.planckScale)
-        super.setPosition(pos.x, pos.y)
+        this.setPosition(pos.x, pos.y)
         this.setRotation(this.pbody.getAngle())
 
         if (this.scene.planck.drawDebug) {
@@ -75,22 +75,16 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     }
 
     /**
-     * Sets the position of both the body and sprite. To only set the position of the sprite,
-     * call the super method.
+     * Sets the position of both the body and sprite in pixel coordinates.
      * @param x 
      * @param y 
-     * @param z 
-     * @param w 
-     * @returns this
      */
-    setPosition(x?: number | undefined, y?: number | undefined, z?: number | undefined, w?: number | undefined): this {
-        if (x && y) {
-            if (this.pbody) {
-                this.pbody.setPosition(Vec2(x*PlanckScale, y*PlanckScale))
-                this.previousBodyPos = this.pbody.getPosition()
-            }
+    setFullPosition(x: number, y: number) {
+        if (this.pbody) {
+            this.pbody.setPosition(Vec2(x*PlanckScale, y*PlanckScale))
+            this.previousBodyPos = this.pbody.getPosition().clone()
         }
-        super.setPosition(x, y, z, w)
+        this.setPosition(x, y)
         return this
     }
 

@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import PlanckSprite from "../PlanckSprite";
 import * as Planck from "planck"
 import GameScene from "../../scenes/GameScene";
+import PlayerLinearBullet from "./PlayerBullets/PlayerLinearBullet";
 
 export default class Bullet extends PlanckSprite {
 
@@ -19,14 +20,11 @@ export default class Bullet extends PlanckSprite {
         if (this.active) {
             super.update(time, delta, timeScale)
 
-            //this.lifeSpan -= delta * timeScale
             this.age += delta * timeScale
-            if (this.x-this.displayWidth/2 > 1920 || this.x+this.displayWidth/2 < 0 ||
-                this.y-this.displayHeight/2 > 1080 || this.y+this.displayHeight/2 < 0 ||
+            let bounds = this.scene.physics.world.bounds
+            if (this.x-this.displayWidth/2 > bounds.x+bounds.width || this.x+this.displayWidth/2 < bounds.x ||
+                this.y-this.displayHeight/2 > bounds.y+bounds.height || this.y+this.displayHeight/2 < bounds.y ||
                 this.age > this.lifeSpan) {
-
-                
-                //this.disableBody(true, true)
                 this.disable()
             }
             
@@ -44,9 +42,13 @@ export default class Bullet extends PlanckSprite {
      */
     spawn(x: number, y: number, angle: number, vx=0, vy=0) {
         //this.pbody.setPosition(Planck.Vec2(x*this.planckScale, y*this.planckScale))
-        this.setPosition(x, y)
+        this.setFullPosition(x, y)
         this.pbody.setAngle(angle)
         this.setRawVelocity(vx, vy)
+        if (this.texture.key == "DefaultPlayerBullet") {
+            console.log(x + ", " + y)
+            console.log(this.pbody.getPosition())
+        }
         
         this.enable()
         this.age = 0

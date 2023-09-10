@@ -78,10 +78,12 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
     setMouseControls() {
         this.timeStopMouse = this.controls.timeStopMouse
         this.shootMouse = this.controls.shootMouse
+        /*
         this.scene.input.on('pointermove', (pointer: Input.Pointer) => {
-            this.mouseX = pointer.x
-            this.mouseY = pointer.y
+            this.mouseX = pointer.worldX
+            this.mouseY = pointer.worldY
         })
+        */
         this.scene.input.on('pointerdown', (pointer: Input.Pointer) => {
             if (pointer.button == this.controls.shootMouse) {
                 if (this.controls.shootToggle) {
@@ -136,6 +138,10 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
     
     update() {
         //let activePointer = this.scene.input.activePointer
+        let pointer = this.scene.input.activePointer
+        pointer.updateWorldPoint(this.scene.cameras.main)
+        this.mouseX = pointer.worldX
+        this.mouseY = pointer.worldY
     }
     
 

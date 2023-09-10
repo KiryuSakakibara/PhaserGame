@@ -54,10 +54,6 @@ export default class Player extends PlanckSprite {
         
     }
 
-    protected preUpdate(time: number, delta: number): void {
-        super.preUpdate(time, delta)
-    }
-
     /**
      * 
      * @param time 
@@ -113,25 +109,26 @@ export default class Player extends PlanckSprite {
         let pos = this.pbody.getPosition().clone().mul(1/this.planckScale)
         let newPos = Planck.Vec2(pos.x, pos.y) // in pixels
         let boundsHit = false
-        if (pos.x-PlayerConst.width/2 < 0) {
-            newPos.x = PlayerConst.width/2
+        let bounds = this.scene.physics.world.bounds
+        if (pos.x-PlayerConst.width/2 < bounds.x) {
+            newPos.x = bounds.x + PlayerConst.width/2
             boundsHit = true
         }
-        else if (pos.x+PlayerConst.width/2 > 1920) {
-            newPos.x = 1920-PlayerConst.width/2
+        else if (pos.x+PlayerConst.width/2 > bounds.x + bounds.width) {
+            newPos.x = bounds.x + bounds.width - PlayerConst.width/2
             boundsHit = true
         }
-        if (pos.y-PlayerConst.height/2 < 0) {
-            newPos.y = PlayerConst.height/2
+        if (pos.y-PlayerConst.height/2 < bounds.y) {
+            newPos.y = bounds.y + PlayerConst.height/2
             boundsHit = true
         }
-        else if (pos.y+PlayerConst.height/2 > 1080) {
-            newPos.y = 1080-PlayerConst.height/2
+        else if (pos.y+PlayerConst.height/2 > bounds.y + bounds.height) {
+            newPos.y = bounds.y + bounds.height - PlayerConst.height/2
             boundsHit = true
         }
         if (boundsHit) {
             //this.pbody.setPosition(newPos.mul(this.planckScale))
-            this.setPosition(newPos.x, newPos.y)
+            this.setFullPosition(newPos.x, newPos.y)
         }
     }
 

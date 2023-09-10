@@ -92,7 +92,7 @@ export default class Enemy extends PlanckSprite {
         this.circleCompletion = (this.circleCompletion + delta/10000*timeScale)%1
         let angle = Math.PI*2*this.circleCompletion
 
-        this.setPosition(960+800*Math.cos(angle), 540-400*Math.sin(angle))
+        this.setFullPosition(800*Math.cos(angle), -400*Math.sin(angle))
         //this.pbody.setAngle((-angle-Math.PI/2+Math.PI/8)%(Math.PI/4)+Math.PI/8)
         //this.setRotation((-angle-Math.PI/2+Math.PI/8)%(Math.PI/4)+Math.PI/8)
 

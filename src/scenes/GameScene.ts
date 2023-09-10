@@ -15,6 +15,8 @@ export default class GameScene extends Phaser.Scene {
 
     
     update(time: number, delta: number): void {
+        // Update the inputs
+        this.customInputs.update()
         
         // Handle debug toggle
         this.handleDebug()
