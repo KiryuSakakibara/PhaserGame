@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Bullet from "../Bullet";
 import GameScene from "../../../scenes/GameScene";
 import { PlayerConst } from "../../../Constants/GameObjects/PlayerConst";
+import { RenderOrder } from "../../../Constants/RenderOrder";
 
 export default class PlayerBullet extends Bullet {
 
@@ -14,6 +15,7 @@ export default class PlayerBullet extends Bullet {
         super(scene, x, y, texture)
         this.timeScaleDelay = PlayerConst.playerBulletTimeScaleDelay
         this.lifeSpan = 3000
+        this.setDepth(RenderOrder.indexOf("playerBullet"))
     }
     
     update(time: number, delta: number, timeScale: number) {

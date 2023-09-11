@@ -45,10 +45,6 @@ export default class Bullet extends PlanckSprite {
         this.setFullPosition(x, y)
         this.pbody.setAngle(angle)
         this.setRawVelocity(vx, vy)
-        if (this.texture.key == "DefaultPlayerBullet") {
-            console.log(x + ", " + y)
-            console.log(this.pbody.getPosition())
-        }
         
         this.enable()
         this.age = 0

@@ -23,8 +23,8 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
     // mouse
     timeStopMouse = 0
     shootMouse = 0
-    mouseX: number
-    mouseY: number
+    mouseScreenPos = new Phaser.Math.Vector2()
+    mouseWorldPos = new Phaser.Math.Vector2()
 
     // states
     /** whether the player is shooting */
@@ -140,8 +140,9 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
         //let activePointer = this.scene.input.activePointer
         let pointer = this.scene.input.activePointer
         pointer.updateWorldPoint(this.scene.cameras.main)
-        this.mouseX = pointer.worldX
-        this.mouseY = pointer.worldY
+        this.mouseWorldPos.x = pointer.worldX
+        this.mouseWorldPos.y = pointer.worldY
+        this.mouseScreenPos = pointer.position
     }
     
 

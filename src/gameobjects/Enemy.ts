@@ -5,6 +5,7 @@ import PlanckSprite from "./PlanckSprite"
 import GameScene from "../scenes/GameScene"
 import {Bits, createCircleFixture, Masks, PlanckScale } from "./PhysicsConstants"
 import * as Planck from "planck"
+import { RenderOrder } from "../Constants/RenderOrder"
 enum Attack {
 
 }
@@ -34,6 +35,7 @@ export default class Enemy extends PlanckSprite {
     constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, "SnakeHead")
         this.pbody.createFixture(createCircleFixture(45, Bits.enemy, Masks.enemy))
+        this.setDepth(RenderOrder.indexOf("enemy"))
         
 
         // Create the bullets
@@ -118,7 +120,7 @@ export default class Enemy extends PlanckSprite {
                 if (bullet) {
                     bullet.spawn(this.pbody.getPosition().x/this.planckScale + vel.x*this.attackTimer/1000,
                         this.pbody.getPosition().y/this.planckScale + vel.y*this.attackTimer/1000, angle, vel.x, vel.y)
-                    bullet.setDepth(-0.1)
+                    
                 }
 
             }

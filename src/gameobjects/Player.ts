@@ -8,6 +8,7 @@ import GameScene from "../scenes/GameScene"
 import { PixelScale, Bits, createBoxFixture, Masks, PlanckScale, FixtureData } from "./PhysicsConstants"
 import { PlayerConst } from "../Constants/GameObjects/PlayerConst"
 import CustomInputPlugin from "../Plugins/CustomInputPlugin"
+import { RenderOrder } from "../Constants/RenderOrder"
 
 export default class Player extends PlanckSprite {
     /** The CustomInputPlugin */
@@ -31,6 +32,7 @@ export default class Player extends PlanckSprite {
             PlayerConst.width, PlayerConst.height, Bits.player, Masks.player
         ))
         this.setDisplayOrigin(this.width/2-0.5, this.height/2+3)
+        this.setDepth(RenderOrder.indexOf("player"))
 
         // Set the inputs
         this.inputs = this.scene.customInputs
@@ -137,11 +139,11 @@ export default class Player extends PlanckSprite {
             for (let i=0; i<1; i++) {
                 const bullet: PlayerLinearBullet = this.bullets.get()
                 if (bullet) {
-                    let angle = Phaser.Math.Angle.Between(this.inputs.mouseX, this.inputs.mouseY, this.x, this.y)
+                    let angle = Phaser.Math.Angle.Between(this.inputs.mouseWorldPos.x, 
+                        this.inputs.mouseWorldPos.y, this.x, this.y)
                     angle += Math.random()*Math.PI/20-Math.PI/40 + Math.PI
                     let pos = this.pbody.getPosition().clone().mul(1/PlanckScale)
                     bullet.spawn(pos.x, pos.y, angle, 3000*Math.cos(angle), 3000*Math.sin(angle))
-                    bullet.setDepth(-1)
                     this.cooldown = this.maxCooldown
                 }
             }
