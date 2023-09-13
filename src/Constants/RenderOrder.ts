@@ -8,5 +8,8 @@ export const RenderOrder = [
     "playerBullet",
     "enemyBullet",
     "enemy",
-    "player"
+    "player",
+
+    // Debug
+    "debug",
 ]

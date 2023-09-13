@@ -18,31 +18,41 @@ export default class LoadScene extends Phaser.Scene {
     }
 
     preload() {
-        let json = this.cache.json.get("assetsJSON")
-        let sprites = json["Sprites"]
-        let spriteAtlases = json["SpriteAtlases"]
+        // asset loading progress bar
+        const progress = this.add.graphics()
+        this.load.on("progress", (value: number) => {
+            progress.clear()
+            progress.fillStyle(0xffffff, 1)
+            progress.fillRect(0, this.scale.height/2-20, this.scale.width*value, 40)
+        })
+        this.load.on("complete", () => {
+            progress.destroy()
+        })
 
-        /*
-        this.load.image("walpurgisnachtImage", json["Boss"])
-        this.load.image("Carmine", json["Carmine"])
-        this.load.image("bullet", json["EnemyBullet"])
-        this.load.image("PlayerBullet", json["PlayerLinearBullet"])
-        */
+        let json = this.cache.json.get("assetsJSON")
         if (!json) {
             return
         }
 
+        let sprites = json["Sprites"]
+        let spriteAtlases = json["SpriteAtlases"]
+
         // Load sprites
         this.loadSprites(sprites)
         this.loadSpriteAtlases(spriteAtlases)
-
-        // Load sprite atlases
-        
         
     }
 
     create() {
-        this.scene.start("Stage1")
+        let playButton = this.add.sprite(this.scale.width/2, this.scale.height/2, "PlayButton")
+        playButton.setScale(10).setInteractive().texture.setFilter(Phaser.Textures.FilterMode.NEAREST)
+        playButton.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+            playButton.setTint(0xc0c0c0)
+        }).on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+            playButton.setTint(0xffffff)
+        }).on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+            this.scene.start("Stage1")
+        })
     }
 
     loadSprites(sprites: Object) {
@@ -56,7 +66,6 @@ export default class LoadScene extends Phaser.Scene {
         let keys = Object.keys(atlases)
         keys.forEach((key) => {
             this.load.atlas(key, atlases[key]+".png", atlases[key]+".json")
-            this.load.json(key+"Meta", atlases[key]+".json", "meta")
         })
     }
 }

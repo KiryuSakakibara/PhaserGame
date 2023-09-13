@@ -35,11 +35,11 @@ export default class Stage1 extends GameScene {
 
         // Create the on screen text
         this.enemyHealthText = this.add.text(20, 20, this.walpurgisNacht.health.toString(), { color: '#ff0000' }).setScale(2)
-        this.enemyHealthText.setScrollFactor(0, 0)
+        this.enemyHealthText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
         this.playerHealthText = this.add.text(20, 60, this.player.health.toString(), {color: "#00ff00"}).setScale(2)
-        this.playerHealthText.setScrollFactor(0, 0)
+        this.playerHealthText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
         this.fpsText = this.add.text(20, 100, "fps").setScale(2)
-        this.fpsText.setScrollFactor(0, 0)
+        this.fpsText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
 
         // Create the background
         let background = this.add.sprite(0, 0, "GrassBackground")

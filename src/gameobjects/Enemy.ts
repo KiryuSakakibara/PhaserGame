@@ -52,7 +52,8 @@ export default class Enemy extends PlanckSprite {
         */
 
         // make the animations
-        let atlasMetaData = this.scene.cache.json.get("SnakeHeadMeta")
+        //let atlasMetaData = this.scene.cache.json.get("SnakeHeadMeta")
+        let atlasMetaData = this.scene.textures.get("SnakeHead").customData["meta"]
         let layers = atlasMetaData["layers"] as Object[]
         let tags = atlasMetaData["frameTags"] as Object[]
         layers.forEach(layer => {

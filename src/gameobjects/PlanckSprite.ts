@@ -3,6 +3,7 @@ import * as Planck from "planck"
 import { Vec2 } from "planck";
 import GameScene from "../scenes/GameScene";
 import { PixelScale, PlanckScale, FixtureData } from "./PhysicsConstants";
+import { RenderOrder } from "../Constants/RenderOrder";
 
 /**
  * Basically the Sprite class but with Planck physics. Has a body, but no fixture or shape.
@@ -33,7 +34,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.previousBodyPos = this.pbody.getPosition().clone()
 
         this.graphics = scene.add.graphics()
-        this.graphics.setDepth(1000)
+        this.graphics.setDepth(RenderOrder.indexOf("debug"))
 
         
         this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST)
