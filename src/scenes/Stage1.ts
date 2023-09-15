@@ -54,14 +54,15 @@ export default class Stage1 extends GameScene {
 
         this.player.update(time, delta, this.timeScale)
         this.walpurgisNacht.update(time, delta, this.timeScale)
+        
+        // move camera
+        this.moveCamera()
 
         // Update text
         this.enemyHealthText.setText(this.walpurgisNacht.health.toString())
         this.playerHealthText.setText(this.player.health.toString())
         this.fpsText.setText(`fps: ${Math.round(1000/delta*10)/10}`)
 
-        // move camera
-        this.moveCamera()
     }
 
     /**
@@ -72,14 +73,13 @@ export default class Stage1 extends GameScene {
         let dx = this.customInputs.mouseWorldPos.x - this.player.x
         let dy = this.customInputs.mouseWorldPos.y - this.player.y
         // thresholds for camera movement
-        let w = this.cameras.main.displayWidth*2/6
-        let h = this.cameras.main.displayHeight*2/6
+        let w = this.cameras.main.displayWidth*1/4
+        let h = this.cameras.main.displayHeight*1/4
         let target = new Phaser.Math.Vector2()
         target.x = this.player.x + (dx > 0 ? Math.max(dx-w, 0) : Math.min(dx+w, 0))*0.65
         target.y = this.player.y + (dy > 0 ? Math.max(dy-h, 0) : Math.min(dy+h, 0))*0.65
         target = this.cameras.main.midPoint.lerp(target, 0.1)
 
-        //let target = this.player.getCenter().lerp(this.customInputs.mouseWorldPos, 0.5)
         this.cameras.main.centerOn(target.x, target.y)
     }
 }

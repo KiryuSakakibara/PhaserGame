@@ -4,6 +4,7 @@ import LoadScene from "./scenes/LoadScene"
 import Stage1 from "./scenes/Stage1"
 import PlanckPhysicsPlugin from "./Plugins/PlanckPhysicsPlugin"
 import CustomInputPlugin from "./Plugins/CustomInputPlugin"
+import PauseUIScene from "./scenes/PauseUIScene"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -49,7 +50,7 @@ const config: Phaser.Types.Core.GameConfig = {
             target: window
         }
     },
-    scene: [LoadScene, Stage1],
+    scene: [LoadScene, Stage1, PauseUIScene],
 }
 
 export default new Phaser.Game(config)

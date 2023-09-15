@@ -9,6 +9,9 @@ export default class GameScene extends Phaser.Scene {
     /** How much time has passed since the last physics update, in milliseconds */
     timeSincePhysicsUpdate = 0
 
+    /** Whether the game is paused */
+    isPaused = false
+
     create() {
         
     }
@@ -30,36 +33,38 @@ export default class GameScene extends Phaser.Scene {
             this.planck.stepWorld()
             this.timeSincePhysicsUpdate -= 1000/60
         }
+
+        this.handlePause()
         
         //TODO: USE STATE MACHINES!!!!
     }
     
     handleDebug() {
+        /*
         if (Phaser.Input.Keyboard.JustDown(this.customInputs.debug)) {
-            /*
-            if (this.physics.world.drawDebug) {
-                this.physics.world.drawDebug = false;
-                this.physics.world.debugGraphic.clear()
-            } else {
-                this.physics.world.drawDebug = true;
-            }
-            */
             this.planck.drawDebug = !this.planck.drawDebug
         }
+        */
+        this.planck.drawDebug = this.customInputs.isDebugging
     }
 
     handleTimeStop() {
-        /*
-        if (Phaser.Input.Keyboard.JustDown(this.inputs.timeStop)) {
-            this.timeScale = 0.1
-        } else if (Phaser.Input.Keyboard.JustUp(this.inputs.timeStop)) {
-            this.timeScale = 1
-        }
-        */
         if (this.customInputs.isStoppingTime) {
             this.timeScale = 0.02
         } else {
             this.timeScale = 1
+        }
+    }
+
+    /** Handles pausing the game */
+    handlePause() {
+        if (Phaser.Input.Keyboard.JustDown(this.customInputs.pause)) {
+            if (!this.isPaused) {
+                this.scene.run("PauseUIScene")
+            } else {
+                this.scene.sleep("PauseUIScene")
+            }
+            this.isPaused = !this.isPaused
         }
     }
     

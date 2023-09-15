@@ -13,12 +13,21 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
 
     // Keys
     up: Key
+    getUp() {return this.up.isDown}
     down: Key
+    getDown() {return this.down.isDown}
     left: Key
+    getLeft() {return this.left.isDown}
     right: Key
+    getRight() {return this.right.isDown}
     debug: Key
+    getDebug() {return this.debug.isDown}
     timeStop: Key
+    getTimeStop() {return this.timeStop.isDown}
     shoot: Key
+    getShoot() {return this.shoot.isDown}
+    pause: Key
+    getPause() {return this.pause.isDown}
 
     // mouse
     timeStopMouse = 0
@@ -33,8 +42,10 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
     isStoppingTime: boolean = false
     /** whether shooting is in toggle mode */
     shootToggle: boolean = false
-    /** whether shotting has just been toggled, if toggle mode is enabled */
-    shootToggled: boolean = false
+    /** whether debugging mode is on */
+    isDebugging: boolean = false
+    /** whether the game is paused or not */
+    isPaused: boolean = false
 
     constructor(scene: Phaser.Scene, pluginManager: Phaser.Plugins.PluginManager) {
         super(scene, pluginManager, "customInputs")
@@ -70,6 +81,15 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
         this.debug = keyboard.addKey(this.controls.debug)
         this.timeStop = keyboard.addKey(this.controls.timeStop)
         this.shoot = keyboard.addKey(this.controls.shoot)
+        this.pause = keyboard.addKey(this.controls.pause)
+        this.debug.on("down", () => {
+            this.isDebugging = !this.isDebugging
+        })
+
+        this.pause.on("down", () => {
+            this.isPaused = !this.isPaused
+        })
+
     }
 
     /**
