@@ -5,6 +5,7 @@ import Stage1 from "./scenes/Stage1"
 import PlanckPhysicsPlugin from "./Plugins/PlanckPhysicsPlugin"
 import CustomInputPlugin from "./Plugins/CustomInputPlugin"
 import PauseUIScene from "./scenes/PauseUIScene"
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -25,7 +26,8 @@ const config: Phaser.Types.Core.GameConfig = {
     plugins: {
         scene: [
             {key: "planck", plugin: PlanckPhysicsPlugin, start: true, mapping: "planck"},
-            {key: "customInputs", plugin: CustomInputPlugin, mapping: "customInputs"}
+            {key: "customInputs", plugin: CustomInputPlugin, mapping: "customInputs"},
+            {key: "rexUI", plugin: RexUIPlugin, mapping: "rexUI"}
         ]
     },
     physics: {

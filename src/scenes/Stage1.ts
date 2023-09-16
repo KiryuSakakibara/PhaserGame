@@ -54,7 +54,7 @@ export default class Stage1 extends GameScene {
 
         this.player.update(time, delta, this.timeScale)
         this.walpurgisNacht.update(time, delta, this.timeScale)
-        
+
         // move camera
         this.moveCamera()
 
@@ -70,8 +70,10 @@ export default class Stage1 extends GameScene {
      */
     moveCamera() {
         // Differences between mouse and player
-        let dx = this.customInputs.mouseWorldPos.x - this.player.x
-        let dy = this.customInputs.mouseWorldPos.y - this.player.y
+        let xMax = this.cameras.main.displayWidth - 100
+        let yMax = this.cameras.main.displayHeight - 200
+        let dx = Math.min(Math.max(this.customInputs.mouseWorldPos.x-this.player.x, -xMax), xMax)
+        let dy = Math.min(Math.max(this.customInputs.mouseWorldPos.y-this.player.y, -yMax), yMax)
         // thresholds for camera movement
         let w = this.cameras.main.displayWidth*1/4
         let h = this.cameras.main.displayHeight*1/4

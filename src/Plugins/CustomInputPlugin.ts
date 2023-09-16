@@ -52,28 +52,27 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
         this.controls = defaultSettings.controls
 
         // Creating the inputs
-        this.initializeInputs()
+        this.initializeInputs(scene)
     }
 
-    initializeInputs() {
+    initializeInputs(scene: Phaser.Scene) {
 
         // KEYS
         this.createKeys()
 
         // MOUSE
-        this.setMouseControls()
+        this.setMouseControls(scene)
 
         // enable the shoot or timeStop keys if mouse is not being used
         this.enableKeysIfNoMouse()
-        
-        this.scene.input.mouse.disableContextMenu()
+        this.scene!.input.mouse!.disableContextMenu()
     }
 
     /** 
      * Create the KEY objects (no functionality) 
      */
     createKeys() {
-        let keyboard = this.scene.input.keyboard
+        let keyboard = this.scene!.input.keyboard!
         this.up = keyboard.addKey(this.controls.up)
         this.down = keyboard.addKey(this.controls.down)
         this.left = keyboard.addKey(this.controls.left)
@@ -95,7 +94,7 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
     /**
      * Adds event listeners on mouse buttons if necessary
      */
-    setMouseControls() {
+    setMouseControls(scene: Phaser.Scene) {
         this.timeStopMouse = this.controls.timeStopMouse
         this.shootMouse = this.controls.shootMouse
         /*
@@ -104,7 +103,9 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
             this.mouseY = pointer.worldY
         })
         */
-        this.scene.input.on('pointerdown', (pointer: Input.Pointer) => {
+        scene.input.on('pointerdown', (pointer: Input.Pointer) => {
+            if (!this.scene!.scene.isActive(this.scene!)) return
+
             if (pointer.button == this.controls.shootMouse) {
                 if (this.controls.shootToggle) {
                     this.isShooting = !this.isShooting
@@ -114,8 +115,9 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
             } else if (pointer.button == this.controls.timeStopMouse) {
                 this.isStoppingTime = true
             }
+            
         })
-        this.scene.input.on('pointerup', (pointer: Input.Pointer) => {
+        scene.input.on('pointerup', (pointer: Input.Pointer) => {
             if (pointer.button == this.controls.shootMouse) {
                 if (!this.controls.shootToggle) {
                     this.isShooting = false
@@ -124,6 +126,7 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
                 this.isStoppingTime = false
             }
         })
+        
     }
 
     /**
@@ -158,8 +161,8 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
     
     update() {
         //let activePointer = this.scene.input.activePointer
-        let pointer = this.scene.input.activePointer
-        pointer.updateWorldPoint(this.scene.cameras.main)
+        let pointer = this.scene!.input.activePointer
+        pointer.updateWorldPoint(this.scene!.cameras.main)
         this.mouseWorldPos.x = pointer.worldX
         this.mouseWorldPos.y = pointer.worldY
         this.mouseScreenPos = pointer.position
