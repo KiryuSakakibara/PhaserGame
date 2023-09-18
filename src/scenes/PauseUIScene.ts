@@ -1,4 +1,6 @@
 import GridTable from "phaser3-rex-plugins/plugins/gridtable";
+import Label from "phaser3-rex-plugins/templates/ui/label/Label";
+import Sizer from "phaser3-rex-plugins/templates/ui/sizer/Sizer";
 
 const COLOR_PRIMARY = 0x4e342e;
 const COLOR_LIGHT = 0x7b5e57;
@@ -13,14 +15,13 @@ export default class PauseUIScene extends Phaser.Scene {
 
     create() {
         let scrollMode: GridTable.ScrollModeType = 0; // 0:vertical, 1:horizontal
-        this.add.sprite(0, 0, "Player").setScale(10)
 
-        /*
+        
         let gridTable = this.rexUI.add.gridTable({
-            x: 400,
-            y: 300,
-            width: (scrollMode === 0) ? 300 : 420,
-            height: (scrollMode === 0) ? 420 : 300,
+            x: this.cameras.main.width/2,
+            y: this.cameras.main.height/2,
+            width: (scrollMode === 0) ? 1200 : 420,
+            height: (scrollMode === 0) ? 800 : 300,
 
             scrollMode: scrollMode,
 
@@ -36,7 +37,7 @@ export default class PauseUIScene extends Phaser.Scene {
                     padding: 2,
                 },
 
-                reuseCellContainer: true,
+                reuseCellContainer: false,
             },
 
             slider: {
@@ -51,20 +52,122 @@ export default class PauseUIScene extends Phaser.Scene {
 
             header: this.rexUI.add.label({
                 width: (scrollMode === 0) ? undefined : 30,
-                height: (scrollMode === 0) ? 30 : undefined,
+                height: (scrollMode === 0) ? 50 : undefined,
 
                 orientation: scrollMode,
                 background: this.rexUI.add.roundRectangle(0, 0, 20, 20, 0, COLOR_DARK),
-                text: this.add.text(0, 0, 'Header'),
+                text: this.add.text(0, 0, 'Controls', {fontSize: 40}),
+                align: "center"
             }),
 
-            createCellContainerCallback: () => {return null},
+            footer: GetFooterSizer(this, scrollMode),
+
+            space: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+
+                table: 10,
+                header: 10,
+                footer: 10,
+            },
+
+            createCellContainerCallback: function (cell, cellContainer) {
+                var scene = cell.scene,
+                    width = cell.width,
+                    height = cell.height,
+                    item = cell.item,
+                    index = cell.index;
+                if (cellContainer === null) {
+                    cellContainer = scene.rexUI.add.label({
+                        width: width,
+                        height: height,
+
+                        orientation: scrollMode,
+                        background: scene.rexUI.add.roundRectangle(0, 0, 20, 20, 0).setStrokeStyle(2, COLOR_DARK),
+                        icon: scene.rexUI.add.roundRectangle(0, 0, 20, 20, 10, 0x0),
+                        text: scene.add.text(0, 0, ''),
+
+                        space: {
+                            icon: 10,
+                            left: (scrollMode === 0) ? 15 : 0,
+                            top: (scrollMode === 0) ? 0 : 15,
+                        }
+                    })
+                    console.log(cell.index + ': create new cell-container');
+                } else {
+                    console.log(cell.index + ': reuse cell-container');
+                }
+                // Set properties from item value
+                /*
+                if (cellContainer instanceof Label) {
+                    cellContainer.setMinSize(width, height); // Size might changed in this demo
+                    cellContainer.getElement('text').setText(item.id); // Set text of text object
+                    cellContainer.getElement('icon').setFillStyle(item.color); // Set fill color of round rectangle object
+                    cellContainer.getElement('background').setStrokeStyle(2, COLOR_DARK).setDepth(0);
+                }
+                */
+                
+                return cellContainer;
+            },
 
             items: []
 
 
-        })
-        */
+        }).layout()
+
+        
+        
     }
+
+    
+
+    
+
+    
 }
 
+function CreateFooterButton(scene: Phaser.Scene, text: string, orientation: Sizer.OrientationTypes) {
+    return scene.rexUI.add.label({
+        height: (orientation === 0) ? 50 : undefined,
+        width: (orientation === 0) ? undefined : 50,
+        orientation: orientation,
+        background: scene.rexUI.add.roundRectangle(0, 0, 2, 2, 15, COLOR_DARK),
+        text: scene.add.text(0, 0, text, {fontSize: 40}),
+        //icon: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_LIGHT),
+        align: 'center',
+        space: {           
+            icon: 10
+        }
+    })
+    .setInteractive()
+    .on('pointerdown', () => {
+        console.log(`Pointer down ${text}`)
+    })
+    .on('pointerover', function (this: Label) {
+        (this.getElement('background') as Phaser.GameObjects.Shape).setStrokeStyle(1, 0xffffff);
+    })
+    .on('pointerout', function (this: Label) {
+        (this.getElement('background') as Phaser.GameObjects.Shape).setStrokeStyle();
+    })
+}
+
+function GetFooterSizer(scene: Phaser.Scene, orientation: Sizer.OrientationTypes) {
+    return scene.rexUI.add.sizer({
+        orientation: orientation,
+        space: {
+            item: 20
+        }
+    })
+        .add(
+            CreateFooterButton(scene, 'Reset', orientation),   // child
+            1,         // proportion
+            'center'   // align
+        )
+        .add(
+            CreateFooterButton(scene, 'Exit', orientation),    // child
+            1,         // proportion
+            'center'   // align
+        )
+}
