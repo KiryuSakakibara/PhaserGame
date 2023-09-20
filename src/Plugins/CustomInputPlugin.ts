@@ -13,7 +13,8 @@ const enum Commands {
     PAUSE = "PAUSE",
 }
 
-type Bindings = {
+
+export type Bindings = {
     [command in Commands]: number
 }
 
@@ -33,6 +34,8 @@ const defaultBindings: Bindings = {
  * Call setScene() every time a scene is changed.
  */
 export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
+
+    currentBindings: Bindings
 
     // Keys
     /*
@@ -244,6 +247,8 @@ export default class CustomInputPlugin extends Phaser.Plugins.ScenePlugin {
         // Clear bindings
         this.scene?.input.keyboard?.removeAllListeners().removeAllKeys(true, true)
         this.scene?.input.removeAllListeners()
+
+        this.currentBindings = bindings
         
         this.initInput(bindings.UP, this.upInput)
         this.initInput(bindings.DOWN, this.downInput)
