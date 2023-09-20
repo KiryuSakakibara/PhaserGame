@@ -18,6 +18,8 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     rawVelocity = new Vec2(0, 0)
     /** The debug graphics for this sprite */
     graphics: Phaser.GameObjects.Graphics
+    /** Whether the graphics has already been cleared */
+    clearedGraphics: boolean = true
 
     
     // INTERPOLATION BETWEEN PHYSICS UPDATES
@@ -56,10 +58,12 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         this.setPosition(pos.x, pos.y)
         this.setRotation(this.pbody.getAngle())
 
-        if (this.scene.planck.drawDebug) {
+        if (this.scene.customInputs.isDebugging) {
             this.drawDebug()
-        } else {
+            this.clearedGraphics = false
+        } else if (!this.clearedGraphics) {
             this.graphics.clear()
+            this.clearedGraphics = true
         }
     }
 

@@ -83,16 +83,16 @@ export default class Player extends PlanckSprite {
 
     handleMovement() {
         let velocity = Planck.Vec2()
-        if (this.inputs.getLeft() && !this.inputs.getRight()) {
+        if (this.inputs.isPressingLeft && !this.inputs.isPressingRight) {
             velocity.x = -1
-        } else if (!this.inputs.getLeft() && this.inputs.getRight()) {
+        } else if (!this.inputs.isPressingLeft && this.inputs.isPressingRight) {
             velocity.x = 1
         } else {
             velocity.x = 0
         }
-        if (this.inputs.getUp() && !this.inputs.getDown()) {
+        if (this.inputs.isPressingUp && !this.inputs.isPressingDown) {
             velocity.y = -1
-        } else if (!this.inputs.getUp() && this.inputs.getDown()) {
+        } else if (!this.inputs.isPressingUp && this.inputs.isPressingDown) {
             velocity.y = 1
         } else {
             velocity.y = 0

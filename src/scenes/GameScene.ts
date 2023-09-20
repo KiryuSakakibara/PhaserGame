@@ -13,16 +13,13 @@ export default class GameScene extends Phaser.Scene {
     isPaused = false
 
     create() {
-        
+        this.customInputs.initAllInputs()
     }
 
     
     update(time: number, delta: number): void {
         // Update the inputs
         this.customInputs.update()
-        
-        // Handle debug toggle
-        this.handleDebug()
 
         // Handle the timeStop
         this.handleTimeStop()
@@ -38,15 +35,6 @@ export default class GameScene extends Phaser.Scene {
         
         //TODO: USE STATE MACHINES!!!!
     }
-    
-    handleDebug() {
-        /*
-        if (Phaser.Input.Keyboard.JustDown(this.customInputs.debug)) {
-            this.planck.drawDebug = !this.planck.drawDebug
-        }
-        */
-        this.planck.drawDebug = this.customInputs.isDebugging
-    }
 
     handleTimeStop() {
         if (this.customInputs.isStoppingTime) {
@@ -58,13 +46,14 @@ export default class GameScene extends Phaser.Scene {
 
     /** Handles pausing the game */
     handlePause() {
-        if (Phaser.Input.Keyboard.JustDown(this.customInputs.pause)) {
+        if (this.customInputs.isPausing) {
             if (!this.isPaused) {
                 this.scene.run("PauseUIScene")
-            } else {
-                this.scene.sleep("PauseUIScene")
+                this.isPaused = true
             }
-            this.isPaused = !this.isPaused
+        } else if (this.isPaused) {
+            this.scene.sleep("PauseUIScene")
+            this.isPaused = false
         }
     }
     
