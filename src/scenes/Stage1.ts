@@ -12,6 +12,9 @@ export default class Stage1 extends GameScene {
     playerHealthText: Phaser.GameObjects.Text
     fpsText: Phaser.GameObjects.Text
 
+    /** The camera following the player */
+    playerCam: PlayerCam
+
     /** The graphics for this scene's world bounds */
     graphics: Phaser.GameObjects.Graphics
 
@@ -29,7 +32,7 @@ export default class Stage1 extends GameScene {
         // Create the game objects
         this.walpurgisNacht = new Enemy(this, 800, 0)
         this.player = new Player(this, 0, 0)
-        this.cameras.addExisting(new PlayerCam(this.cameras.main, this.player), true)
+        this.playerCam = new PlayerCam(this.cameras.main, this.player)
         this.cameras.main.setBounds(-1440, -1440, 2880, 2880)
         this.physics.world.setBounds(-1440, -1440, 2880, 2880)
 
@@ -52,13 +55,17 @@ export default class Stage1 extends GameScene {
     update(time: number, delta: number): void {
         super.update(time, delta)
 
-        this.player.update(time, delta, this.timeScale)
-        this.walpurgisNacht.update(time, delta, this.timeScale)
-
         // Update text
         this.enemyHealthText.setText(this.walpurgisNacht.health.toString())
         this.playerHealthText.setText(this.player.health.toString())
         this.fpsText.setText(`fps: ${Math.round(1000/delta*10)/10}`)
 
+        if (this.isPaused) return
+        // NOTHING PAST THIS POINT WILL RUN IF THE GAME IS PAUSED
+
+        this.player.update(time, delta, this.timeScale)
+        this.walpurgisNacht.update(time, delta, this.timeScale)
+
+        this.playerCam.updatePosition()
     }
 }

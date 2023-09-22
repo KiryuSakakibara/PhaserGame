@@ -24,6 +24,12 @@ export default class GameScene extends Phaser.Scene {
         // Handle the timeStop
         this.handleTimeStop()
 
+        // Handle pausing
+        this.handlePause()
+
+        if (this.isPaused) return
+        // NOTHING PAST THIS POINT WILL RUN IF THE GAME IS PAUSED    
+
         // step the physics engine
         this.timeSincePhysicsUpdate += delta
         while (this.timeSincePhysicsUpdate >= 1000/60) {
@@ -31,7 +37,6 @@ export default class GameScene extends Phaser.Scene {
             this.timeSincePhysicsUpdate -= 1000/60
         }
 
-        this.handlePause()
         
         //TODO: USE STATE MACHINES!!!!
     }
