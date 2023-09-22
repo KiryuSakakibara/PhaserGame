@@ -3,6 +3,7 @@ import Enemy from "../gameobjects/Enemy";
 import Player from "../gameobjects/Player";
 import GameScene from "./GameScene";
 import { RenderOrder } from "../Constants/RenderOrder";
+import PlayerCam from "../gameobjects/PlayerCam";
 
 export default class Stage1 extends GameScene {
     walpurgisNacht: Enemy
@@ -28,8 +29,7 @@ export default class Stage1 extends GameScene {
         // Create the game objects
         this.walpurgisNacht = new Enemy(this, 800, 0)
         this.player = new Player(this, 0, 0)
-        //this.cameras.main.setBounds(-1440, -810, 2880, 1620)
-        //this.physics.world.setBounds(-1440, -810, 2880, 1620)
+        this.cameras.addExisting(new PlayerCam(this.cameras.main, this.player), true)
         this.cameras.main.setBounds(-1440, -1440, 2880, 2880)
         this.physics.world.setBounds(-1440, -1440, 2880, 2880)
 
@@ -55,33 +55,10 @@ export default class Stage1 extends GameScene {
         this.player.update(time, delta, this.timeScale)
         this.walpurgisNacht.update(time, delta, this.timeScale)
 
-        // move camera
-        this.moveCamera()
-
         // Update text
         this.enemyHealthText.setText(this.walpurgisNacht.health.toString())
         this.playerHealthText.setText(this.player.health.toString())
         this.fpsText.setText(`fps: ${Math.round(1000/delta*10)/10}`)
 
-    }
-
-    /**
-     * Moves the camera towards the mouse when aiming far away
-     */
-    moveCamera() {
-        // Differences between mouse and player
-        let xMax = this.cameras.main.displayWidth - 100
-        let yMax = this.cameras.main.displayHeight - 200
-        let dx = Math.min(Math.max(this.customInputs.mouseWorldPos.x-this.player.x, -xMax), xMax)
-        let dy = Math.min(Math.max(this.customInputs.mouseWorldPos.y-this.player.y, -yMax), yMax)
-        // thresholds for camera movement
-        let w = this.cameras.main.displayWidth*1/4
-        let h = this.cameras.main.displayHeight*1/4
-        let target = new Phaser.Math.Vector2()
-        target.x = this.player.x + (dx > 0 ? Math.max(dx-w, 0) : Math.min(dx+w, 0))*0.65
-        target.y = this.player.y + (dy > 0 ? Math.max(dy-h, 0) : Math.min(dy+h, 0))*0.65
-        target = this.cameras.main.midPoint.lerp(target, 0.1)
-
-        this.cameras.main.centerOn(target.x, target.y)
     }
 }

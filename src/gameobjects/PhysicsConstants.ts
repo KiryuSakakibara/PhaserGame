@@ -36,8 +36,8 @@ export const Masks = {
 
 /**
  * Creates a fixture with a box shape with the given parameters
- * @param width Width of the box in pixels
- * @param height Height of the box in pixels
+ * @param width Width of the box in unscaled pixels
+ * @param height Height of the box in unscaled pixels
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
  * @returns A Planck FixtureDef
@@ -45,20 +45,20 @@ export const Masks = {
 export function createBoxFixture(width: number, height: number, filterCategoryBits: number, 
     filterMaskBits: number) {
     return {
-        shape: Planck.Box(width*PlanckScale/2, height*PlanckScale/2), // Planck.Box uses half width ad half height
+        shape: Planck.Box(width*PixelScale*PlanckScale/2, height*PixelScale*PlanckScale/2), // Planck.Box uses half width ad half height
         filterCategoryBits,
         filterMaskBits,
         isSensor: true,
         userData: {
-            width,
-            height
+            width: width*PixelScale,
+            height: height*PixelScale
         } as FixtureData
     }
 }
 
 /**
  * Creates a fixture with a circle shape with the given parameters
- * @param radius The radius of the circle in pixels
+ * @param radius The radius of the circle in unscaled pixels
  * @param filterCategoryBits The bits associated with this fixture
  * @param filterMaskBits The bits to enable collisions for
  * @returns A Planck FixtureDef
@@ -66,12 +66,12 @@ export function createBoxFixture(width: number, height: number, filterCategoryBi
 export function createCircleFixture(radius: number, filterCategoryBits: number,
     filterMaskBits: number) {
     return {
-        shape: Planck.Circle(radius*PlanckScale),
+        shape: Planck.Circle(radius*PixelScale*PlanckScale),
         filterCategoryBits,
         filterMaskBits,
         isSensor: true,
         userData: {
-            radius
+            radius: radius*PixelScale
         } as FixtureData
     }
 }

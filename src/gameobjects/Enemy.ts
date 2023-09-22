@@ -34,7 +34,7 @@ export default class Enemy extends PlanckSprite {
 
     constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, "SnakeHead")
-        this.pbody.createFixture(createCircleFixture(45, Bits.enemy, Masks.enemy))
+        this.pbody.createFixture(createCircleFixture(11, Bits.enemy, Masks.enemy))
         this.setDepth(RenderOrder.indexOf("enemy"))
         
 

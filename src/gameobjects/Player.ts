@@ -134,6 +134,9 @@ export default class Player extends PlanckSprite {
         }
     }
 
+    /**
+     * Handles the player shooting
+     */
     handleShoot() {
         if (this.inputs.isShooting && this.cooldown <= 0) {
             for (let i=0; i<1; i++) {
