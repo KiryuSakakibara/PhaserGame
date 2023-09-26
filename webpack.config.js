@@ -3,8 +3,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const package = require("./package.json");
 const TerserPlugin = require("terser-webpack-plugin");
+const webpack = require("webpack");
+const { argv } = require("process");
 
-module.exports = {
+var config = {
     entry: path.resolve(__dirname, "./src/game.ts"),
     module: {
         rules: [
@@ -26,6 +28,10 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.node$/,
+                use: "node-loader",
+            }
         ],
     },
     optimization: {
@@ -45,6 +51,9 @@ module.exports = {
     },
     resolve: {
         extensions: [".js", ".ts"],
+        fallback: {
+            "path": require.resolve("path-browserify")
+        }
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
@@ -87,4 +96,19 @@ module.exports = {
             hot: true,
         }),
     ],
+    //target: ["web"]
+    
 };
+var webConfig = {
+    ...config,
+    target: "web"
+}
+
+module.exports = (env, argv) => {
+    webConfig.plugins.push(new webpack.DefinePlugin({
+        "process.env": {
+            APP_ENV: JSON.stringify(argv.mode)
+        }
+    }))
+    return webConfig
+}

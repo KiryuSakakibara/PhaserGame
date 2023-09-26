@@ -2,8 +2,8 @@
 Phaser game
 
 IMPORTANT WHEN BUILDING GAME FOR BROWSER:
-In index.html in the dist folder, remove the first / from the script src url
-when using css, uninstall cssnano and reinstall cssnano@4.1.11
+When using css, uninstall cssnano and reinstall cssnano@4.1.11
+After running npm run build, copy the dist folder to the ./resources/app folder
 
 Rules for assets<br>
 When using Aseprite:<br>

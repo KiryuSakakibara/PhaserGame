@@ -10,6 +10,6 @@
         "noImplicitAny": false,
         "sourceMap": true,
         "strictPropertyInitialization": false,
-        "types": ["./src/plugin.d.ts"]
+        "types": ["./src/plugin.d.ts", "node"]
     }
 }

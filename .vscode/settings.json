@@ -3,6 +3,7 @@
         "anims",
         "gameobjects",
         "Pausable",
-        "pbody"
+        "pbody",
+        "Steamworks"
     ]
 }

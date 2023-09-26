@@ -4,6 +4,8 @@ import Player from "../gameobjects/Player";
 import GameScene from "./GameScene";
 import { RenderOrder } from "../Constants/RenderOrder";
 import PlayerCam from "../gameobjects/PlayerCam";
+import Steamworks from "steamworks.js"
+
 
 export default class Stage1 extends GameScene {
     walpurgisNacht: Enemy
@@ -49,6 +51,10 @@ export default class Stage1 extends GameScene {
         background.setDepth(RenderOrder.indexOf("background"))
         background.texture.setFilter(Phaser.Textures.FilterMode.LINEAR)
         background.setScale(6)
+
+        //console.log(process.env.APP_ENV)
+        
+        
 
     }
 
