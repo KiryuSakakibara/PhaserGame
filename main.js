@@ -1,32 +1,8 @@
 // THE MAIN ENTRY FILE FOR ELECTRON APPLICATION
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
+const path = require("path")
+const steamworks = require("steamworks.js")
 
-const useSteam = true;
-if (useSteam) {
-    try {
-        const steamworks = require("steamworks.js");
-        console.log("steamworks, ", steamworks);
-        const client = steamworks.init();
-
-        console.log("client", client);
-        console.log(client.localplayer.getName());
-        app.commandLine.appendSwitch("in-process-gpu");
-        app.commandLine.appendSwitch("disable-direct-composition");
-        app.allowRendererProcessReuse = false;
-    } catch (e) {
-        console.log(e)
-    }
-  
-}
-/*
-if (process.env.APP_ENV === "production") {
-    try {
-        const client = Steamworks.init(2618510)
-    } catch (e) {
-        console.log(e)
-    }
-}
-*/
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -34,15 +10,29 @@ function createWindow() {
         height: 540,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: false,
+            preload: path.join(__dirname, "preload.js")
         },
         useContentSize: true,
-        backgroundColor: "#000000"
+        backgroundColor: "#000000",
     })
     win.setMenuBarVisibility(false)
+    win.maximize()
     
-    win.loadFile('./dist/index.html');
     win.webContents.openDevTools()
+    win.loadFile('./dist/index.html');
 }
- 
-app.whenReady().then(createWindow)
+
+app.whenReady().then(() => {
+    createWindow()
+
+    app.on("activate", function() {
+        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
+})
+
+app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') app.quit()
+})
+
+steamworks.electronEnableSteamOverlay()

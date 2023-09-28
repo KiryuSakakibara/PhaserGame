@@ -13,6 +13,7 @@ export default class Stage1 extends GameScene {
     enemyHealthText: Phaser.GameObjects.Text
     playerHealthText: Phaser.GameObjects.Text
     fpsText: Phaser.GameObjects.Text
+    steamText: Phaser.GameObjects.Text
 
     /** The camera following the player */
     playerCam: PlayerCam
@@ -45,7 +46,25 @@ export default class Stage1 extends GameScene {
         this.playerHealthText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
         this.fpsText = this.add.text(20, 100, "fps").setScale(2)
         this.fpsText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
-
+        this.steamText = this.add.text(20, 140, "steam unavailable").setScale(2)
+        this.steamText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
+        if (window["steamworks"]){
+            if (window["steamworks"].client) {
+                this.steamText.setText(window["steamworks"].client.localplayer.getName())
+            }
+        }
+        
+        /*
+        if (window["steamworksClient"]) {
+            //console.log(window["steamworks"].getSteamClient())
+            //console.log(window["steamworks"].getSteamClient().localplayer)
+            //this.steamText.setText(window["steamworks"].getSteamClient().localplayer)
+            //this.getSteamClient()
+            console.log(window["steamworksClient"])
+        }
+        */
+        
+        
         // Create the background
         let background = this.add.sprite(0, 0, "GrassBackground")
         background.setDepth(RenderOrder.indexOf("background"))
@@ -73,5 +92,10 @@ export default class Stage1 extends GameScene {
         this.walpurgisNacht.update(time, delta, this.timeScale)
 
         this.playerCam.updatePosition()
+    }
+
+    async getSteamClient() {
+        let client = await window["steamworks"].getSteamClient()
+        console.log(client)
     }
 }
