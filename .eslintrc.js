@@ -1,25 +1,29 @@
 module.exports = {
-	root: true,
-	parser: "@typescript-eslint/parser",
+	env: {
+		browser: true,
+		node: true,
+	},
 	parserOptions: { 
 		ecmaVersion: 6,
 		sourceType: 'module'
 	},
-	plugins: [
-		"@typescript-eslint",
-	],
-	env: {
-		es6: true,
-		browser: true,
-	},
     extends: [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		"plugin:import/recommended",
+    	"plugin:import/electron",
+    	"plugin:import/typescript"
 	],
 	rules: {
 		"no-unused-vars": "warn",
 		"@typescript-eslint/no-empty-function": "off"
 	},
+	parser: "@typescript-eslint/parser",
+	/*
+	plugins: [
+		"@typescript-eslint",
+	],
+	*/
 	exclude: ["node_modules", "dist"]
 }

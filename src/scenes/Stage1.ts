@@ -48,10 +48,8 @@ export default class Stage1 extends GameScene {
         this.fpsText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
         this.steamText = this.add.text(20, 140, "steam unavailable").setScale(2)
         this.steamText.setScrollFactor(0, 0).setDepth(RenderOrder.indexOf("debug"))
-        if (window["steamworks"]){
-            if (window["steamworks"].client) {
-                this.steamText.setText(window["steamworks"].client.localplayer.getName())
-            }
+        if (window.steamClient){
+            this.steamText.setText(window.steamClient.localplayer.getName())
         }
         
         /*
@@ -92,10 +90,5 @@ export default class Stage1 extends GameScene {
         this.walpurgisNacht.update(time, delta, this.timeScale)
 
         this.playerCam.updatePosition()
-    }
-
-    async getSteamClient() {
-        let client = await window["steamworks"].getSteamClient()
-        console.log(client)
     }
 }

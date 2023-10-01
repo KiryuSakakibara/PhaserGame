@@ -1,3 +1,4 @@
+
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -62,12 +63,12 @@ var config = {
         clean: true,
     },
     devServer: {
-        /*
-        static: {
-            directory: path.resolve(__dirname, "./dist"),
-            watch: true,
-        },
-        */
+        
+        //static: {
+        //    directory: path.resolve(__dirname, "./dist"),
+        //    watch: true,
+        //},
+        
         //static: path.resolve(__dirname, "./dist")
         static: [
             {

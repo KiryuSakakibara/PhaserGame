@@ -6,3 +6,7 @@ declare namespace Phaser {
         rexUI: import("phaser3-rex-plugins/templates/ui/ui-plugin").default
     }
 }
+
+interface Window {
+    steamClient: Omit<typeof import("steamworks.js/client"), "init" | "runCallbacks"> | undefined
+}

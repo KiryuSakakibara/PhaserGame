@@ -10,7 +10,7 @@ export default class LoadScene extends Phaser.Scene {
                     {
                         type: "json",
                         key: "assetsJSON",
-                        url: "assets/assets.json"
+                        url: "./assets/assets.json"
                     }
                 ]
             }
