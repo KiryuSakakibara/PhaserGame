@@ -18,7 +18,7 @@ if (useSteam) {
         client = steamworks.init(2618510);
 
         //console.log("client", client);
-        console.log(client.localplayer.getName());
+        //console.log(client.localplayer.getName());
         
     } catch (e) {
         console.log(e)

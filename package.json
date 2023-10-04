@@ -1,6 +1,6 @@
 {
-  "name": "phasergame",
-  "productName": "Time Step Delta",
+  "name": "time-step-delta",
+  "productName": "TimeStepDelta",
   "version": "1.0.0",
   "description": "Phaser game",
   "main": "./.webpack/main",
