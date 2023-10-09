@@ -4,6 +4,7 @@
         "gameobjects",
         "Pausable",
         "pbody",
+        "ROKA",
         "Steamworks"
     ]
 }

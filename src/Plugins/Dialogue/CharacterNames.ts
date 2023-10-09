@@ -1,3 +1,4 @@
 export const enum CharacterName {
-    LOTUS = "Lotus"
+    LOTUS = "Lotus",
+    ROKA = "Roka"
 }

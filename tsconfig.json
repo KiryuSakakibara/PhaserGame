@@ -7,13 +7,12 @@
         "esModuleInterop": true,
         "noImplicitAny": false,
         "sourceMap": true,
-        "baseUrl": ".",
         "outDir": "dist",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "allowUnreachableCode": false,
         "paths": {
-            "*": ["node_modules/*"]
+            "*": ["./node_modules/*"]
         },
         "types": ["node", "./src/plugin.d.ts"]
     },
