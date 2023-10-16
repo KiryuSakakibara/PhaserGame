@@ -6,6 +6,7 @@ import PlanckPhysicsPlugin from "./Plugins/PlanckPhysicsPlugin"
 import CustomInputPlugin from "./Plugins/CustomInputPlugin"
 import PauseUIScene from "./scenes/PauseUIScene"
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin"
+import DialogueUIScene from "./scenes/DialogueUIScene"
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -52,7 +53,7 @@ const config: Phaser.Types.Core.GameConfig = {
             target: window
         }
     },
-    scene: [LoadScene, Stage1, PauseUIScene],
+    scene: [LoadScene, Stage1, PauseUIScene, DialogueUIScene],
 }
 
 export default new Phaser.Game(config)
