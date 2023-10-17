@@ -15,9 +15,53 @@ export default class PauseUIScene extends Phaser.Scene {
     }
 
     create() {
-        let scrollMode: GridTable.ScrollModeType = 0; // 0:vertical, 1:horizontal
+        var scrollMode: GridTable.ScrollModeType = 0; // 0:vertical, 1:horizontal
 
-        
+        // The header for the table
+        var tableHeader = this.rexUI.add.label({
+            width: (scrollMode === 0) ? undefined : 30,
+            height: (scrollMode === 0) ? 50 : undefined,
+
+            orientation: scrollMode,
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 20, COLOR_DARK),
+            text: this.add.text(0, 0, 'Controls', {fontSize: 40}),
+            align: "center"
+        })
+
+        // The callback function for creating cell containers
+        let createCellContainerCallback = function (
+            cell: GridTable.CellData, cellContainer: Phaser.GameObjects.GameObject) {
+
+            var scene = cell.scene,
+            width = cell.width,
+            height = cell.height,
+            item = cell.item as {text: string},
+            index = cell.index;
+            if (cellContainer === null) {
+                cellContainer = scene.rexUI.add.label({
+                    width: width,
+                    height: height,
+
+                    orientation: scrollMode,
+                    background: scene.rexUI.add.roundRectangle(0, 0, 20, 20, 0).setStrokeStyle(2, COLOR_DARK),
+                    text: scene.add.text(0, 0, item.text, {fontSize: 40}),
+                    align: "center",
+
+                    space: {
+                        icon: 10,
+                        left: (scrollMode === 0) ? 15 : 0,
+                        top: (scrollMode === 0) ? 0 : 15,
+                    }
+                }).setMinSize(width, height)
+                
+            } else {
+                
+            }
+            
+            return cellContainer;
+        }
+
+        // The grid table
         let gridTable = this.rexUI.add.gridTable({
             x: this.cameras.main.width/2,
             y: this.cameras.main.height/2,
@@ -51,15 +95,8 @@ export default class PauseUIScene extends Phaser.Scene {
                 speed: 0.1
             },
 
-            header: this.rexUI.add.label({
-                width: (scrollMode === 0) ? undefined : 30,
-                height: (scrollMode === 0) ? 50 : undefined,
-
-                orientation: scrollMode,
-                background: this.rexUI.add.roundRectangle(0, 0, 20, 20, 0, COLOR_DARK),
-                text: this.add.text(0, 0, 'Controls', {fontSize: 40}),
-                align: "center"
-            }),
+            
+            header: tableHeader.bringToTop(),
 
             footer: GetFooterSizer(this, scrollMode),
 
@@ -74,35 +111,7 @@ export default class PauseUIScene extends Phaser.Scene {
                 footer: 10,
             },
 
-            createCellContainerCallback: function (cell, cellContainer) {
-                var scene = cell.scene,
-                    width = cell.width,
-                    height = cell.height,
-                    item = cell.item as {text: string},
-                    index = cell.index;
-                if (cellContainer === null) {
-                    cellContainer = scene.rexUI.add.label({
-                        width: width,
-                        height: height,
-
-                        orientation: scrollMode,
-                        background: scene.rexUI.add.roundRectangle(0, 0, 20, 20, 0).setStrokeStyle(2, COLOR_DARK),
-                        text: scene.add.text(0, 0, item.text, {fontSize: 40}),
-                        align: "center",
-
-                        space: {
-                            icon: 10,
-                            left: (scrollMode === 0) ? 15 : 0,
-                            top: (scrollMode === 0) ? 0 : 15,
-                        }
-                    }).setMinSize(width, height)
-                    
-                } else {
-                    
-                }
-                
-                return cellContainer;
-            },
+            createCellContainerCallback,
 
             items: this.createItems()
 
@@ -144,7 +153,7 @@ function getKeyFromKeyCode(key: number) {
     }
 }
 
-function CreateFooterButton(scene: Phaser.Scene, text: string, orientation: Sizer.OrientationTypes) {
+function CreateFooterButton(scene: PauseUIScene, text: string, orientation: Sizer.OrientationTypes) {
     return scene.rexUI.add.label({
         height: (orientation === 0) ? 50 : undefined,
         width: (orientation === 0) ? undefined : 50,
@@ -169,7 +178,7 @@ function CreateFooterButton(scene: Phaser.Scene, text: string, orientation: Size
     })
 }
 
-function GetFooterSizer(scene: Phaser.Scene, orientation: Sizer.OrientationTypes) {
+function GetFooterSizer(scene: PauseUIScene, orientation: Sizer.OrientationTypes) {
     return scene.rexUI.add.sizer({
         orientation: orientation,
         space: {

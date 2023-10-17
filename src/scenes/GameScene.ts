@@ -53,13 +53,14 @@ export default class GameScene extends Phaser.Scene {
     handlePause() {
         if (this.customInputs.isPausing) {
             if (!this.isPaused) {
+                this.scene.pause("DialogueUIScene")
                 this.scene.run("PauseUIScene")
-                this.scene.run("DialogueUIScene")
+                this.scene.get("PauseUIScene").scene.bringToTop()
                 this.isPaused = true
             }
         } else if (this.isPaused) {
+            this.scene.resume("DialogueUIScene")
             this.scene.sleep("PauseUIScene")
-            this.scene.sleep("DialogueUIScene")
             this.isPaused = false
         }
     }

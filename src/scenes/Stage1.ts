@@ -71,6 +71,8 @@ export default class Stage1 extends GameScene {
 
         //console.log(process.env.APP_ENV)
         
+        // Start the Dialogue UI
+        this.scene.run("DialogueUIScene")
         
 
     }
