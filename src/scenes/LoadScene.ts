@@ -29,17 +29,12 @@ export default class LoadScene extends Phaser.Scene {
             progress.destroy()
         })
 
-        let json = this.cache.json.get("assetsJSON")
-        if (!json) {
+        let assetsJson = this.cache.json.get("assetsJSON")
+        if (!assetsJson) {
             return
         }
 
-        let sprites = json["Sprites"]
-        let spriteAtlases = json["SpriteAtlases"]
-
-        // Load sprites
-        this.loadSprites(sprites)
-        this.loadSpriteAtlases(spriteAtlases)
+        this.loadAllAssets(assetsJson)
         
     }
 
@@ -55,17 +50,47 @@ export default class LoadScene extends Phaser.Scene {
         })
     }
 
-    loadSprites(sprites: Object) {
-        let keys = Object.keys(sprites)
-        keys.forEach((key) => {
-            this.load.image(key, sprites[key])
-        })
+    /**
+     * Load all the assets
+     * @param assetsJson The json file defining all asset paths
+     */
+    loadAllAssets(assetsJson: Object) {
+        // load sprites
+        this.loadSprites(assetsJson["Sprites"])
+        // load spriteAtlases
+        this.loadSpriteAtlases(assetsJson["SpriteAtlases"])
+        // load nineSlices
+        this.loadNineSlices(assetsJson["NineSlices"])
     }
 
+    /**
+     * Load sprites using scene.load.image()
+     * @param sprites 
+     */
+    loadSprites(sprites: Object) {
+        for (const [key, path] of Object.entries(sprites)) {
+            this.load.image(key, path)
+        }
+    }
+
+    /**
+     * Load spriteAtlases using scene.load.atlas()
+     * @param atlases 
+     */
     loadSpriteAtlases(atlases: Object) {
-        let keys = Object.keys(atlases)
-        keys.forEach((key) => {
-            this.load.atlas(key, atlases[key]+".png", atlases[key]+".json")
-        })
+        for (const [key, path] of Object.entries(atlases)) {
+            this.load.atlas(key, path+".png", path+".json")
+        }
+    }
+
+    /**
+     * Load nine slices using scene.load.image() and scene.load.json()
+     * @param nineSlices 
+     */
+    loadNineSlices(nineSlices: Object) {
+        for (const [key, path] of Object.entries(nineSlices)) {
+            this.load.image(key, path+".png")
+            this.load.json(key, path+".json")
+        }
     }
 }
