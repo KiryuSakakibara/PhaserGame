@@ -167,7 +167,7 @@ function CreateFooterButton(scene: PauseUIScene, text: string, orientation: Size
         }
     })
     .setInteractive()
-    .on('pointerdown', () => {
+    .on('pointerup', function (this: Label) {
         console.log(`Pointer down ${text}`)
     })
     .on('pointerover', function (this: Label) {
@@ -186,12 +186,12 @@ function GetFooterSizer(scene: PauseUIScene, orientation: Sizer.OrientationTypes
         }
     })
         .add(
-            CreateFooterButton(scene, "This button doesn't do anything", orientation),   // child
+            CreateFooterButton(scene, "Toggle fullscreen", orientation),   // child
             1,         // proportion
             'center'   // align
         )
         .add(
-            CreateFooterButton(scene, 'Neither does this one lol', orientation),    // child
+            CreateFooterButton(scene, "This button doesn't do anything", orientation),    // child
             1,         // proportion
             'center'   // align
         )
