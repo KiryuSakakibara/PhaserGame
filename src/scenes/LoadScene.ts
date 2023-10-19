@@ -61,6 +61,8 @@ export default class LoadScene extends Phaser.Scene {
         this.loadSpriteAtlases(assetsJson["SpriteAtlases"])
         // load nineSlices
         this.loadNineSlices(assetsJson["NineSlices"])
+        // load fonts
+        this.loadFonts(assetsJson["Fonts"])
     }
 
     /**
@@ -91,6 +93,21 @@ export default class LoadScene extends Phaser.Scene {
         for (const [key, path] of Object.entries(nineSlices)) {
             this.load.image(key, path+".png")
             this.load.json(key, path+".json")
+        }
+    }
+
+    /**
+     * Load custom fonts
+     * @param fonts 
+     */
+    loadFonts(fonts: Object) {
+        for (const [key, path] of Object.entries(fonts)) {
+            let newFont = new FontFace(key, `url(${path})`)
+            newFont.load().then(function (loaded) {
+                document.fonts.add(loaded)
+            }).catch(function (error) {
+                return error
+            })
         }
     }
 }

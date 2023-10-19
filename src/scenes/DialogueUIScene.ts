@@ -27,7 +27,7 @@ actually successfully wraps around the provided width of the textBox.`
             orientation: "y"
         })
 
-        dialogueSizer.add(nameBox, {align: "left"})
+        dialogueSizer.add(nameBox, {align: "left", padding: {bottom: -this.cache.json.get("TextBox")["bottomHeight"]}})
         dialogueSizer.add(textBox)
 
         dialogueSizer.layout()
@@ -45,14 +45,15 @@ actually successfully wraps around the provided width of the textBox.`
         })
 
         let text = this.add.text(0, 0, "Hello World", {
-            fontSize: 50,
+            fontSize: 70,
+            fontFamily: "Silver",
         })
 
         let label = this.rexUI.add.label({
             background,
             text,
             space: {
-                top: 20, bottom: 20, left: 50, right: 50
+                top: 20, bottom: 20, left: 40, right: 40
             }
         })
 
@@ -73,11 +74,11 @@ actually successfully wraps around the provided width of the textBox.`
         let text = this.add.text(0, 0, "", {
             fixedWidth,
             fixedHeight,
-            fontSize: "50px",
+            fontSize: 70,
             wordWrap: {
                 width: fixedWidth,
             },
-            fontFamily: "OCR A Std"
+            fontFamily: "Silver"
         })
         
         
@@ -89,7 +90,7 @@ actually successfully wraps around the provided width of the textBox.`
             //action: this.add.image(0, 0, 'Player').setTint(COLOR_LIGHT).setVisible(false),
 
             space: {
-                innerLeft: 30, innerRight: 30, innerTop: 30, innerBottom: 30,
+                innerLeft: 30, innerRight: 30, innerTop: 20, innerBottom: 20,
             }
 
         })
