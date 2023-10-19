@@ -35,6 +35,7 @@ var config = {
             }
         ],
     },
+    /*
     optimization: {
         minimizer: [new TerserPlugin({
             extractComments: false
@@ -50,6 +51,7 @@ var config = {
             },
         },
     },
+    */
     resolve: {
         extensions: [".js", ".ts"],
         fallback: {
@@ -58,8 +60,9 @@ var config = {
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "[name].[chunkhash].js",
-        chunkFilename: "[name].[chunkhash].js",
+        //filename: "[name].[chunkhash].js",
+        //chunkFilename: "[name].[chunkhash].js",
+        filename: "index.js",
         clean: true,
     },
     devServer: {
