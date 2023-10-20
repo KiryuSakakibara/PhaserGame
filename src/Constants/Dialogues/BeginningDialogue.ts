@@ -1,6 +1,6 @@
 import { RopeJoint } from "planck";
-import { CharacterName } from "../../Plugins/Dialogue/CharacterNames";
-import { Dialogue } from "../../Plugins/Dialogue/Dialogue";
+import { CharacterName } from "../../gameobjects/UI/Dialogue/CharacterNames";
+import { Dialogue } from "../../gameobjects/UI/Dialogue/Dialogue";
 const LOTUS = CharacterName.LOTUS
 const ROKA = CharacterName.ROKA
 
