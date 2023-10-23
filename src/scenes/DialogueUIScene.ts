@@ -10,12 +10,14 @@ const COLOR_DARK = 0x260e04;
 export default class DialogueUIScene extends Phaser.Scene {
 
     dialogueBox: DialogueBox
+    graphics: Phaser.GameObjects.Graphics
 
     constructor() {
         super("DialogueUIScene")
     }
 
     create() {
+        this.graphics = this.add.graphics().setDepth(1)
         this.createDialogueSizer()
 
         this.dialogueBox.startNewDialogue(BeginningDialogue)
@@ -45,48 +47,14 @@ export default class DialogueUIScene extends Phaser.Scene {
         return label
     }
 
-    createDialogueBox(nameBox: Label) {
-        let fixedWidth = 1200
-        let fixedHeight = 200
-        
-        let innerBackground = this.rexUI.add.ninePatch({
-            key: "TextBox",
-            ...this.cache.json.get("TextBox"),
-            stretchMode: 1
-        })
-
-        // Text object that stores the dialogue (This determines the textBox size)
-        let text = this.add.text(0, 0, "", {
-            fixedWidth,
-            fixedHeight,
-            fontSize: 70,
-            wordWrap: {
-                width: fixedWidth,
-            },
-            fontFamily: "Silver"
-        })
-        
-        let textBox = new DialogueBox(this, nameBox, {
-            background: innerBackground,
-
-            text: text,
-
-            //action: this.add.image(0, 0, 'Player').setTint(COLOR_LIGHT).setVisible(false),
-
-            space: {
-                innerLeft: 30, innerRight: 30, innerTop: 20, innerBottom: 20,
-            }
-        })
-
-        return textBox
-    }
-
     createDialogueSizer() {
+        let fixedWidth = 1200
         let fixedHeight = 200
 
         let nameBox = this.createNameBox()
 
-        this.dialogueBox = this.createDialogueBox(nameBox)
+        //this.dialogueBox = this.createDialogueBox(nameBox)
+        this.dialogueBox = new DialogueBox(this, fixedWidth, fixedHeight, nameBox)
 
 
         let dialogueSizer = this.rexUI.add.sizer({
@@ -99,11 +67,15 @@ export default class DialogueUIScene extends Phaser.Scene {
         dialogueSizer.add(this.dialogueBox)
         
         // Re-layout the dialogue box when the next dialogue is shown
-        this.dialogueBox.on("updateDialogue", () => {dialogueSizer.layout()})
+        this.dialogueBox.on("updateDialogue", () => {
+            dialogueSizer.layout()
+            this.graphics.clear()
+            //dialogueSizer.drawBounds(this.graphics, 0xff0000)
+        })
         this.dialogueBox.on("endDialogue", () => {this.scene.sleep(this)})
 
         dialogueSizer.layout()
-        //dialogueSizer.drawBounds(this.add.graphics(), 0xff0000)
+        //dialogueSizer.drawBounds(this.graphics, 0xff0000)
 
         return dialogueSizer
     }

@@ -6,18 +6,58 @@ export default class DialogueBox extends TextBox {
 
     dialogueSet: DialogueSet = {}
     currentDialogue: Dialogue
-    nameBox: Label
+    nameBox: Label | null
+    actionButton: Phaser.GameObjects.Sprite
 
-    constructor(scene: Phaser.Scene, nameBox: Label, config: TextBox.IConfig) {
-        super(scene, config)
+    constructor(scene: Phaser.Scene, width: number, height: number, nameBox?: Label) {
+
+        // Background object
+        let background = scene.rexUI.add.ninePatch({
+            key: "TextBox",
+            ...scene.cache.json.get("TextBox"),
+            stretchMode: 1
+        })
+
+        // Text object that stores the dialogue (This determines the textBox size)
+        let text = scene.add.text(0, 0, "", {
+            fixedWidth: width,
+            fixedHeight: height,
+            fontSize: 70,
+            wordWrap: {
+                width: width,
+            },
+            fontFamily: "Silver"
+        })
+
+        // The animated button telling the player they can click to progress the dialogue
+        scene.anims.create({
+            key: "NextDialogueButtonAnim",
+            frames: "NextDialogueButton",
+            frameRate: 5,
+            repeat: -1
+        })
+        let actionButton = scene.add.sprite(0, 0, "NextDialogueButton")
+            .play("NextDialogueButtonAnim")
+            .setVisible(false)
+        
+        // Create the text box
+        super(scene, {
+            background,
+            text,
+            action: actionButton,
+            space: {
+                innerLeft: 30, innerRight: 30, innerTop: 20, innerBottom: 20,
+                actionTop: 150, actionRight: 10
+            }
+        })
+
         scene.add.existing(this)
-
         this.nameBox = nameBox
-
-        this.setTypingSpeed(20)
+        this.actionButton = actionButton
+        this.setTypingSpeed(30)
         this.setInteractive()
-        //this.on("pointerdown", this.clickAction)
         this.on("pointerdown", this.clickAction)
+        this.on("pageend", () => {this.actionButton.setVisible(true)})
     }
 
     startNewDialogue(dialogues: Dialogue[]) {
@@ -45,6 +85,7 @@ export default class DialogueBox extends TextBox {
             this.currentDialogue = this.dialogueSet[this.currentDialogue.next]
             this.updateDialogue()
         } else {
+            // Emit an end dialogue event so the parent scene can disable itself
             this.setText("")
             this.emit("endDialogue")
         }
@@ -55,7 +96,8 @@ export default class DialogueBox extends TextBox {
      */
     updateDialogue() {
         this.start(this.currentDialogue.txt)
-        this.nameBox.setText(this.currentDialogue.char)
+        this.nameBox?.setText(this.currentDialogue.char)
+        this.actionButton.setVisible(false)
         this.emit("updateDialogue")
     }
 }
