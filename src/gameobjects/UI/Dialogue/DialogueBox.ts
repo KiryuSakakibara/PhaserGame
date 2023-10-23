@@ -6,7 +6,7 @@ export default class DialogueBox extends TextBox {
 
     dialogueSet: DialogueSet = {}
     currentDialogue: Dialogue
-    nameBox: Label | null
+    nameBox: Label | undefined
     actionButton: Phaser.GameObjects.Sprite
 
     constructor(scene: Phaser.Scene, width: number, height: number, nameBox?: Label) {
