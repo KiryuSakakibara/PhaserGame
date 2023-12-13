@@ -8,6 +8,8 @@ export default class DialogueBox extends TextBox {
     currentDialogue: Dialogue
     nameBox: Label | undefined
     actionButton: Phaser.GameObjects.Sprite
+    dialogueSound: Phaser.Sound.BaseSound | undefined
+    
 
     constructor(scene: Phaser.Scene, width: number, height: number, nameBox?: Label) {
 
@@ -52,12 +54,16 @@ export default class DialogueBox extends TextBox {
         })
 
         scene.add.existing(this)
+
+        this.dialogueSound = scene.sound.add("DialogueSound_Lotus", {volume: 0.1})
+
         this.nameBox = nameBox
         this.actionButton = actionButton
-        this.setTypingSpeed(30)
+        this.setTypingSpeed(40)
         this.setInteractive()
         this.on("pointerdown", this.clickAction)
         this.on("pageend", () => {this.actionButton.setVisible(true)})
+        this.on("typechar", (char: string) => {if (char != " ") this.dialogueSound?.play()})
     }
 
     startNewDialogue(dialogues: Dialogue[]) {

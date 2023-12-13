@@ -63,6 +63,8 @@ export default class LoadScene extends Phaser.Scene {
         this.loadNineSlices(assetsJson["NineSlices"])
         // load fonts
         this.loadFonts(assetsJson["Fonts"])
+        // load audio
+        this.loadAudio(assetsJson["Audio"])
     }
 
     /**
@@ -108,6 +110,16 @@ export default class LoadScene extends Phaser.Scene {
             }).catch(function (error) {
                 return error
             })
+        }
+    }
+
+    /**
+     * Load audio
+     * @param audio 
+     */
+    loadAudio(audio: Object) {
+        for (const [key, path] of Object.entries(audio)) {
+            this.load.audio(key, path)
         }
     }
 }
