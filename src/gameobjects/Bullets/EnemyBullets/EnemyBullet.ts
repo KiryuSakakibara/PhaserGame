@@ -6,7 +6,7 @@ import { RenderOrder } from "../../../Constants/RenderOrder";
 
 export default class EnemyBullet extends Bullet {
     constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, "DefaultEnemyBullet")
+        super(scene, x, y, "CircleBulletRed")
         this.lifeSpan = 3000
         this.pbody.createFixture(createCircleFixture(4, Bits.enemyBullet, Masks.enemyBullet))
         this.setDepth(RenderOrder.indexOf("enemyBullet"))
