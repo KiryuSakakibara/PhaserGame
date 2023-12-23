@@ -6,11 +6,11 @@ import { Bits, createBoxFixture, createCircleFixture, Masks } from "../../Physic
 
 export default class PlayerLinearBullet extends PlayerBullet {
     constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, "CircleBulletBlue")
-        //this.pbody.createFixture(createBoxFixture(
-        //    11, 6, Bits.playerBullet, Masks.playerBullet))
-        this.pbody.createFixture(createCircleFixture(
-            4, Bits.playerBullet, Masks.playerBullet
-        ))
+        super(scene, x, y, "DefaultPlayerBullet")
+        this.pbody.createFixture(createBoxFixture(
+            11, 6, Bits.playerBullet, Masks.playerBullet))
+        //this.pbody.createFixture(createCircleFixture(
+        //    4, Bits.playerBullet, Masks.playerBullet
+        //))
     }
 }

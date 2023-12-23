@@ -9,6 +9,9 @@ import { PixelScale, Bits, createBoxFixture, Masks, PlanckScale, FixtureData } f
 import { PlayerConst } from "../Constants/GameObjects/PlayerConst"
 import CustomInputPlugin from "../Plugins/CustomInputPlugin"
 import { RenderOrder } from "../Constants/RenderOrder"
+import PlayerHomingBullet from "./Bullets/PlayerBullets/PlayerHomingBullet"
+import ConstantBulletSpawner from "./Bullets/ConstantBulletSpawner"
+import { PlayerLinearBulletSpawnerConfig } from "../Constants/GameObjects/BulletSpawnerConsts"
 
 export default class Player extends PlanckSprite {
     /** The CustomInputPlugin */
@@ -16,13 +19,16 @@ export default class Player extends PlanckSprite {
     /** The speed of the ship in pixels/second */
     speed = 600
     /** The max cooldown of the ship in milliseconds */
-    maxCooldown = 80
+    //maxCooldown = 80
     /** The remaining shooting cooldown of the ship in milliseconds */
-    cooldown = 0
+    //cooldown = 0
     /** The collection of bullets owned by the ship */
-    bullets: Phaser.GameObjects.Group
+    //bullets: Phaser.GameObjects.Group //TODO: Turn this into an array of bullet collections
     /** The health of the player */
     health: number = 10
+
+    /** Array of the bullet spawners */
+    bulletSpawners: ConstantBulletSpawner[] = []
 
     constructor(scene: GameScene, x: number, y: number) {
 
@@ -38,21 +44,15 @@ export default class Player extends PlanckSprite {
         this.inputs = this.scene.customInputs
         
         // Create the bullets
-        
+        /*
         this.bullets = scene.add.group({
             classType: PlayerLinearBullet,
-            maxSize: 5000,
+            maxSize: 1000,
             runChildUpdate: false,
         })
-        /*
-        this.bullets.createMultiple({
-            classType: Bullet,
-            quantity: this.bullets.maxSize,
-            visible: false,
-            active: false
-        })
         */
-        
+
+        this.bulletSpawners.push(new ConstantBulletSpawner(scene, PlayerLinearBulletSpawnerConfig))
         
     }
 
@@ -66,17 +66,23 @@ export default class Player extends PlanckSprite {
         this.checkInBounds() // calling this first so body gets updated before sprite jump
         super.update(time, delta, 1)
 
-        this.cooldown -= delta
+        //this.cooldown -= delta
 
         this.handleMovement()
         // handle shooting before updating bullets so the bullet sprites get updated
-        this.handleShoot() 
+        this.handleShoot(time, delta, timeScale) 
         
+        /*
         this.bullets.getChildren().forEach((bullet) => {
             let b = bullet as PlayerLinearBullet
             if (b.active) {
                 b.update(time, delta, timeScale)
             }
+        })
+        */
+
+        this.bulletSpawners.forEach((spawner) => {
+            spawner.updateBullets(time, delta, timeScale)
         })
 
     }
@@ -137,7 +143,8 @@ export default class Player extends PlanckSprite {
     /**
      * Handles the player shooting
      */
-    handleShoot() {
+    handleShoot(time: number, delta: number, timeScale: number) {
+        /*
         if (this.inputs.isShooting && this.cooldown <= 0) {
             for (let i=0; i<1; i++) {
                 const bullet: PlayerLinearBullet = this.bullets.get()
@@ -151,7 +158,17 @@ export default class Player extends PlanckSprite {
                 }
             }
             
-        } 
+        }
+        */
+        this.bulletSpawners.forEach((spawner) => {
+            spawner.updateTimer(time, delta, 1)
+            if (this.inputs.isShooting) {
+                let angle = Phaser.Math.Angle.Between(this.inputs.mouseWorldPos.x, 
+                    this.inputs.mouseWorldPos.y, this.x, this.y) + Math.PI
+                let pos = this.pbody.getPosition().clone().mul(1/PlanckScale)
+                spawner.attemptSpawn(pos.x, pos.y, angle)
+            }
+        })
     }
 
     dealDamage(damage: number) {

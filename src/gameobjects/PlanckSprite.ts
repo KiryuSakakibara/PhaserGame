@@ -9,6 +9,7 @@ import { RenderOrder } from "../Constants/RenderOrder";
  * Basically the Sprite class but with Planck physics. Has a body, but no fixture or shape.
  */
 export default class PlanckSprite extends Phaser.GameObjects.Sprite {
+    //TODO: Maybe refactor this whole thing so it extends Planck.Body instead of a Phaser Sprite
 
     /** The planck physics body */
     pbody: Planck.Body
@@ -47,6 +48,7 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         super.update(time, delta)
 
         let scaledDelta = delta * timeScale // scale delta for time stop
+        //TODO: DON'T SET THE VELOCITY EVERY FRAME JESUS CHRIST
         this.pbody.setLinearVelocity(this.rawVelocity.clone().mul(timeScale*this.planckScale))
         //let pos = this.pbody.getPosition().clone().mul(1/this.planckScale) // body position in pixels
         let prev = this.previousBodyPos.clone()

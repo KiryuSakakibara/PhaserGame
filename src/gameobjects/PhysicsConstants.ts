@@ -4,7 +4,7 @@ import PlanckSprite from "./PlanckSprite"
 /** The scale to multiply by to convert from pixels to meters */
 export const PlanckScale = 0.02
 /** How much the pixel art is scaled up by */
-export const PixelScale = 3
+export const PixelScale = 4
 
 /** The type of the userData stored in bodies, to be used during collisions */
 export type BodyData = {

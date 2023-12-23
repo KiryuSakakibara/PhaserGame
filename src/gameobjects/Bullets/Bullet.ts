@@ -17,18 +17,22 @@ export default class Bullet extends PlanckSprite {
     }
 
     update(time: number, delta: number, timeScale: number): void {
-        if (this.active) {
-            super.update(time, delta, timeScale)
+        // Don't do anything if the bullet isn't active
+        if (!this.active) return
 
-            this.age += delta * timeScale
-            let bounds = this.scene.physics.world.bounds
-            if (this.x-this.displayWidth/2 > bounds.x+bounds.width || this.x+this.displayWidth/2 < bounds.x ||
-                this.y-this.displayHeight/2 > bounds.y+bounds.height || this.y+this.displayHeight/2 < bounds.y ||
-                this.age > this.lifeSpan) {
-                this.disable()
-            }
-            
+        // Bullet is active, continue
+        super.update(time, delta, timeScale)
+
+        this.age += delta * timeScale
+        let bounds = this.scene.physics.world.bounds
+        if (this.x-this.displayWidth/2 > bounds.x+bounds.width || this.x+this.displayWidth/2 < bounds.x ||
+            this.y-this.displayHeight/2 > bounds.y+bounds.height || this.y+this.displayHeight/2 < bounds.y ||
+            this.age > this.lifeSpan) {
+            this.disable()
         }
+            
+
+        // TODO: Implement the time dilation stuff here to combine PlayerBullet and EnemyBullet
         
     }
 
