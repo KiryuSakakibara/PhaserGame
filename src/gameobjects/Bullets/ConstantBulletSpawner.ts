@@ -69,8 +69,9 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
      * @param x The x position to spawn at in pixels
      * @param y The y position to spawn at in pixels
      * @param angle The angle being aimed at in radians
+     * @param time The time the bullet was spawned, so latest bullet can be rendered on top
      */
-    attemptSpawn(x: number, y: number, angle: number) {
+    attemptSpawn(x: number, y: number, angle: number, time: number) {
         while (this.cooldown <= 0) {
             const bullet: Bullet = this.get()
             if (bullet) {
@@ -78,8 +79,7 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
                 let t = -this.cooldown - (this.scene as GameScene).timeSincePhysicsUpdate + 1000/60
                 let vx = this.speed*Math.cos(angle)
                 let vy = this.speed*Math.sin(angle)
-                //bullet.spawn(x-vx*this.cooldown/1000, y-vy*this.cooldown/1000, angle, vx, vy)
-                bullet.spawn(x+vx*t/1000, y+vy*t/1000, angle, vx, vy)
+                bullet.spawn(x+vx*t/1000, y+vy*t/1000, angle, vx, vy, time)
                 bullet.scaledAge = -this.cooldown
                 bullet.trueAge = -this.cooldown
                 //TODO: Implement spread, shot count, and uniform

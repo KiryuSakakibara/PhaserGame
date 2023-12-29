@@ -168,7 +168,7 @@ export default class Player extends PlanckSprite {
                 let angle = Phaser.Math.Angle.Between(this.inputs.mouseWorldPos.x, 
                     this.inputs.mouseWorldPos.y, this.x, this.y) + Math.PI
                 let pos = this.pbody.getPosition().clone().mul(1/PlanckScale)
-                spawner.attemptSpawn(pos.x, pos.y, angle)
+                spawner.attemptSpawn(pos.x, pos.y, angle, time)
             }
         })
     }

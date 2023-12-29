@@ -3,6 +3,7 @@ import PlanckSprite from "../PlanckSprite";
 import * as Planck from "planck"
 import GameScene from "../../scenes/GameScene";
 import PlayerLinearBullet from "./PlayerBullets/PlayerLinearBullet";
+import { RenderOrder } from "../../Constants/RenderOrder";
 
 export default class Bullet extends PlanckSprite {
 
@@ -47,9 +48,9 @@ export default class Bullet extends PlanckSprite {
      * @param angle angle in radians
      * @param vx x velocity in pixels/second
      * @param vy y velocity in pixels/second
+     * @param time The time the bullet was spawned, so latest bullet gets rendered on top
      */
-    spawn(x: number, y: number, angle: number, vx=0, vy=0) {
-        //this.pbody.setPosition(Planck.Vec2(x*this.planckScale, y*this.planckScale))
+    spawn(x: number, y: number, angle: number, vx=0, vy=0, time=0) {
         this.setFullPosition(x, y)
         this.pbody.setAngle(angle)
         this.setRawVelocity(vx, vy)
@@ -57,6 +58,7 @@ export default class Bullet extends PlanckSprite {
         this.enable()
         this.scaledAge = 0
         this.trueAge = 0
+        this.setDepth(Math.floor(this.depth) + 1-1/(time+1))
     }
 
 
