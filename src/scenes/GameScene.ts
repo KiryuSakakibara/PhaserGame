@@ -34,7 +34,8 @@ export default class GameScene extends Phaser.Scene {
         this.timeSincePhysicsUpdate += delta
         while (this.timeSincePhysicsUpdate >= 1000/60) {
             this.planck.stepWorld()
-            this.timeSincePhysicsUpdate -= 1000/60
+            //this.timeSincePhysicsUpdate -= 1000/60
+            this.timeSincePhysicsUpdate = this.timeSincePhysicsUpdate % (1000/60)
         }
 
         

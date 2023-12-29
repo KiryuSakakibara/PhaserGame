@@ -1,5 +1,8 @@
 import { ConstantSpawnerConfig } from "../../Constants/GameObjects/BulletSpawnerConsts"
+import GameScene from "../../scenes/GameScene"
 import Bullet from "./Bullet"
+import PlayerLinearBullet from "./PlayerBullets/PlayerLinearBullet"
+var Vec2 = Phaser.Math.Vector2
 
 /**
  * Bullet pool that spawns bullets at a constant rate.
@@ -13,10 +16,10 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
     spawnerConfig: ConstantSpawnerConfig
     speed: number
 
-    constructor(scene: Phaser.Scene, config: ConstantSpawnerConfig) {
+    constructor(scene: GameScene, config: ConstantSpawnerConfig) {
         super(scene, {
             classType: config.bulletType,
-            maxSize: 1000,
+            maxSize: config.poolSize,
             runChildUpdate: false
         })
         /*
@@ -71,9 +74,15 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
         while (this.cooldown <= 0) {
             const bullet: Bullet = this.get()
             if (bullet) {
-                bullet.spawn(x, y, angle, this.speed*Math.cos(angle), this.speed*Math.sin(angle))
+                // Simulated time passed for the first physics update
+                let t = -this.cooldown - (this.scene as GameScene).timeSincePhysicsUpdate + 1000/60
+                let vx = this.speed*Math.cos(angle)
+                let vy = this.speed*Math.sin(angle)
+                //bullet.spawn(x-vx*this.cooldown/1000, y-vy*this.cooldown/1000, angle, vx, vy)
+                bullet.spawn(x+vx*t/1000, y+vy*t/1000, angle, vx, vy)
+                bullet.scaledAge = -this.cooldown
+                bullet.trueAge = -this.cooldown
                 //TODO: Implement spread, shot count, and uniform
-                //TODO: calculate offset based on lag/cooldown differences
                 
             }
             this.cooldown += this.spawnerConfig.maxCooldown

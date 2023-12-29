@@ -21,8 +21,8 @@ export type ConstantSpawnerConfig = {
 
 export const PlayerLinearBulletSpawnerConfig: ConstantSpawnerConfig = {
     bulletType: PlayerLinearBullet,
-    poolSize: 100,
-    maxCooldown: 80,
+    poolSize: 1000,
+    maxCooldown: 100,
     projectileSpeed: 3000,
     spread: Math.PI/20,
     shotCount: 1,

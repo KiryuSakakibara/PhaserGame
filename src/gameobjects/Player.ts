@@ -69,8 +69,13 @@ export default class Player extends PlanckSprite {
         //this.cooldown -= delta
 
         this.handleMovement()
+
         // handle shooting before updating bullets so the bullet sprites get updated
         this.handleShoot(time, delta, timeScale) 
+        
+        this.bulletSpawners.forEach((spawner) => {
+            spawner.updateBullets(time, delta, timeScale)
+        })
         
         /*
         this.bullets.getChildren().forEach((bullet) => {
@@ -81,9 +86,6 @@ export default class Player extends PlanckSprite {
         })
         */
 
-        this.bulletSpawners.forEach((spawner) => {
-            spawner.updateBullets(time, delta, timeScale)
-        })
 
     }
 

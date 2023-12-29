@@ -7,7 +7,10 @@ import PlayerLinearBullet from "./PlayerBullets/PlayerLinearBullet";
 export default class Bullet extends PlanckSprite {
 
     lifeSpan: number = 1000
-    age = 0
+    /** Scaled age of the bullet considering time dilation, in milliseconds. */
+    scaledAge = 0
+    /** True age of the bullet in real world milliseconds. */
+    trueAge = 0
     
     constructor(scene: GameScene, x: number, y: number, texture: string) {
         super(scene, x, y, texture)
@@ -23,11 +26,12 @@ export default class Bullet extends PlanckSprite {
         // Bullet is active, continue
         super.update(time, delta, timeScale)
 
-        this.age += delta * timeScale
+        this.scaledAge += delta * timeScale
+        this.trueAge += delta
         let bounds = this.scene.physics.world.bounds
         if (this.x-this.displayWidth/2 > bounds.x+bounds.width || this.x+this.displayWidth/2 < bounds.x ||
             this.y-this.displayHeight/2 > bounds.y+bounds.height || this.y+this.displayHeight/2 < bounds.y ||
-            this.age > this.lifeSpan) {
+            this.scaledAge > this.lifeSpan) {
             this.disable()
         }
             
@@ -51,7 +55,8 @@ export default class Bullet extends PlanckSprite {
         this.setRawVelocity(vx, vy)
         
         this.enable()
-        this.age = 0
+        this.scaledAge = 0
+        this.trueAge = 0
     }
 
 

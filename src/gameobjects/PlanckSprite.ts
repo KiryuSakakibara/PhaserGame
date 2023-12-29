@@ -48,7 +48,6 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
         super.update(time, delta)
 
         let scaledDelta = delta * timeScale // scale delta for time stop
-        //TODO: DON'T SET THE VELOCITY EVERY FRAME JESUS CHRIST
         this.pbody.setLinearVelocity(this.rawVelocity.clone().mul(timeScale*this.planckScale))
         //let pos = this.pbody.getPosition().clone().mul(1/this.planckScale) // body position in pixels
         let prev = this.previousBodyPos.clone()
