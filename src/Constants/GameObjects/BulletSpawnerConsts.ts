@@ -1,5 +1,6 @@
 import Bullet from "../../gameobjects/Bullets/Bullet"
 import ConstantBulletSpawner from "../../gameobjects/Bullets/ConstantBulletSpawner"
+import PlayerHomingBullet from "../../gameobjects/Bullets/PlayerBullets/PlayerHomingBullet"
 import PlayerLinearBullet from "../../gameobjects/Bullets/PlayerBullets/PlayerLinearBullet"
 
 export type ConstantSpawnerConfig = {
@@ -11,12 +12,12 @@ export type ConstantSpawnerConfig = {
     maxCooldown: number,
     /** Initial projectile speed */
     projectileSpeed: number,
-    /** The spread angle in radians */
-    spread?: number,
+    /** The max spread angle in radians */
+    spread: number,
     /** How many bullets are shot per wave */
-    shotCount?: number,
-    /** Whether the bullets are spread out uniformly, only matters if shotCount > 1 */
-    uniform?: boolean
+    shotCount: number,
+    /** Whether the bullets are spread out uniformly (spread randomly if false) */
+    uniform: boolean
 }
 
 export const PlayerLinearBulletSpawnerConfig: ConstantSpawnerConfig = {
@@ -26,5 +27,15 @@ export const PlayerLinearBulletSpawnerConfig: ConstantSpawnerConfig = {
     projectileSpeed: 3000,
     spread: Math.PI/20,
     shotCount: 1,
+    uniform: false
+}
+
+export const PlayerHomingBulletSpawnerConfig: ConstantSpawnerConfig = {
+    bulletType: PlayerHomingBullet,
+    poolSize: 3000,
+    maxCooldown: 200,
+    projectileSpeed: 2000,
+    spread: Math.PI/5,
+    shotCount: 2,
     uniform: false
 }

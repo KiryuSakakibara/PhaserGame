@@ -45,7 +45,7 @@ export default class Bullet extends PlanckSprite {
      * 
      * @param x x position in pixels
      * @param y y position in pixels
-     * @param angle angle in radians
+     * @param angle angle in radians (clockwise)
      * @param vx x velocity in pixels/second
      * @param vy y velocity in pixels/second
      * @param time The time the bullet was spawned, so latest bullet gets rendered on top

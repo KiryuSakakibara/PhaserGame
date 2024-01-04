@@ -1,6 +1,8 @@
 import { ConstantSpawnerConfig } from "../../Constants/GameObjects/BulletSpawnerConsts"
 import GameScene from "../../scenes/GameScene"
+import PlanckSprite from "../PlanckSprite"
 import Bullet from "./Bullet"
+import PlayerHomingBullet from "./PlayerBullets/PlayerHomingBullet"
 import PlayerLinearBullet from "./PlayerBullets/PlayerLinearBullet"
 var Vec2 = Phaser.Math.Vector2
 
@@ -13,8 +15,9 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
     /** Internal cooldown */
     cooldown: number = 0
 
-    spawnerConfig: ConstantSpawnerConfig
+    config: ConstantSpawnerConfig
     speed: number
+    homingTargetList?: PlanckSprite[]
 
     constructor(scene: GameScene, config: ConstantSpawnerConfig) {
         super(scene, {
@@ -31,7 +34,7 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
         })
         */
 
-        this.spawnerConfig = config
+        this.config = config
         this.speed = config.projectileSpeed
 
         scene.add.existing(this)
@@ -59,6 +62,9 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
         this.getChildren().forEach((bullet) => {
             let b = bullet as Bullet
             if (b.active) {
+                if (b instanceof PlayerHomingBullet && this.homingTargetList && this.homingTargetList.length > 0) {
+                    b.target = this.homingTargetList[0]
+                }
                 b.update(time, delta, timeScale)
             }
         })
@@ -73,19 +79,26 @@ export default class ConstantBulletSpawner extends Phaser.GameObjects.Group {
      */
     attemptSpawn(x: number, y: number, angle: number, time: number) {
         while (this.cooldown <= 0) {
-            const bullet: Bullet = this.get()
-            if (bullet) {
-                // Simulated time passed for the first physics update
-                let t = -this.cooldown - (this.scene as GameScene).timeSincePhysicsUpdate + 1000/60
-                let vx = this.speed*Math.cos(angle)
-                let vy = this.speed*Math.sin(angle)
-                bullet.spawn(x+vx*t/1000, y+vy*t/1000, angle, vx, vy, time)
-                bullet.scaledAge = -this.cooldown
-                bullet.trueAge = -this.cooldown
-                //TODO: Implement spread, shot count, and uniform
+            for (let i=0; i<this.config.shotCount; i++) {
+                const bullet: Bullet = this.get()
+                if (bullet) {
+                    // The random angle (0.5 if spread is uniform)
+                    let randA = this.config.uniform ? 0.5 : Math.random()
+                    // The angle of the current shot in the wave
+                    let a = angle - this.config.spread/2 +
+                        this.config.spread/this.config.shotCount * (randA + i)
+                    // Simulated time passed for the first physics update
+                    let t = -this.cooldown - (this.scene as GameScene).timeSincePhysicsUpdate + 1000/60
+                    let vx = this.speed*Math.cos(a)
+                    let vy = this.speed*Math.sin(a)
+                    bullet.spawn(x+vx*t/1000, y+vy*t/1000, a, vx, vy, time)
+                    bullet.scaledAge = -this.cooldown
+                    bullet.trueAge = -this.cooldown
+                    
+                }
                 
             }
-            this.cooldown += this.spawnerConfig.maxCooldown
+            this.cooldown += this.config.maxCooldown
         }
     }
 }

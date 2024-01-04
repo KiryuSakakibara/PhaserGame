@@ -95,6 +95,18 @@ export default class PlanckSprite extends Phaser.GameObjects.Sprite {
     }
 
     /**
+     * Rotate the sprite clockwise, including velocity
+     * @param angle The angle to rotate by in radians
+     */
+    rotate(angle: number) {
+        let v = this.rawVelocity
+        let cos = Math.cos(angle)
+        let sin = Math.sin(angle)
+        this.setRawVelocity(cos*v.x - sin*v.y, sin*v.x + cos*v.y)
+        this.pbody.setAngle(this.pbody.getAngle()+angle)
+    }
+
+    /**
      * Activates the sprite and body
      */
     enable() {
